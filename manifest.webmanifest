@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Briarford — Black Clover fan RPG (prototipas)",
+  "short_name": "Briarford",
+  "description": "Neoficialus 2D pixel-art mobilus RPG prototipas. Vietinis išsaugojimas, NPC, dialogai ir taktinė kova.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#131918",
+  "theme_color": "#171c1c",
+  "orientation": "portrait",
+  "icons": [
+    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
