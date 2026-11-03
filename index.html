@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="lt">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Briarford" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-  <title>Briarford — Black Clover fan RPG prototipas</title>
+  <title>Briarford — Black Clover fan RPG prototype</title>
   <style>
   :root { --bg:#131918;--panel:#202c29;--panel2:#293934;--stroke:#405148;--text:#f1ead9;--muted:#b1bdac;--gold:#dfbd76;--accent:#7dc7a4;--danger:#e18e85; }
   * {box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.35 system-ui,-apple-system,sans-serif;min-height:100%;overscroll-behavior:none}body{background:radial-gradient(ellipse at center top,#27392f,#111615 75%)}button,select{font:inherit;touch-action:manipulation}button{color:var(--text);background:#31483d;border:1px solid #66806a;border-radius:9px;padding:10px 12px;font-weight:600;min-height:43px;cursor:pointer}button:active{filter:brightness(1.2)}button:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#25322f;border-color:#44564d}.warning{background:#5b3434;border-color:#915957}.primary{background:#557559;border-color:#9ec69b;color:white}.app{width:min(100%,490px);margin:0 auto;min-height:100svh;background:#161d1c;box-shadow:0 0 35px #0006;padding-bottom:env(safe-area-inset-bottom)}header{padding:calc(8px + env(safe-area-inset-top)) 12px 7px;background:#202b27;border-bottom:1px solid #394e40}.topline{display:flex;justify-content:space-between;align-items:center;gap:6px}.brand{font-family:Georgia,serif;color:#e2c68b;font-size:17px;letter-spacing:.5px;font-weight:700}.sub{font-size:11px;color:var(--muted)}.pill{border:1px solid #58715c;border-radius:20px;padding:3px 8px;font-size:11px;background:#2a3e35}.meters{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:7px}.hpbox{display:flex;align-items:center;gap:5px;flex:1;max-width:240px}.hpbar{height:8px;background:#111a18;border:1px solid #60705a;border-radius:8px;flex:1;overflow:hidden}.hpfill{background:linear-gradient(90deg,#af4c47,#e08f66);height:100%}.gold{font-weight:700;color:var(--gold)}.scenehead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;background:#1b2622}.scenehead span:last-child{color:var(--muted);font-size:11px}.canvas-wrap{position:relative;overflow:hidden;background:#293a30}canvas{display:block;width:100%;aspect-ratio:1/1;image-rendering:pixelated;touch-action:none}.canvas-tip{position:absolute;bottom:7px;left:7px;background:#101d1bd9;padding:5px 8px;border:1px solid #67765c;border-radius:6px;font-size:10px;pointer-events:none}.event{margin:7px 9px;padding:8px 10px;background:#25352d;border-left:3px solid var(--gold);min-height:47px;font-size:12px;color:#ede5d5}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:0 9px 7px}.actions button{font-size:12px;padding:9px 3px;min-height:46px}.actions button span{display:block;font-size:17px;margin-bottom:3px}.battlebar{padding:7px 9px;background:#372b27;display:none;grid-template-columns:repeat(3,1fr);gap:5px;border-top:1px solid #80594e}.battlebar button{font-size:12px;padding:8px 4px}.combat-title{grid-column:1/-1;text-align:center;color:#f0bd9f}.footer{padding:6px 10px;text-align:center;font-size:10px;color:#8da494}.overlay{position:fixed;inset:0;background:#080d0cca;z-index:10;display:none;align-items:center;justify-content:center;padding:15px;overflow:auto}.overlay.visible{display:flex}.modal{background:#21302b;border:1px solid #779073;border-radius:13px;width:min(100%,470px);max-height:min(86svh,850px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 55px #0009}.modal-title{display:flex;justify-content:space-between;align-items:center;padding:14px 15px;background:#31453b;border-bottom:1px solid #658066;font:700 18px Georgia,serif;color:#f0dcae}.close{background:transparent;border:none;font-size:21px;min-height:24px;padding:0 5px}.modal-body{overflow:auto;padding:12px 14px 15px}.modal-body p{margin:0 0 10px;color:#e4e5d6;line-height:1.48}.choice-list{display:grid;gap:7px}.choice-list button{text-align:left;width:100%;padding:12px 13px}.small{font-size:12px;color:var(--muted)}.list-row{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:8px 0;border-bottom:1px solid #3d5149}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chip{display:inline-block;padding:5px 9px;border-radius:20px;border:1px solid #627765;color:#e1e5d4;background:#2b3b32;font-size:12px}.chip.active{background:#546e51;border-color:#c6d89e}.mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.mini{background:#293a33;border:1px solid #455b50;padding:9px;border-radius:8px}.muted{color:var(--muted)}.stat{font-weight:bold;color:var(--gold)}.separator{border:0;border-top:1px solid #44584c;margin:12px 0}.banner{padding:9px;border:1px solid #5d7356;background:#2b3b33;border-radius:7px;margin-bottom:10px}.tag{color:var(--gold);font-size:12px}.floating-label{position:absolute;top:8px;right:10px;background:#11201bd6;border:1px solid #54725b;padding:5px 7px;border-radius:6px;font-size:10px}.hidden{display:none!important}@media(min-width:540px){.app{border-left:1px solid #3e5646;border-right:1px solid #3e5646}}
@@ -250,6 +250,352 @@ cn.addEventListener('pointerdown',ev=>{if(!state?.created||state.combat||$('over
  const poi=LANDMARKS.find(z=>z.zone===state.zone&&z.x===x&&z.y===y);if(poi){ev.preventDefault();ev.stopImmediatePropagation();startMove(pathTo(state.x,state.y,poi.x,poi.y,true),()=>landmarkAction(poi.id));}
 },true);
 const activityButton=document.createElement('button');activityButton.innerHTML='<span>🛠️</span>Veiklos';activityButton.onclick=activityPanel;$('actions').appendChild(activityButton);
+
+/* Briarford v0.3 — world atlas, quest hand-in, equipment and magic foundations.
+ * Built as a compatible in-closure extension. All game data remains offline. */
+const V03_PLACES = [
+  ['briarford','Briarford','Clover · Forsaken',72,78,1,'original','A small frontier village, your home.'],
+  ['hage','Hage Village','Clover · Forsaken',67,84,1,'canon','A remote village, birthplace of two famous future rivals.'],
+  ['sosshi','Sosshi Village','Clover · Forsaken',77,86,1,'canon','Village near the outer borders, vulnerable to raids.'],
+  ['rayaka','Rayaka','Clover · Forsaken',62,88,1,'canon','A quiet outlying settlement.'],
+  ['tolsa','Tolsa','Clover · Forsaken',83,82,1,'canon','A distant frontier hamlet.'],
+  ['toaru','Toaru','Clover · Forsaken',85,76,1,'canon','A remote community.'],
+  ['breed','Breed Mountain','Clover · Forsaken',79,71,2,'canon','Wind-scoured mountain trails.'],
+  ['poison','Forest of Poisonous Magical Beasts','Clover · Forsaken',61,71,3,'canon','A hazardous forest, rich in wildlife and wild mana.'],
+  ['kikka','Kikka','Clover · Common',67,67,2,'canon','Busy castle town with merchants and the Magic Knights examination grounds.'],
+  ['nairn','Nairn','Clover · Common',79,67,2,'canon','A Common Realm town.'],
+  ['kiten','Kiten','Clover · Common',83,58,3,'canon','A fortified border city exposed to Diamond Kingdom raids.'],
+  ['yvon','Yvon','Clover · Common',74,60,2,'canon','An inland settlement.'],
+  ['hecairo','Hecairo','Clover · Common',58,73,2,'canon','A settlement along the realm roads.'],
+  ['tiulyu','Tiulyu','Clover · Common',57,63,2,'canon','A market town on a rural route.'],
+  ['capital','Royal Capital','Clover · Noble',69,73,4,'canon','Clover Castle, the Wizard King and the Magic Knights headquarters.'],
+  ['clovercastle','Clover Castle','Clover · Noble',72,71,4,'canon','The royal houses Kira, Silva and Vermillion.'],
+  ['magicHQ','Magic Knights Headquarters','Clover · Noble',66,72,4,'canon','Command and coordination of the nine squads.'],
+  ['parliament','Magic Parliament','Clover · Noble',71,75,4,'canon','The kingdom’s legislature and courts.'],
+  ['raque','Raque','Clover · Noble',76,88,3,'canon','A coastal resort town.'],
+  ['tota','Tota','Clover · Noble',64,76,3,'canon','A Noble Realm settlement.'],
+  ['bulls','Black Bulls Hideout','Clover · Other',59,82,3,'canon','Home of the Black Bulls squad.'],
+  ['witch','Witches’ Forest','Neutral',49,60,4,'canon','A secluded forest where powerful witches live.'],
+  ['undersea','Undersea Temple','Neutral',73,98,5,'canon','An ancient temple hidden beneath the sea.'],
+  ['dungeon','Ancient Border Dungeon','Neutral',55,64,3,'original','A newly discovered labyrinth near contested land.'],
+  ['elysia','Elysia','Neutral',47,47,5,'canon','A hidden refuge, known to only a few.'],
+  ['heartcapital','Heart Kingdom Capital','Heart',27,57,5,'canon','Heart Kingdom’s royal seat.'],
+  ['heartforest','Heart Mana Forest','Heart',29,46,4,'original','A dense route threaded with natural mana.'],
+  ['heartlake','Undine Lake','Heart',22,63,4,'original','A great lake near the heartland.'],
+  ['heartborder','Heart Border','Heart',43,65,4,'original','A road into a mana-rich kingdom.'],
+  ['diamondcapital','Diamond Kingdom Capital','Diamond',82,42,6,'canon','Center of the militarized Diamond Kingdom.'],
+  ['diamondborder','Diamond Border Fort','Diamond',76,51,4,'original','A mountain outpost on a disputed border.'],
+  ['diamondmine','Eastern Diamond Mines','Diamond',90,33,4,'original','Frost and stone surround the ore seams.'],
+  ['spadecastle','Spade Kingdom Castle','Spade',49,18,7,'canon','The seat of power in the northern kingdom.'],
+  ['spadefront','Spade Frontier','Spade',62,36,5,'original','A harsh borderland beneath cold skies.'],
+  ['spadevillages','Northern Spade Villages','Spade',30,29,5,'original','Scattered settlements on the northern roads.'],
+  ['hino','Land of the Sun (Hino)','Hino · Overseas',96,91,8,'canon','A distant homeland beyond the sea, with its own traditions.']
+].map(([id,name,realm,x,y,tier,source,desc])=>({id,name,realm,x,y,tier,source,desc}));
+const V03_BY_ID=Object.fromEntries(V03_PLACES.map(p=>[p.id,p]));
+const V03_QUESTS={
+ firewood:{npc:'Elna',items:{wood:2},gold:5,xp:7,label:'Firewood for Elna'},
+ ore:{npc:'Garrick',items:{ore:2},gold:15,xp:16,label:'A Smith’s Order'},
+ bridge:{npc:'Haldric',items:{wood:3},gold:11,xp:11,label:'Repair the Bridge'},
+ herbal:{npc:'Mira',items:{herbs:3},gold:11,xp:12,label:'Herbs for Mira'},
+ hunt:{npc:'Renn',items:{meat:1,hide:1},gold:13,xp:18,label:'The Hunter’s Request'},
+ tracks:{npc:'Orven',items:{},flag:'tracksFound',gold:8,xp:10,label:'Strange Tracks'},
+ parcel:{npc:'Elna',items:{parcel:1},gold:7,xp:9,label:'Vessa’s Delivery'}
+};
+const V03_EQUIPMENT={knife:{name:'Old Hunting Knife',slot:'weapon',damage:1,price:8,desc:'Light, reliable, easy to conceal.'},staff:{name:'Traveler’s Staff',slot:'weapon',damage:1,price:9,desc:'Useful for defense and long walks.'},sword:{name:'Iron Sword',slot:'weapon',damage:3,price:35,desc:'A proper steel blade.'},bow:{name:'Hunter’s Bow',slot:'weapon',damage:2,price:28,desc:'A hunting weapon, best at a distance.'},vest:{name:'Leather Vest',slot:'body',armor:2,price:24,desc:'Thick leather absorbs minor blows.'},cloak:{name:'Traveler’s Cloak',slot:'body',armor:1,price:12,desc:'Protection against wind and cold.'},charm:{name:'Copper Lucky Charm',slot:'trinket',focus:1,price:18,desc:'A cheap keepsake, not a magical artifact.'}};
+const V03_EN_ITEMS={bread:'Bread',potion:'Healing Potion',wood:'Firewood',water:'Clean Water',ore:'Iron Ore',knife:'Old Hunting Knife',staff:'Traveler’s Staff',meat:'Meat',hide:'Wolf Pelt',book:'Sealed Grimoire',herbs:'Medicinal Herbs',fish:'Fresh Fish',berry:'Berries',torch:'Torch',bandage:'Bandage',parcel:'Sealed Parcel',sword:'Iron Sword',bow:'Hunter’s Bow',vest:'Leather Vest',cloak:'Traveler’s Cloak',charm:'Copper Lucky Charm'};
+Object.assign(itemNames,V03_EN_ITEMS);
+Object.assign(statNames,{STR:'Strength',DEX:'Dexterity',CON:'Constitution',INT:'Intelligence',WIS:'Wisdom',CHA:'Charisma'});
+Object.assign(skillNames,{blade:'Swordsmanship',archery:'Marksmanship',survival:'Survival',craft:'Crafting',social:'Social',magic:'Magic Theory'});
+const V03_MAGIC=[
+ {id:'observe',name:'Awakened Awareness',cost:1,req:null,desc:'Notice traces of magic that others miss. Does not reveal the seal.'},
+ {id:'breath',name:'Controlled Breathing',cost:1,req:null,desc:'Learn to regain focus while resting.'},
+ {id:'insight',name:'Arcane Research',cost:1,req:'observe',desc:'Improve success at grimoire research and magical investigation.'},
+ {id:'sense',name:'Mana Perception',cost:1,req:'observe',desc:'Sense ambient mana, magical disturbances and nearby spell residue.'},
+ {id:'discipline',name:'Combat Discipline',cost:1,req:'breath',desc:'Improved defensive stance during tactical combat.'},
+ {id:'ward',name:'Mana Skin Theory',cost:2,req:'sense',desc:'Learn the theory of mana reinforcement. Practical casting remains unproven.'},
+ {id:'sealed',name:'Sealed Pages',cost:0,req:'hidden',desc:'What lies beyond the seal remains undiscovered.'}
+];
+const V03_DIALOGUES={
+ Liora:{job:'My family uses simple crop magic. The crops are fine, but the soil near the river feels different this year.',past:'Remember the old oak near the river? We hid beneath it every storm. You always ran out first.',secret:'I saw your grimoire at the ceremony. It was unlike any I had ever seen. I will not pretend I understand it.',day:'I want to see the capital one day. But I would miss this village more than I like to admit.',rumor:'Someone found unusual marks beyond the northern bridge. Renn thinks they were made by a hunter.'},
+ Renn:{job:'I tracked a wolf this morning, but the trail broke at the creek. The undergrowth is thick now.',past:'You and I once spent an entire afternoon searching for a wooden sword we had lost. Elna found it next to the well.',day:'I could use better arrows. The fletching keeps coming loose at the worst moment.',rumor:'A caravan went missing for half a day on the eastern track. They swear the road itself had changed.'},
+ Teren:{job:'Garrick says I rush the bellows. He says patience makes a smith. I say speed makes one.',past:'Do not make me bring up that race we had as children. You won because I slipped.',day:'I am training for the Magic Knights selection. I will not be an apprentice forever.',rumor:'A recruiter passed through Kikka last season. I heard the examination attracts hundreds.'},
+ Garrick:{job:'A ploughshare broke at dawn, and the farmer needs it by sunset. I could use another pair of hands.',past:'My father taught me that a badly forged nail can cost someone a roof. I have never forgotten.',day:'If the charcoal comes late, nothing gets made today. That is the whole damn problem.',rumor:'Iron shipments are getting expensive. That might mean trouble at the border.'},
+ Mira:{job:'I have plenty of clean bandages, but my stock of healing herbs is low again.',past:'When you were little, you refused to stay in bed even with a fever. I remember the argument.',day:'The river water is unusually cold today. It might be nothing, but I want to check upstream.',rumor:'An old pilgrim mentioned a spring that glows at night. No one here knows where it is.'},
+ Haldric:{job:'The bridge must be repaired before the next merchant convoy. We cannot pay for lumber twice.',past:'This village has survived harder seasons. Not because of speeches, but because people worked together.',day:'I have petitions to read, a roof to inspect, and not enough daylight to do either.',rumor:'Some families oppose a levy, but repairs do not pay for themselves.'},
+ Orven:{job:'Two guards patrol the main road. They cannot watch the woods and the bridge at the same time.',past:'I was younger than you when I first carried a spear. I hope you never have to learn the same lessons.',day:'If you venture into the woods, return before dark. A skilled hunter can still make a mistake.',rumor:'I need someone to confirm tracks in the north. Rumors are not evidence.'},
+ Vessa:{job:'I buy pelts and fish, and sell necessities. My prices rise when the border roads become dangerous.',past:'I started with a handcart and two sacks of grain. Now I know merchants in three realms.',day:'The roads are passable. The merchants are not happy, but merchants rarely are.',rumor:'A letter from Kikka says the Magic Knights entrance examination is drawing near.'},
+ Elna:{job:'I bake bread, mend clothes and keep this little house in order. I could use more wood for the stove.',past:'You raised yourself more than anyone else did. Still, people in this village remember you as a child.',day:'I made soup this morning. No, you do not have to pay for it.',rumor:'Liora seemed distracted near the river. Maybe ask her what happened.'}
+};
+const V03_JOURNAL_LABEL={parcel:'Take Vessa’s sealed parcel to Elna.',firewood:'Deliver 2 firewood to Elna.',ore:'Bring 2 iron ore to Garrick.',bridge:'Deliver 3 firewood to Haldric.',herbal:'Bring 3 medicinal herbs to Mira.',hunt:'Bring meat and a pelt to Renn.',tracks:'Report what you find along the forest trail to Orven.'};
+function v03init(){
+ if(!state||!state.created)return;
+ ensureV02();const f=state.flags;f.v03??={};const x=f.v03;x.equipped??={weapon:state.items.knife?'knife':state.items.staff?'staff':null,body:null,trinket:null};x.magic??={};x.routeHistory??=[];x.regionEvents??={};x.discoveries??=[];x.focus??=6;x.worldLocation??='briarford';x.missions??={};x.dailyXp??={};x.dailySkill??={};
+ const elna=state.npcs.find(n=>n.id==='Elna');if(elna){elna.job='Neighbor';elna.desc='A kind village resident who has always offered help; Sania grew up independently.';}
+ // Source of truth for old saves: a quest taken at the notice board must still supply a real parcel.
+ if(state.quests.parcel?.status==='active'&&!state.items.parcel&&!x.parcelDelivered){x.parcelFromBoard=true;}
+}
+function v03questReady(id){const q=V03_QUESTS[id];if(!q||state.quests[id]?.status!=='active')return false;if(q.flag)return !!state.flags[q.flag];return Object.entries(q.items).every(([k,n])=>(state.items[k]||0)>=n);}
+function v03questTurnIn(id){v03init();const q=V03_QUESTS[id];if(!q||state.quests[id]?.status!=='active'){notify('This task is not currently active.');return}
+ if(!v03questReady(id)){notify('You are not carrying everything needed to complete '+q.label+'.');return}
+ for(const [k,n] of Object.entries(q.items))addItem(k,-n);
+ state.quests[id].status='done';state.quests[id].title=q.label;state.quests[id].desc=V03_JOURNAL_LABEL[id];state.gold+=q.gold;gainXP(q.xp);remember(q.npc,'completed '+q.label,5);
+ if(id==='parcel')state.flags.v03.parcelDelivered=true;
+ if(id==='bridge')state.flags.villageStatus.bridge=Math.min(100,state.flags.villageStatus.bridge+15);
+ if(id==='herbal')addItem('potion');if(id==='firewood')addItem('bread');if(id==='ore')skillUp('craft',1);
+ updTime(8);notify('Quest completed: '+q.label+' · +'+q.gold+' yul, +'+q.xp+' XP.');updateHUD();draw();
+}
+function v03parcel(){v03init();const q=state.quests.parcel;
+ if(!q){state.quests.parcel={title:'Vessa’s Delivery',desc:V03_JOURNAL_LABEL.parcel,status:'active'};addItem('parcel');notify('Vessa hands you a sealed parcel. Deliver it to Elna.');}
+ else if(q.status==='active'&&!state.items.parcel){addItem('parcel');notify('Vessa hands you the parcel from the notice-board request. Take it to Elna.');}
+ else if(q.status==='active')notify('You still have the parcel. Elna is waiting at her cottage.');else notify('Vessa thanks you again for the delivery.');
+}
+function v03npcDialogue(id,topic){v03init();const n=state.npcs.find(p=>p.id===id);if(!n)return;
+ const lines=V03_DIALOGUES[id];const said=lines?.[topic]||'There is still more to learn about this place.';
+ let hint='';if(topic==='day'&&state.day>2)hint=' The days have been busy since the grimoire ceremony.';
+ if(topic==='rumor'&&state.flags.tracksFound)hint=' By the way, the guard has heard about the marks you found.';
+ updTime(4);remember(id,'spoke about '+topic,topic==='past'?1:0);
+ modal(n.name,`“${said}${hint}”`,[{text:'Ask something else',act:()=>talk(id)},{text:'Leave'}]);
+}
+talk=function(id){if(!state?.created)return;v03init();const n=state.npcs.find(p=>p.id===id);if(!n)return;const opts=[];
+ for(const [qid,q] of Object.entries(V03_QUESTS))if(q.npc===id&&v03questReady(qid))opts.push({text:'✅ Turn in quest: '+q.label,act:()=>v03questTurnIn(qid)});
+ if(id==='Vessa'&&(!state.quests.parcel||state.quests.parcel.status==='active'))opts.push({text:'📦 '+(state.quests.parcel?'Collect / check parcel':'Accept delivery for Elna'),act:v03parcel});
+ opts.push({text:'☀️ How is your day going?',act:()=>v03npcDialogue(id,'day')},{text:'🛠️ Ask about work',act:()=>v03npcDialogue(id,'job')},{text:'🧡 Talk about the past',act:()=>v03npcDialogue(id,'past')},{text:'🗣️ Ask about local rumors',act:()=>v03npcDialogue(id,'rumor')});
+ if(id==='Liora')opts.push({text:'📖 Study the sealed grimoire together',act:()=>{if(!dailyCap('liora-research',1))return;updTime(30);skillUp('magic',1);remember(id,'researched the grimoire together',2);notify('The seal remains quiet, but you learned how to examine the binding without damaging it.')}});
+ if(id==='Garrick')opts.push({text:'🔨 Help at the forge',act:()=>labor('forge')});
+ if(id==='Renn')opts.push({text:'🏹 Practice tracking',act:()=>practice('survival')});
+ if(id==='Teren')opts.push({text:'💪 Arm-wrestle',act:()=>{if(!dailyCap('wrestle',1))return;updTime(12);const c=check('STR',14);remember(id,'competed in arm wrestling',c.pass?-1:1);if(c.pass){gainXP(3);notify('You beat Teren in a close contest. +3 XP.')}else notify('Teren wins this round and grins.')}});
+ if(id==='Orven')opts.push({text:'🛡️ Practice defenses',act:()=>practice('blade')});
+ if(id==='Mira')opts.push({text:'🩹 Request treatment (5 yul)',act:()=>{if(state.gold<5)return notify('Not enough yul.');state.gold-=5;state.hp=Math.min(state.maxHp,state.hp+14);updTime(12);notify('Mira treats your wounds. +14 HP.');updateHUD();}});
+ if(id==='Vessa')opts.push({text:'🪙 Trade goods and equipment',act:shop});
+ for(const [qid,q] of Object.entries(V03_QUESTS)){
+ const issuer=qid==='parcel'?'Vessa':q.npc;
+ if(issuer===id&&!state.quests[qid])opts.push({text:'📜 Ask for work: '+q.label,act:()=>{
+   if(qid==='parcel'){v03parcel();return}
+   state.quests[qid]={title:q.label,desc:V03_JOURNAL_LABEL[qid],status:'active'};notify('Accepted: '+q.label+'. Check your journal for details.');
+ }});
+ }
+ opts.push({text:'Leave conversation'});
+ modal(n.name+' · '+({Liora:'Childhood friend',Renn:'Hunter apprentice',Teren:'Smith apprentice',Garrick:'Blacksmith',Mira:'Healer',Haldric:'Village elder',Orven:'Guard',Vessa:'Merchant',Elna:'Neighbor'}[id]||'Villager'),`Relationship: ${n.relationship}/100. People remember the favors you do and the trouble you cause.`,opts);
+};
+rumor=function(id){v03npcDialogue(id,'rumor')};
+const V03_BASE_SKILLUP=skillUp;
+skillUp=function(id,amount=1){if(!state)return;v03init();const m=state.flags.v03.dailySkill,k=state.day+':'+id;const used=m[k]||0;if(used>=8){notify('You practiced '+(skillNames[id]||id)+', but meaningful progress needs fresh challenges tomorrow.');return;}const actual=Math.min(amount,8-used);m[k]=used+actual;V03_BASE_SKILLUP(id,actual)};
+const V03_BASE_XP=gainXP;
+gainXP=function(amount){v03init();const m=state.flags.v03.dailyXp,k=String(state.day);const used=m[k]||0;const gained=Math.max(0,Math.min(amount,60-used));m[k]=used+gained;if(gained)V03_BASE_XP(gained);};
+function v03equippedPower(){v03init();const eq=state.flags.v03.equipped;const weapon=V03_EQUIPMENT[eq.weapon];const body=V03_EQUIPMENT[eq.body];return {damage:weapon?.damage||0,armor:body?.armor||0,focus:V03_EQUIPMENT[eq.trinket]?.focus||0}}
+function v03equips(){v03init();const eq=state.flags.v03.equipped;
+ customModal('Equipment · Sania',body=>{
+  html(body,'p','Equipment changes your combat effectiveness. A grimoire is carried separately and remains sealed.','small');
+  for(const [slot,label] of [['weapon','⚔️ Weapon'],['body','🛡️ Body'],['trinket','💠 Accessory']]){
+   const id=eq[slot];const wrap=html(body,'div','','banner');html(wrap,'strong',label+': '+(id?V03_EQUIPMENT[id].name:'Empty'));
+   if(id)btn(wrap,'Unequip',()=>{eq[slot]=null;notify('Unequipped '+V03_EQUIPMENT[id].name+'.');v03equips()},'secondary');
+   const available=Object.keys(V03_EQUIPMENT).filter(k=>V03_EQUIPMENT[k].slot===slot&&(state.items[k]||0)>0&&id!==k);
+   if(!available.length)html(wrap,'p','No other equipment available.','small');
+   for(const k of available)btn(wrap,'Equip '+V03_EQUIPMENT[k].name,()=>{eq[slot]=k;updTime(1);notify('Equipped '+V03_EQUIPMENT[k].name+'.');v03equips()});
+  }
+  const p=v03equippedPower();html(body,'p','Attack bonus: +'+p.damage+' · Armor: '+p.armor+' · Focus: +'+p.focus,'tag');
+  btn(body,'Open inventory',()=>panel('bag'));
+ });
+}
+function v03bag(){v03init();customModal('Inventory',body=>{
+ html(body,'p','Items, supplies and equipment you carry.','small');
+ for(const [id,count] of Object.entries(state.items))if(count>0){const row=html(body,'div','','list-row');html(row,'span',(itemNames[id]||id)+' × '+count);if(V03_EQUIPMENT[id])btn(row,'Equip',v03equips,'secondary');
+ else if(['bread','fish','berry','bandage','potion'].includes(id))btn(row,'Use',()=>{addItem(id,-1);const heal={bread:3,fish:5,berry:2,bandage:6,potion:12}[id];state.hp=Math.min(state.maxHp,state.hp+heal);updTime(3);notify('Used '+itemNames[id]+'. +'+heal+' HP.');v03bag()},'secondary');}
+ html(body,'hr','','separator');btn(body,'⚔️ Equipment slots',v03equips);btn(body,'📖 Grimoire research',()=>grimoire());
+ });}
+function v03talents(){v03init();const unlocked=state.flags.v03.magic;const spent=Object.values(V03_MAGIC).filter(t=>unlocked[t.id]).reduce((s,t)=>s+t.cost,0);const total=Math.floor(state.level/2);const points=Math.max(0,total-spent);
+ customModal('Arcane Studies · Skill Tree',body=>{
+ html(body,'p','The grimoire is sealed. Study ordinary magical principles first; no one knows what powers, if any, are hidden in its pages.','small');
+ html(body,'div','Insight points: '+points+' available · '+spent+' spent','banner');
+ for(const t of V03_MAGIC){const box=html(body,'div','','banner');const ok=t.req===null||unlocked[t.req];html(box,'strong',(unlocked[t.id]?'✅ ':t.id==='sealed'?'🔒 ':'◇ ')+t.name);html(box,'p',t.desc,'small');if(t.id==='sealed'){html(box,'div','Undiscovered. Progress in the story will reveal more.','small');continue}if(unlocked[t.id]){html(box,'div','Learned','tag');continue}const b=btn(box,`Learn · ${t.cost} insight ${ok?'':'(requires previous study)'}`,()=>{if(!ok||points<t.cost)return;unlocked[t.id]=true;updTime(15);notify('New understanding gained: '+t.name+'.');v03talents()});b.disabled=!ok||points<t.cost;}
+ btn(body,'Return to character',()=>panel('character'));
+ });
+}
+function v03character(){v03init();const e=v03equippedPower();customModal('Sania · Character',body=>{
+ html(body,'p','15 years old · Orphan · Briarford · No fixed class');
+ html(body,'div','Level '+state.level+' · XP '+state.xp+'/'+(25*state.level)+' · '+state.day+' day','banner');
+ const g=html(body,'div','','mini-grid');for(const k of STATS)html(g,'div',statNames[k]+' ('+k+'): '+state.stats[k],'mini');
+ html(body,'hr','','separator');html(body,'strong','Learned skills');const t=html(body,'div','','mini-grid');for(const [k,v] of Object.entries(state.skills))html(t,'div',(skillNames[k]||k)+': '+v,'mini');
+ html(body,'p','Equipment: +'+e.damage+' attack · '+e.armor+' armor.','tag');
+ html(body,'p','Grimoire: sealed. Its origin and nature remain unknown.','small');
+ btn(body,'🌟 Magic skill tree',v03talents);btn(body,'⚔️ Manage equipment',v03equips);
+ });}
+function v03journal(){v03init();customModal('Journal & Memories',body=>{
+ const q=Object.entries(state.quests);html(body,'p',q.length?'Quest log — unfinished tasks first.':'No accepted quests. Talk to villagers or check the notice board.');
+ q.sort((a,b)=>(a[1].status==='done')-(b[1].status==='done'));
+ for(const [id,quest] of q){const box=html(body,'div','','banner');html(box,'strong',(quest.status==='done'?'✅ ':'📌 ')+(V03_QUESTS[id]?.label||quest.title));html(box,'p',V03_JOURNAL_LABEL[id]||quest.desc,'small');const meta=V03_QUESTS[id];if(meta&&quest.status==='active'){
+ html(box,'div','Turn in to: '+meta.npc+(v03questReady(id)?' · READY':' · incomplete'),'tag');
+ if(id==='parcel'&&!state.items.parcel)btn(box,'Collect parcel from Vessa',()=>talk('Vessa'));
+ if(v03questReady(id))btn(box,'Show turn-in instructions',()=>modal('Quest ready','Find '+meta.npc+' in Briarford and select “Turn in quest: '+meta.label+'”.',[{text:'OK'}]));}
+ }
+ html(body,'hr','','separator');html(body,'strong','Recent events');for(const t of state.log.slice(0,8))html(body,'div',t,'list-row');
+ });}
+const V03_BASE_PANEL=panel;
+panel=function(name){if(name==='bag')return v03bag();if(name==='character')return v03character();if(name==='journal')return v03journal();if(name==='world')return v03worldMap();return V03_BASE_PANEL(name)};
+function v03regionFor(p){if(!p)return 'Clover';if(p.realm.startsWith('Clover'))return 'Clover';if(p.realm.startsWith('Hino'))return 'Hino';return p.realm}
+function v03worldMap(filter='All'){v03init();const f=state.flags.v03;customModal('The World · Black Clover Atlas',body=>{
+ html(body,'p','Canon locations and original additions are marked separately. This is a schematic atlas, not a measured geographical map. The world begins during the grimoire ceremony era.','small');
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 440 350');svg.setAttribute('role','img');svg.setAttribute('aria-label','Schematic map of Clover, Heart, Diamond, Spade and overseas Hino');svg.style.cssText='width:100%;height:auto;border:1px solid #536652;background:#172329;border-radius:9px;margin:4px 0 10px';
+ svg.innerHTML=`<defs><pattern id="sea" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M0 10 Q5 5 10 10 T20 10" stroke="#294852" stroke-width="1" fill="none"/></pattern></defs><rect width="440" height="350" fill="url(#sea)"/><path d="M65 42 L108 8 L270 7 L324 25 L290 94 L307 135 L234 154 L175 125 L137 172 L80 133 Z" fill="#61616e" stroke="#b3b5b5" stroke-width="2"/><path d="M47 120 L149 150 L189 215 L152 279 L68 290 L18 222 Z" fill="#3b766f" stroke="#9cc5ac" stroke-width="2"/><path d="M278 97 L386 91 L422 148 L400 226 L303 224 L266 169 Z" fill="#85705f" stroke="#d6b99a" stroke-width="2"/><path d="M169 190 L294 151 L357 230 L348 302 L276 329 L166 317 L150 259 Z" fill="#628562" stroke="#accb94" stroke-width="2"/><text x="180" y="42" font-size="17" fill="#f2f0df" text-anchor="middle">♠ SPADE</text><text x="105" y="200" font-size="17" fill="#f2f0df" text-anchor="middle">♥ HEART</text><text x="348" y="131" font-size="16" fill="#f2f0df" text-anchor="middle">♦ DIAMOND</text><text x="258" y="271" font-size="17" fill="#f2f0df" text-anchor="middle">♣ CLOVER</text><path d="M420 303 L437 299 L436 339 L417 341 Z" fill="#a09065"/><text x="413" y="294" fill="#e9d7ad" font-size="9" text-anchor="end">Hino →</text>`;
+ for(const p of V03_PLACES){if(filter!=='All'&&v03regionFor(p)!==filter)continue;const x=p.x*4.25,y=p.y*3.28;const isHere=f.worldLocation===p.id;const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('cx',x);dot.setAttribute('cy',y);dot.setAttribute('r',isHere?6:3.2);dot.setAttribute('fill',isHere?'#ffe4a1':p.source==='original'?'#9ad7f9':'#fff');dot.setAttribute('stroke','#17251a');dot.setAttribute('stroke-width','1.2');dot.style.cursor='pointer';dot.addEventListener('click',()=>v03place(p.id));const title=document.createElementNS('http://www.w3.org/2000/svg','title');title.textContent=p.name+' — '+(p.source==='canon'?'Canon':'Original addition');dot.append(title);svg.append(dot)}body.append(svg);
+ html(body,'div','● White = canon  ·  ● Blue = original  ·  ● Gold = current location','small');
+ const chips=html(body,'div','','chips');for(const ch of ['All','Clover','Heart','Diamond','Spade','Neutral','Hino']){const b=btn(chips,ch,()=>v03worldMap(ch),'chip'+(ch===filter?' active':''));}
+ html(body,'p',`${V03_PLACES.length} places plotted · ${V03_PLACES.filter(p=>p.source==='canon').length} canon references · ${V03_PLACES.filter(p=>p.source==='original').length} original additions.`,'tag');
+ for(const p of V03_PLACES){if(filter!=='All'&&v03regionFor(p)!==filter)continue;const row=html(body,'div','','list-row');const d=html(row,'div','');html(d,'strong',(f.worldLocation===p.id?'📍 ':'')+p.name);html(d,'div',p.realm+' · '+(p.source==='canon'?'Canon':'Original')+' · Danger '+p.tier,'small');btn(row,'Details',()=>v03place(p.id),'secondary');}
+ });}
+function v03place(id){v03init();const p=V03_BY_ID[id];if(!p)return;const at=state.flags.v03.worldLocation===p.id;const isLocal=['briarford','hage','kikka','nairn','royal'].includes(p.id)||p.realm.includes('Clover');
+ const choices=[];if(at){choices.push({text:'🔍 Explore this location',act:()=>v03explore(p)});choices.push({text:'🛍️ Look for services',act:()=>v03services(p)})}
+ else choices.push({text:'🚶 Travel here',act:()=>v03travel(p)});
+ choices.push({text:'🗺️ Back to atlas',act:()=>v03worldMap(v03regionFor(p))});
+ modal(p.name,`${p.realm} · ${p.source==='canon'?'Canon location':'Original world expansion'} · Danger tier ${p.tier}. ${p.desc} ${at?'You are here.':'Travel consumes time and may be risky beyond familiar roads.'}`,choices);
+}
+function v03travel(p){v03init();if(state.combat)return notify('Cannot travel during combat.');if(indoors())return notify('Leave the building first.');
+ const f=state.flags.v03;if(p.id==='briarford'){f.worldLocation='briarford';travel('village');return}
+ const from=V03_BY_ID[f.worldLocation]||V03_BY_ID.briarford;let hrs=Math.max(2,Math.round(Math.hypot(p.x-from.x,p.y-from.y)/6))+p.tier;
+ if(p.id==='hino')hrs+=18;
+ if(hrs>4&&state.items.bread){addItem('bread',-1);}
+ stopMoving();state.zone='region:'+p.id;state.x=24;state.y=22;f.worldLocation=p.id;f.routeHistory.unshift({to:p.id,day:state.day});f.routeHistory=f.routeHistory.slice(0,20);state.seen=Array.from(new Set([...(state.seen||[]),state.zone]));
+ updTime(hrs*60);state.hp=Math.max(1,state.hp-Math.max(0,p.tier-2));
+ notify(`Travelled to ${p.name} (${hrs}h). ${p.tier>=5?'These lands are dangerous; stay alert.':'You arrive as local life carries on.'}`);draw();updateHUD();
+ if(p.tier>=4&&Math.random()<.22){state.flags.v03.regionEvents[p.id]=(state.flags.v03.regionEvents[p.id]||0)+1;modal('Roadside Encounter',`As you approach ${p.name}, you see signs of a recent struggle. The tracks lead away from the road.`,[{text:'Investigate carefully',act:()=>v03explore(p)},{text:'Keep moving',act:()=>{notify('You choose not to interfere.');}}]);}
+}
+const V03_BASE_MAP=makeMap;
+makeMap=function(which){if(!which.startsWith('region:'))return V03_BASE_MAP(which);if(mapCache[which])return mapCache[which];const id=which.slice(7),p=V03_BY_ID[id]||V03_BY_ID.kikka;const type=v03regionFor(p);const grid=[];
+ for(let y=0;y<H;y++){const row=[];for(let x=0;x<W;x++){let t='grass',rnd=hash(x+43,y+65);if(y<3||y>=H-2||x<2||x>=W-2)t='trees';else if((rnd%100)<(type==='Heart'?21:15)&&!(x>14&&x<40&&y>8&&y<31))t='trees';else if(rnd%100<23)t='brush';if(type==='Diamond'||type==='Spade'){if(rnd%5===0)t='farm'}if(x>=22&&x<=26||y>=20&&y<=24)t='road';if(x>=16&&x<=34&&y>=14&&y<=29&&rnd%4!==0)t='square';if((x>=9&&x<=15&&y>=10&&y<=15)||(x>=37&&x<=43&&y>=15&&y<=20)||(x>=12&&x<=18&&y>=27&&y<=32))t='house';if((x===12&&y===15)||(x===40&&y===20)||(x===15&&y===32))t='door';if(x===24&&y===17)t='well';row.push(t)}grid.push(row)}mapCache[which]=grid;return grid;
+};
+const V03_BASE_DRAW=draw;
+draw=function(){V03_BASE_DRAW();if(!state?.zone?.startsWith('region:'))return;const offsetX=state.camera[0],offsetY=state.camera[1];const sites=[[12,15,'⌂'],[40,20,'⚒'],[24,17,'◉'],[15,32,'★']];for(const [x,y,ch] of sites){const sx=(x-offsetX)*16,sy=(y-offsetY)*16;if(sx<-16||sy<-16||sx>320||sy>320)continue;ctx.fillStyle='#221d14';ctx.fillRect(sx+1,sy+1,14,14);ctx.fillStyle='#f1d38f';ctx.font='bold 11px monospace';ctx.fillText(ch,sx+3,sy+12)};};
+cn.addEventListener('pointerdown',ev=>{if(!state?.created||!state.zone.startsWith('region:')||$('overlay').classList.contains('visible')||state.combat)return;ev.preventDefault();ev.stopImmediatePropagation();const [tx,ty]=toTile(ev),sites=[[12,15,'market'],[40,20,'work'],[24,17,'rumors'],[15,32,'explore']];const found=sites.find(([x,y])=>Math.abs(x-tx)+Math.abs(y-ty)<=1);
+ const local=v03localAt(tx,ty);if(local){startMove(pathTo(state.x,state.y,local.x,local.y,true),()=>v03talkLocal(local));return}
+ if(found){startMove(pathTo(state.x,state.y,found[0],found[1],true),()=>v03regionalAction(found[2]));return}if(!walkable(tx,ty)){notify('The way is blocked.');return}startMove(pathTo(state.x,state.y,tx,ty));
+},true);
+function v03regionalAction(action){const p=V03_BY_ID[state.zone.slice(7)];if(!p)return;
+ if(action==='market')v03services(p);else if(action==='work')modal('Local guild',`A workshop in ${p.name} needs extra hands.`,[{text:'Take a day job',act:()=>v03work(p)},{text:'Browse equipment',act:shop},{text:'Leave'}]);
+ else if(action==='rumors')v03contacts(p);else v03explore(p);
+}
+function v03work(p){if(!dailyCap('region-work-'+p.id,1))return;updTime(90);const r=check('CON',10+p.tier);const n=r.pass?12+p.tier:5;state.gold+=n;skillUp('craft',1);gainXP(3);notify(`You complete an afternoon of labor in ${p.name}. +${n} yul, +3 XP.`)}
+function v03services(p){modal(p.name+' · Services',`Find work, merchants and information in ${p.name}.`,[{text:'🛒 Visit a merchant',act:shop},{text:'🛠️ Take a day job',act:()=>v03work(p)},{text:'🏨 Rent a bed (4 yul)',act:()=>{if(state.gold<4)return notify('Not enough yul.');state.gold-=4;updTime(8*60);state.hp=state.maxHp;notify('You wake after a proper rest.');updateHUD();}},{text:'🗞️ Gather regional news',act:()=>v03contacts(p)},{text:'Return to location',act:()=>v03place(p.id)}]);}
+function v03contacts(p){v03init();const snippets={Clover:['Clover’s nobles do not all agree on how to protect the frontier.','The Magic Knights selection draws applicants from across the realm.','Traveling merchants are tracking disturbances along the border.'],Heart:['The forests hold more mana than outsiders expect.','A guardian patrol passed near the waterway.','Travelers speak of powerful natural magic.'],Diamond:['Ore and military supplies are tightly controlled.','Travelers report soldiers moving along the northern passes.','A shopkeeper offers news in exchange for help.'],Spade:['A northern storm has cut off two villages.','Strangers avoid questions about royal authority.','Winter roads are unforgiving without supplies.'],Neutral:['Few travelers enter this territory willingly.','You hear stories about old spells and unexplained ruins.','No one agrees about what lies beyond the next ridge.'],Hino:['The people here speak of ki and distant sword traditions.','Local customs are unfamiliar to visitors.','Travelers arrive rarely by sea.']}[v03regionFor(p)]||[];const idx=(state.day+Math.floor(state.minute/100))%snippets.length;updTime(10);modal('Local voices · '+p.name,`“${snippets[idx]}”`,[{text:'Ask about local work',act:()=>v03work(p)},{text:'Leave'}]);}
+function v03explore(p){v03init();if(!dailyCap('explore-'+p.id,2))return;updTime(50);const result=check('WIS',8+p.tier,state.skills.survival);skillUp('survival',1);
+ if(result.pass){const id=(p.tier>4&&Math.random()<.4)?'ore':Math.random()<.4?'wood':Math.random()<.5?'herbs':'berry';addItem(id);notify(`You explore ${p.name} and collect ${itemNames[id]}.`);}else{state.hp=Math.max(1,state.hp-(p.tier>=5?3:1));notify(`The search in ${p.name} leads into difficult terrain. You return tired and empty-handed.`)}updateHUD();draw();}
+activityPanel=function(){if(!state?.created)return;v03init();if(indoors()){indoorObject(25,20);return}if(state.zone.startsWith('region:'))return v03place(state.zone.slice(7));const items=state.zone==='forest'?[['🌿 Gather herbs',()=>goLandmark('herbs')],['⛏️ Mine iron ore',()=>goLandmark('quarry')],['🐾 Examine animal tracks',()=>goLandmark('tracks')],['🪵 Gather firewood',()=>gather('wood')],['🔍 Explore deeper',()=>{updTime(20);v03explore(V03_BY_ID.poison)}],['🗺️ World atlas',v03worldMap]]:[['🎣 Go fishing at the river',()=>goLandmark('fishing')],['⚔️ Train in the yard',()=>goLandmark('training')],['🌾 Work on the farms',()=>goLandmark('farmwork')],['📜 Village notice board',()=>goLandmark('board')],['🛠️ Craft supplies',craftMenu],['📖 Study grimoire',grimoire],['🌟 Magic skill tree',v03talents],['🗺️ World atlas',v03worldMap]];
+ modal('Activities · '+(state.zone==='forest'?'Northern Forest':'Briarford'),'Select a destination or activity. Time advances while you travel and work.',items.map(([text,act])=>({text,act})));
+};
+const V03_BASE_SHOP=shop;
+shop=function(){v03init();const prices={sword:35,bow:28,vest:24,cloak:12,charm:18,knife:8,staff:9,bread:2,potion:9,ore:5,water:1};const opts=Object.entries(prices).map(([id,price])=>({text:'Buy '+itemNames[id]+' · '+price+' yul',act:()=>{if(state.gold<price){notify('Not enough yul.');return;}state.gold-=price;addItem(id);updTime(5);notify('Purchased '+itemNames[id]+'.');shop()}}));for(const [id,price] of [['wood',3],['hide',8],['fish',5],['herbs',3],['berry',1]])opts.push({text:'Sell '+itemNames[id]+' · +'+price+' yul',act:()=>{if(!state.items[id])return notify('You do not have that item.');addItem(id,-1);state.gold+=price;shop()}});opts.push({text:'Leave the market'});modal('Merchant · Goods and equipment','Your balance: '+state.gold+' yul. Prices vary between merchants in later updates.',opts);};
+const V03_BASE_ATTACK=attack;
+attack=function(){const c=state.combat;if(!c||c.ap<2)return;const e=v03equippedPower();if(Math.abs(state.x-c.enemyX)+Math.abs(state.y-c.enemyY)>1)return notify('Move closer to attack.');c.ap-=2;const isBow=state.flags.v03.equipped.weapon==='bow';const t=check(isBow?'DEX':'STR',11,state.skills[isBow?'archery':'blade']+c.focus);c.focus=0;skillUp(isBow?'archery':'blade',1);if(t.pass){const dmg=4+Math.floor(rand(0,5))+Math.floor((state.stats[isBow?'DEX':'STR']-10)/3)+e.damage;c.hp=Math.max(0,c.hp-dmg);notify('Hit! '+dmg+' damage dealt.')}else notify('Your attack missed.');if(c.hp<=0){winCombat();return}draw();updateHUD()};$('attackBtn').onclick=attack;
+const V03_BASE_ENDTURN=endTurn;
+endTurn=function(){const hp=state.hp;V03_BASE_ENDTURN();if(!state.combat)return;const reduction=v03equippedPower().armor+(state.flags.v03.magic.discipline?1:0);if(state.hp<hp&&reduction){const reduced=Math.min(hp-state.hp,reduction);state.hp+=reduced;notify('Your equipment and training absorb '+reduced+' damage.');updateHUD();}};$('turnBtn').onclick=endTurn;
+const V03_BASE_REST=rest;
+rest=function(d){V03_BASE_REST(d);v03init();const f=state.flags.v03;if(f.magic.breath)f.focus=Math.min(10,f.focus+3);};
+const V03_BASE_LOAD=load;
+load=function(slot){const raw=storage.getItem(storageKey(slot));if(!raw)return notify('This save slot is empty.');try{let x=JSON.parse(raw);if(x.version!==1||!x.npcs||!x.stats||!x.items||!x.zone)throw Error('Incompatible save');state=x;v03init();stopMoving();updateHUD();draw();notify('Loaded slot '+slot+'.')}catch(e){notify('Could not load save: '+e.message)}};
+// New toolbar and equipment HUD, without changing the save schema or old on-device storage keys.
+const hud=document.createElement('div');hud.id='v03-gear-hud';hud.style.cssText='display:flex;gap:6px;padding:5px 9px;background:#1b2a27;border-bottom:1px solid #415b4f;justify-content:space-between';hud.innerHTML='<button id="v03equip" style="flex:1;font-size:11px;padding:5px">⚔️ Empty</button><button id="v03body" style="flex:1;font-size:11px;padding:5px">🛡️ Empty</button><button id="v03magic" style="flex:1;font-size:11px;padding:5px">✨ Magic Tree</button>';document.querySelector('header').appendChild(hud);
+$('v03equip').onclick=v03equips;$('v03body').onclick=v03equips;$('v03magic').onclick=v03talents;
+const atlasBtn=document.createElement('button');atlasBtn.innerHTML='<span>🌍</span>Atlas';atlasBtn.onclick=()=>v03worldMap();$('actions').append(atlasBtn);
+for(const [id,label] of [['bag','Inventory'],['character','Character'],['world','World map'],['journal','Quests'],['rest','Rest'],['save','Save']]){const b=$('actions').querySelector(`[data-panel="${id}"]`);if(b){const emoji=b.querySelector('span')?.textContent||'•';b.innerHTML='<span>'+emoji+'</span>'+label;b.onclick=()=>panel(id)}}
+activityButton.innerHTML='<span>🛠️</span>Activities';activityButton.onclick=activityPanel;
+$('scenehint').textContent='Tap to move';$('tip').textContent='Tap a path, person or marker';document.querySelector('.footer').textContent='Free offline-friendly prototype · Saves stay in this browser';
+const brand=document.querySelector('.brand');if(brand){brand.innerHTML='BRIARFORD <span class="sub">v0.3</span>';brand.nextElementSibling.textContent='Unofficial Black Clover fan RPG';}
+const V03_BASE_UPDATEHUD=updateHUD;
+updateHUD=function(){V03_BASE_UPDATEHUD();if(!state?.created)return;v03init();const eq=state.flags.v03.equipped;$('v03equip').textContent='⚔️ '+(V03_EQUIPMENT[eq.weapon]?.name||'No weapon');$('v03body').textContent='🛡️ '+(V03_EQUIPMENT[eq.body]?.name||'No armor');$('v03magic').textContent='✨ Skills';$('scene').textContent=state.zone.startsWith('region:')?V03_BY_ID[state.zone.slice(7)]?.name||'Unknown Region':state.zone==='village'?'Briarford · Clover Kingdom':state.zone==='forest'?'Northern Forest · Clover Kingdom':indoors()?HOUSE_DEFS.find(h=>h.id===interiorId())?.name||'Inside':'Briarford';$('day').textContent='Day '+state.day+' · '+time();$('worldtag').textContent=state.zone.startsWith('region:')?'Travel':indoors()?'Indoors':state.zone==='forest'?'Northern Forest':'Briarford';$('tip').textContent=state.combat?'Tap to move in tactical combat':'Tap a path, character or marker';};
+// A specifically requested problem: source quest from board without its physical parcel.
+const V03_BASE_JOBBOARD=jobBoard;
+jobBoard=function(){v03init();const tasks=Object.entries(V03_QUESTS).filter(([id])=>id!=='hunt').map(([id,info])=>({text:(state.quests[id]?.status==='done'?'✅ ':state.quests[id]?'📌 ':'＋ ')+info.label,act:()=>{if(!state.quests[id]){state.quests[id]={title:info.label,desc:V03_JOURNAL_LABEL[id],status:'active'};if(id==='parcel')notify('Accepted. Collect the actual parcel from Vessa first.');else notify('Quest accepted: '+info.label)}else notify('Quest: '+info.label+'. '+V03_JOURNAL_LABEL[id]);}}));modal('Briarford Notice Board','Jobs are optional. Check your quest journal to see who receives completed work.',tasks)};
+// A quick accessible turn-in interface when an NPC owner is inside a building.
+indoorObject=function(x,y){v03init();const id=interiorId(),h=HOUSE_DEFS.find(z=>z.id===id);if(!h)return;const owner=state.npcs.find(n=>n.id===h.owner);if(x===25&&y===27){leaveHouse();return}
+ const opts=[];if(owner)opts.push({text:'💬 Speak with '+owner.name,act:()=>talk(owner.id)});
+ if(id==='home')opts.push({text:'🛏️ Sleep until morning',act:()=>rest(480)},{text:'📦 Personal storage',act:storageChest},{text:'📖 Examine grimoire',act:grimoire},{text:'✨ Magic studies',act:v03talents},{text:'⚔️ Change equipment',act:v03equips},{text:'🧰 Craft supplies',act:craftMenu});
+ if(id==='inn')opts.push({text:'🍲 Buy a meal (3 yul)',act:()=>{if(state.gold<3)return notify('Not enough yul.');state.gold-=3;state.hp=Math.min(state.maxHp,state.hp+6);updTime(20);notify('Warm food restores 6 HP.');}},{text:'🗞️ Hear travelers’ rumors',act:()=>v03npcDialogue('Vessa','rumor')});
+ if(id==='forge')opts.push({text:'🔨 Help at the forge',act:()=>labor('forge')},{text:'🧰 Craft items',act:craftMenu});
+ if(id==='clinic')opts.push({text:'🩹 Get treatment (5 yul)',act:()=>{if(state.gold<5)return notify('Not enough yul.');state.gold-=5;state.hp=Math.min(state.maxHp,state.hp+14);updTime(15);notify('Treatment complete. +14 HP.')}});
+ if(id==='farm')opts.push({text:'🌾 Work on the farm',act:()=>labor('farm')});
+ if(id==='lodge')opts.push({text:'🏹 Practice tracking',act:()=>practice('survival')});
+ if(id==='elna')opts.push({text:'📦 Discuss deliveries',act:()=>talk('Elna')});
+ opts.push({text:'🔍 Look around',act:()=>{updTime(3);notify('You inspect the room. Ordinary objects and signs of everyday work fill the space.');}},{text:'🚪 Leave building',act:leaveHouse});
+ modal(h.name,`Interior · ${owner?'A familiar person lives or works here.':'This is your own home.'}`,opts);
+};
+function v03makeMapLabel(){/* reserved for future regional simulation tiers */}
+// Update compatible saves on page startup / loading. Init is invoked immediately after this extension.
+
+// Accessible hand-ins even if the village is asleep; separate dialogue action when the owner is available.
+enterHouse=function(h){v03init();const hour=state.minute/60;const owner=state.npcs.find(n=>n.id===h.owner);const open=h.kind==='home'||h.kind==='public'&&(hour>=7&&hour<21)||h.kind==='private'&&(hour>=7&&hour<21||owner?.relationship>=65)||state.flags.temporaryEntry===h.id;
+ if(!open)return houseDoor(h);stopMoving();state.flags.temporaryEntry=null;state.flags.interiorVisited[h.id]=true;state.lastDoor={x:h.x,y:h.y};state.zone='inside:'+h.id;state.x=25;state.y=25;updTime(2);notify('You enter '+h.name+'.');updateHUD();draw();};
+leaveHouse=function(){stopMoving();const d=state.lastDoor||{x:46,y:32};state.zone='village';state.x=d.x;state.y=Math.min(H-2,d.y+1);if(!walkable(state.x,state.y))state.x=d.x-1;updTime(2);notify('You step outside into Briarford.');updateHUD();draw();};
+houseDoor=function(h){v03init();const owner=state.npcs.find(n=>n.id===h.owner),hour=state.minute/60;const open=h.kind==='home'||h.kind==='public'&&(hour>=7&&hour<21)||h.kind==='private'&&(hour>=7&&hour<21||owner?.relationship>=65);let choices=[];
+ if(open)choices.push({text:'🚪 Enter building',act:()=>enterHouse(h)});
+ if(owner)choices.push({text:'👋 Knock and ask for '+owner.name,act:()=>{updTime(4);const c=check('CHA',10,owner.relationship>50?3:0);if(c.pass||h.id==='elna'&&v03questReady('parcel')){state.flags.temporaryEntry=h.id;modal(h.name,owner.name+' opens the door. “What is it?”',[{text:'💬 Speak to '+owner.name,act:()=>talk(owner.id)},{text:'Enter',act:()=>enterHouse(h)}]);}else notify('No answer. They may be asleep or away.')}});
+ if(h.id==='elna'&&v03questReady('parcel'))choices.unshift({text:'📦 Deliver Vessa’s sealed parcel to Elna',act:()=>v03questTurnIn('parcel')});
+ if(h.id==='home')choices.push({text:'🛏️ Return home and sleep',act:()=>{enterHouse(h);}});
+ choices.push({text:'Leave'});modal(h.name,open?'The door is unlocked.':'The door is closed at this hour. You can knock or come back later.',choices);
+};
+grimoire=function(){v03init();if(!dailyCap('grimoire-study',1))return;updTime(25);let extra=state.flags.v03.magic.insight?3:0;const c=check('INT',14,state.skills.magic/10+extra);skillUp('magic',1);if(c.pass){state.flags.grimoireHint=true;notify('For a brief moment, an unfamiliar mark shifts on a sealed page. Its meaning remains unclear.');}else notify('The book offers no answer. The seal remains intact.');draw();};
+function v03exploreAtHome(){modal('Sania’s Home','You live independently in a modest cottage near the edge of Briarford.',[{text:'Sleep until morning',act:()=>rest(480)},{text:'Store supplies',act:storageChest},{text:'Study the grimoire',act:grimoire},{text:'Open equipment',act:v03equips},{text:'Leave'}]);}
+craftMenu=function(){v03init();const rec=[{id:'torch',title:'Torch',items:{wood:1},min:12},{id:'bandage',title:'Bandage',items:{herbs:1},min:15},{id:'potion',title:'Healing potion',items:{herbs:2,water:1},min:25}];modal('Crafting','Simple materials are used for survival tools. Better recipes require knowledge and resources.',rec.map(r=>({text:'Make '+r.title+' · '+Object.entries(r.items).map(([id,n])=>n+' '+itemNames[id]).join(', '),act:()=>{if(Object.entries(r.items).some(([id,n])=>(state.items[id]||0)<n))return notify('Not enough materials.');updTime(r.min);const c=check('INT',10,state.skills.craft/5);skillUp('craft',1);if(!c.pass)return notify('The attempt fails; you salvage your materials.');for(const [id,n] of Object.entries(r.items))addItem(id,-n);addItem(r.id);gainXP(3);notify('Crafted '+r.title+'. +3 XP.')}})));};
+landmarkAction=function(id){v03init();const p=LANDMARKS.find(x=>x.id===id);if(!p)return;const opts={
+ board:[{text:'📜 Browse quests',act:jobBoard},{text:'🪵 Repair the bridge (3 firewood)',act:()=>{if((state.items.wood||0)<3)return notify('You need 3 firewood.');addItem('wood',-3);state.gold+=6;state.flags.villageStatus.bridge=Math.min(100,state.flags.villageStatus.bridge+8);gainXP(5);updTime(20);notify('You helped repair the bridge. +6 yul and +5 XP.')}}],
+ training:[{text:'⚔️ Swordsmanship',act:()=>practice('blade')},{text:'🏹 Marksmanship',act:()=>practice('archery')},{text:'💪 Strength practice',act:()=>practice('strength')}],
+ fishing:[{text:'🎣 Fish in the river (20 min)',act:()=>{updTime(20);skillUp('survival',1);const c=check('WIS',10,state.skills.survival/5);if(c.pass){addItem('fish');notify('You catch a fish! +1 Fresh Fish.')}else notify('No luck this time. The fish slip away.')}},{text:'💧 Fill water flask',act:()=>{addItem('water');updTime(4);notify('Collected clean water.')}}],
+ farmwork:[{text:'🌾 Work for wages',act:()=>labor('farm')},{text:'🍓 Gather berries',act:()=>gather('berry')}],
+ herbs:[{text:'🌿 Gather medicinal herbs',act:()=>gather('herbs')},{text:'🍓 Gather berries',act:()=>gather('berry')}],
+ quarry:[{text:'⛏️ Mine iron ore',act:()=>gather('ore')}],
+ tracks:[{text:'🐾 Investigate footprints',act:()=>{updTime(18);const c=check('WIS',11,state.skills.survival/5);skillUp('survival',1);if(c.pass){state.flags.tracksFound=state.day;notify('You identify the tracks. Report your findings to Orven.')}else notify('The footprints are hard to read. You need more practice.')}},{text:'🪵 Gather firewood',act:()=>gather('wood')}]
+ }[id]||[];modal(({board:'Village Notice Board',training:'Training Yard',fishing:'Riverbank',farmwork:'Fields',herbs:'Forest Clearing',quarry:'Stone Outcrop',tracks:'Hunter’s Trail'})[id]||p.name,p.desc,opts);};
+const V03_OLD_GATHER=gather;
+gather=function(id){if(!dailyCap('gather-'+id,4))return;const min=id==='ore'?22:id==='herbs'?14:12;updTime(min);const stat=id==='ore'?'STR':'WIS';const c=check(stat,id==='ore'?13:10,Math.floor(state.skills.survival/10));skillUp('survival',1);if(c.pass){let n=id==='wood'?2:1;addItem(id,n);notify('Gathered '+n+' × '+itemNames[id]+'.');}else notify('You searched but came away empty-handed.');draw()};
+labor=function(where){if(!dailyCap('labor-'+where,2))return;const sk=where==='forge'?'craft':'survival';const c=check(where==='forge'?'STR':'CON',10,Math.floor(state.skills[sk]/10));updTime(55);skillUp(sk,1);const n=c.pass?8:4;state.gold+=n;gainXP(4);notify('You worked at the '+(where==='forge'?'forge':'farm')+'. +'+n+' yul, +4 XP.')};
+practice=function(skill){if(!dailyCap('practice-'+skill,2))return;updTime(25);if(skill==='strength'){const c=check('CON',11);if(c.pass){state.flags.strengthSessions=(state.flags.strengthSessions||0)+1;if(state.flags.strengthSessions%8===0){state.stats.STR++;notify('Your strength has improved after steady practice. STR +1.');return}}notify('A productive strength-training session.');return;}skillUp(skill,1);gainXP(1);notify('Training complete: '+(skillNames[skill]||skill)+' +1, XP +1.');};
+storageChest=function(){v03init();state.flags.homeStorage??={};const box=state.flags.homeStorage;const opts=[];
+ for(const [id,num] of Object.entries(state.items))if(num>0&&id!=='book'&&!Object.values(state.flags.v03.equipped).includes(id))opts.push({text:'📥 Store '+(itemNames[id]||id)+' ('+num+')',act:()=>{addItem(id,-1);box[id]=(box[id]||0)+1;updTime(1);storageChest()}});
+ for(const [id,num] of Object.entries(box))if(num>0)opts.push({text:'📤 Take '+(itemNames[id]||id)+' ('+num+')',act:()=>{box[id]--;if(!box[id])delete box[id];addItem(id);updTime(1);storageChest()}});
+ opts.push({text:'Return to room',act:()=>indoorObject(22,22)});modal('Home storage','Equipment currently worn must be unequipped before storing it.',opts);};
+const V03_BASE_SAVE=save;
+save=function(slot){try{v03init();storage.setItem(storageKey(slot),JSON.stringify(state));notify('Saved to slot '+slot+'.')}catch(e){notify('Save failed. Check browser storage permissions.')}};
+savePanel=function(){v03init();customModal('Save Game',body=>{
+ html(body,'p','Three separate local save slots. Export a backup before clearing Safari data.');
+ for(let i=1;i<=3;i++){const raw=storage.getItem(storageKey(i));let info='Empty';if(raw){try{const x=JSON.parse(raw);info='Day '+x.day+' · Level '+x.level+' · '+x.zone;}catch(e){info='Damaged save'}}const row=html(body,'div','','list-row');html(row,'div','Slot '+i+' — '+info);btn(row,'Save',()=>{save(i);savePanel()},'secondary');if(raw)btn(row,'Load',()=>{closeModal();load(i)},'secondary');}
+ btn(body,'⬇️ Export backup (JSON)',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='briarford-save-v03.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000)});
+ const input=document.createElement('input');input.type='file';input.accept='.json';input.style.cssText='max-width:100%;margin-top:12px';input.onchange=async()=>{try{const data=JSON.parse(await input.files[0].text());if(data.version!==1||!data.npcs||!data.items||!data.stats)throw Error('Invalid save');state=data;v03init();closeModal();updateHUD();draw();notify('Backup imported. Save to a slot to keep it.')}catch(e){notify('Could not import backup: '+e.message)}};body.append(input);
+ });};
+const V03_BASE_CREATION=creation;
+// The new English creation experience uses the same original starting logic and balance.
+creation=function(){state=newState();draw();updateHUD();let stat='STR',starter='knife';const selected=new Set();customModal('Sania · Age 15',body=>{
+ html(body,'p','The morning after the grimoire ceremony. You live in a small cottage on the outskirts of Briarford. Your grimoire remains sealed. Choose two skills, one attribute bonus and an item.');
+ html(body,'p','Select two starting skills (+2 each)','tag');const skills=html(body,'div','','chips');for(const [id,name] of Object.entries(skillNames)){const c=btn(skills,name,()=>{if(selected.has(id))selected.delete(id);else if(selected.size<2)selected.add(id);c.classList.toggle('active',selected.has(id));go.disabled=selected.size!==2},'chip');}
+ html(body,'p','Choose an attribute (+2)','tag');const attrs=html(body,'div','','chips');for(const id of STATS){const b=btn(attrs,statNames[id],()=>{stat=id;attrs.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active')},'chip'+(id==='STR'?' active':''));}
+ html(body,'p','Starting equipment','tag');const gear=html(body,'div','','chips');for(const [id,name] of [['knife','Hunting Knife'],['staff','Traveler’s Staff'],['potion','Healing Potion']]){const b=btn(gear,name,()=>{starter=id;gear.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active')},'chip'+(id==='knife'?' active':''));}
+ const go=btn(body,'Begin your story',()=>{if(selected.size!==2)return;state.stats[stat]+=2;selected.forEach(id=>state.skills[id]+=2);addItem(starter);state.created=true;v03init();closeModal();notify('Day 1, 07:00. You stand outside your cottage. The world moves on around you.');draw();updateHUD()},'primary');go.style.cssText='width:100%;margin-top:14px';go.disabled=true;
+ },false);};
+
+
+/* Living town layer: three residents per visited location, local memories and jobs. */
+const V03_LOCAL_NAMES=['Aven','Meriel','Caro','Bryn','Fenn','Talia','Isen','Nell','Soren','Dama','Orla','Eris','Davin','Marn','Leto','Neris','Ilya','Varo','Reina','Tobin'];
+const V03_LOCAL_PROFESSIONS=['Merchant','Guard','Craftsperson'];
+Object.assign(COLOURS,{MarketTrader:['#5b4631','#ba9672','#c2a05d'],TownGuard:['#393a44','#cbaa89','#68849b'],TownSmith:['#4d3029','#c29470','#8d7365']});
+function v03townLocals(){if(!state.zone.startsWith('region:'))return[];v03init();const id=state.zone.slice(7),v=state.flags.v03;v.locals??={};if(!v.locals[id]){
+ const seed=id.split('').reduce((a,ch)=>a+ch.charCodeAt(0),0);
+ v.locals[id]=[0,1,2].map((n)=>({id:id+'-'+n,name:V03_LOCAL_NAMES[(seed+n*7)%V03_LOCAL_NAMES.length],job:V03_LOCAL_PROFESSIONS[n],x:[28,33,20][n],y:[18,25,28][n],relationship:35+n*5,notes:[],visits:0}));
+ }return v.locals[id];
+}
+function v03localAt(x,y){return v03townLocals().find(n=>n.x===x&&n.y===y)}
+const V03_TOWN_DRAW=draw;
+draw=function(){V03_TOWN_DRAW();if(!state.zone.startsWith('region:'))return;for(const [i,n] of v03townLocals().entries()){
+ const x=n.x-state.camera[0],y=n.y-state.camera[1];if(x<0||y<0||x>=20||y>=20)continue;
+ drawPerson(x,y,i===0?'MarketTrader':i===1?'TownGuard':'TownSmith');ctx.fillStyle='#f4ce81';ctx.fillRect(x*16+5,y*16-2,6,2);
+ }};
+function v03localNews(p,n){const realm=v03regionFor(p);const world={Clover:['The Magic Knights are preparing to assess new recruits.','The court cannot agree on the next border patrol.','Our traders prefer these roads before the rainy season.'],Heart:['The forest responds strangely to certain kinds of magic.','Old river paths are safer than the royal road.','The guardians have been watching the outer boundaries.'],Spade:['The cold is getting worse farther north.','Do not ask too many questions of the soldiers.','A family left before dawn without a word.'],Diamond:['New ore quotas have made our lives difficult.','The mountain routes are watched day and night.','The eastern mines need workers.'],Neutral:['The old ruins predate the kingdoms.','Some places draw mana toward themselves.','Travel lightly and keep your supplies dry.'],Hino:['People here value discipline as much as talent.','The sea hides the journey from most travelers.','Few outsiders learn our ways quickly.']}[realm]||['People are watching the roads.'];return world[(state.day+n.visits)%world.length]}
+function v03localMission(p){const missions=state.flags.v03.missions,mission=missions[p.id];if(!mission){const type=p.tier<=2?'wood':p.tier<=4?'herbs':'ore';const count=p.tier<5?2:3;missions[p.id]={item:type,count,status:'active',owner:'local',pay:9+p.tier*3};return notify('New local task: bring '+count+' '+itemNames[type]+' to the workshop in '+p.name+'.')}
+ if(mission.status==='done')return notify('The town remembers your previous help.');if((state.items[mission.item]||0)<mission.count)return notify('Still needed: '+mission.count+' × '+itemNames[mission.item]+'.');
+ addItem(mission.item,-mission.count);state.gold+=mission.pay;gainXP(6+p.tier);mission.status='done';state.flags.v03.discoveries.push('Helped '+p.name);updTime(8);notify('Task delivered in '+p.name+'! +'+mission.pay+' yul, +'+(6+p.tier)+' XP.');}
+function v03talkLocal(n){v03init();const p=V03_BY_ID[state.zone.slice(7)];if(!p)return;n.visits++;const mis=state.flags.v03.missions?.[p.id];
+ const options=[{text:'🗣️ Ask about life here',act:()=>{updTime(6);n.relationship=Math.min(100,n.relationship+1);n.notes.unshift('Spoke on day '+state.day);modal(n.name,`“${v03localNews(p,n)}”`,[{text:'Talk again',act:()=>v03talkLocal(n)},{text:'Leave'}]);}},{text:'🪙 Browse local goods',act:shop},{text:'📜 '+(mis?.status==='active'?'Turn in / check local task':'Ask for a local task'),act:()=>v03localMission(p)},{text:'🏘️ Explore this settlement',act:()=>v03explore(p)},{text:'Leave'}];
+ modal(n.name+' · '+n.job,`${p.name} resident. Relationship: ${n.relationship}/100. ${n.notes.length?'You have spoken before.':'You have not talked before.'}`,options);
+}
+
+const V03_ORIGINAL_INIT=init;
+init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
 init();
 if('serviceWorker' in navigator && location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
