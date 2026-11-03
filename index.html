@@ -615,6 +615,205 @@ function v03talkLocal(n){v03init();const p=V03_BY_ID[state.zone.slice(7)];if(!p)
  modal(n.name+' · '+n.job,`${p.name} resident. Relationship: ${n.relationship}/100. ${n.notes.length?'You have spoken before.':'You have not talked before.'}`,options);
 }
 
+/* v0.4 — persistent consequences, social diffusion, unified quests, honest progress. */
+const V04_EVENT_LABELS={
+ bridge:'The eastern bridge has been repaired and reopened.',
+ firewood:'Elna received the firewood she needed.',
+ ore:'Garrick completed the iron order with Sania’s help.',
+ herbal:'Mira received a fresh stock of medicinal herbs.',
+ tracks:'Orven received a report about strange forest tracks.',
+ hunt:'Renn was supplied with meat and a wolf pelt.',
+ parcel:'Vessa’s sealed parcel was safely delivered to Elna.'
+};
+const V04_WITNESSES={bridge:['Haldric','Garrick','Orven'],firewood:['Elna'],ore:['Garrick','Teren'],herbal:['Mira'],tracks:['Orven','Renn'],hunt:['Renn'],parcel:['Elna','Vessa']};
+function v04prepare(){
+ if(!state?.created)return;
+ const f=state.flags;f.v04??={};const a=f.v04;
+ a.worldEvents??={};a.strength??={points:Math.min(7,(f.strengthSessions||0)%8),earned:0};
+ a.lastNewsDay??=state.day;
+ if(state.quests.bridge?.status==='done'){
+  f.bridgeFixed=true;
+  f.villageStatus.bridge=100;
+ }
+ for(const id of Object.keys(V04_EVENT_LABELS)){
+  if(state.quests[id]?.status==='done'&&!a.worldEvents[id]){
+   a.worldEvents[id]={id,day:state.day,text:V04_EVENT_LABELS[id],knownBy:[...(V04_WITNESSES[id]||[])],source:'recovered save'};
+  }
+ }
+}
+const V04_BASE_INIT=v03init;
+v03init=function(){V04_BASE_INIT();v04prepare();};
+function v04event(id){return state?.flags?.v04?.worldEvents?.[id]}
+function v04known(npc,id){const e=v04event(id);return !!e?.knownBy?.includes(npc)}
+function v04learn(npc,id){const e=v04event(id);if(!e)return false;e.knownBy??=[];if(e.knownBy.includes(npc))return false;e.knownBy.push(npc);return true}
+function v04record(id){v03init();if(!V04_EVENT_LABELS[id])return;const e=state.flags.v04.worldEvents;if(!e[id])e[id]={id,day:state.day,text:V04_EVENT_LABELS[id],knownBy:[...(V04_WITNESSES[id]||[])],source:'player action'};else if(e[id].source==='recovered save')e[id].source='player action';
+ if(id==='bridge'){state.flags.bridgeFixed=true;state.flags.villageStatus.bridge=100;}
+}
+function v04spreadNews(){v03init();const a=state.flags.v04;if(a.lastNewsDay>=state.day)return;
+ for(let day=a.lastNewsDay+1;day<=state.day;day++){
+  for(const [eventId,e] of Object.entries(a.worldEvents)){
+   if(e.day>=day)continue;
+   // 1-2 villagers learn per day, through their social contacts.
+   const unknown=state.npcs.filter(n=>!e.knownBy.includes(n.id));
+   const spread=Math.min(unknown.length,day-e.day>=3?2:1);
+   for(let i=0;i<spread;i++){
+    const sorted=unknown.filter(n=>!e.knownBy.includes(n.id)).sort((a,b)=>hash(a.id.length+day,e.id.length+day)-hash(b.id.length+day,e.id.length+day));
+    const next=sorted.length?sorted[(day+i+eventId.length)%sorted.length]:null;
+    if(next)v04learn(next.id,eventId);
+   }
+  }
+ }
+ a.lastNewsDay=state.day;
+}
+const V04_PREV_DAY=villageDay;
+villageDay=function(){V04_PREV_DAY();v03init();if(state.flags.bridgeFixed)state.flags.villageStatus.bridge=100;v04spreadNews()};
+const V04_PREV_TURNIN=v03questTurnIn;
+v03questTurnIn=function(id){const status=state?.quests?.[id]?.status;V04_PREV_TURNIN(id);if(status==='active'&&state.quests[id]?.status==='done'){
+ v04record(id);notify('World updated: '+V04_EVENT_LABELS[id]);
+}};
+const V04_PREV_JOBBOARD=jobBoard;
+jobBoard=function(){v03init();const tasks=Object.entries(V03_QUESTS).filter(([id])=>id!=='hunt');
+ const actions=tasks.map(([id,q])=>{const status=state.quests[id]?.status;
+  return {text:(status==='done'?'✅ COMPLETED · ':status==='active'?'📌 ACTIVE · ':'＋ AVAILABLE · ')+q.label,act:()=>{
+   if(status==='done')return notify('Already completed: '+q.label+'. The task cannot be taken again.');
+   if(status==='active')return notify('Already in your journal: '+q.label+'. Deliver it to '+q.npc+'.');
+   state.quests[id]={title:q.label,desc:V03_JOURNAL_LABEL[id],status:'active'};
+   notify(id==='parcel'?'Delivery accepted. Collect the actual parcel from Vessa.':'Accepted: '+q.label+'. Talk to '+q.npc+' when you have the supplies.');
+  }};
+ });
+ modal('Briarford Notice Board',state.flags.bridgeFixed?'The village bridge is repaired. Completed jobs stay in the records.':'Work is available around Briarford. Each job is unique and can only be completed once.',actions);
+};
+const V04_PREV_LANDMARK=landmarkAction;
+landmarkAction=function(id){if(id!=='board')return V04_PREV_LANDMARK(id);v03init();
+ modal('Village Notice Board',state.flags.bridgeFixed?'The eastern bridge has reopened. No more repair supplies are needed.':'The eastern bridge is still awaiting repairs.',[
+  {text:'📜 Browse village jobs',act:jobBoard},
+  {text:'🌉 Inspect bridge status',act:()=>modal('Bridge status',state.flags.bridgeFixed?'REPAIRED · 100% · Traders and villagers can cross safely.':('Repair progress: '+state.flags.villageStatus.bridge+'%. Ask Haldric about the bridge quest.'),[{text:'Back to notice board',act:()=>landmarkAction('board')}])},
+  {text:'Leave'}
+ ]);
+};
+function v04strengthNeed(){return 6+Math.max(0,state.stats.STR-12)*2}
+const V04_PREV_PRACTICE=practice;
+practice=function(skill){if(skill!=='strength')return V04_PREV_PRACTICE(skill);v03init();
+ if(!dailyCap('practice-strength',2))return;
+ updTime(25);const a=state.flags.v04.strength;const test=check('CON',11);
+ const added=test.pass?2:1;a.points+=added;state.flags.strengthSessions=(state.flags.strengthSessions||0)+1;
+ let gained=false;const need=v04strengthNeed();
+ if(a.points>=need){a.points-=need;state.stats.STR+=1;a.earned++;gained=true;}
+ const xp0=state.xp,lv0=state.level;gainXP(2);
+ const xpText=state.level>lv0?'XP gained; level up!':('XP +'+Math.max(0,state.xp-xp0));
+ notify(gained?'Strength training complete: STR +1! '+xpText+'. Next goal: '+a.points+'/'+v04strengthNeed()+'.':('Strength training: +'+added+' practice points ('+a.points+'/'+v04strengthNeed()+'). '+xpText+'. STR is '+state.stats.STR+'.'));
+};
+const V04_PREV_CHARACTER=v03character;
+v03character=function(){v03init();const e=v03equippedPower(),a=state.flags.v04.strength;
+ customModal('Sania · Character',body=>{
+ html(body,'p','15 years old · Orphan · Briarford · No fixed class');
+ html(body,'div','Level '+state.level+' · XP '+state.xp+'/'+(25*state.level)+' · Day '+state.day,'banner');
+ const g=html(body,'div','','mini-grid');for(const k of STATS)html(g,'div',statNames[k]+' ('+k+'): '+state.stats[k],'mini');
+ html(body,'div','💪 Strength training: '+a.points+'/'+v04strengthNeed()+' practice points until STR +1. Successful drills award 2 points; other drills award 1.','banner');
+ html(body,'hr','','separator');html(body,'strong','Learned skills');const t=html(body,'div','','mini-grid');for(const [k,v] of Object.entries(state.skills))html(t,'div',(skillNames[k]||k)+': '+v,'mini');
+ html(body,'p','Magic lessons increase Magic Theory, not your base INT or WIS.','small');
+ html(body,'p','Equipment: +'+e.damage+' attack · '+e.armor+' armor.','tag');
+ html(body,'p','Grimoire: sealed. Its origin and nature remain unknown.','small');
+ btn(body,'🌟 Magic skill tree',v03talents);btn(body,'⚔️ Manage equipment',v03equips);
+ });
+};
+const V04_BRIDGE_QUOTES={
+ Haldric:'The bridge is repaired. Your timber made the difference. I have removed it from the list of outstanding repairs.',
+ Garrick:'The bridge holds now. I checked the bolts myself, and the carts have begun crossing again.',
+ Vessa:'The repaired bridge has made my route shorter. That is good business for me and for the village.',
+ Orven:'The bridge is open again. My guards can focus on the northern road instead of the damaged crossing.',
+ Liora:'People are using the bridge again. I heard that you helped finish it.',
+ Renn:'The bridge is safe to cross now. That opens the better hunting trail again.',
+ Mira:'The repaired bridge means I can get herbs from the far bank without sending people the long way around.',
+ Elna:'The market cart made it over the bridge safely this morning. The repairs were worth the effort.',
+ Teren:'The repaired bridge looked sturdy when I crossed it. Garrick says your timber helped.'
+};
+function v04npcEventLine(id,topic){
+ const f=state.flags.v04;
+ if(topic==='bridge')return v04known(id,'bridge')?(V04_BRIDGE_QUOTES[id]||'The bridge has reopened.'):'I have not heard the latest news about the bridge.';
+ // Job-specific dialogue changes persist, but do not overwrite every conversation topic.
+ if(topic==='job'){
+  if(id==='Haldric'&&v04known(id,'bridge'))return V04_BRIDGE_QUOTES.Haldric;
+  if(id==='Orven'&&v04known(id,'bridge'))return V04_BRIDGE_QUOTES.Orven;
+  if(id==='Garrick'&&v04known(id,'ore'))return 'That iron order is finished. I can finally focus on the farm tools waiting on my bench.';
+  if(id==='Mira'&&v04known(id,'herbal'))return 'The herbal shipment arrived. For now the clinic has enough remedies.';
+  if(id==='Elna'&&v04known(id,'firewood'))return 'Thanks to the fresh firewood, my stove is warm again. I have no need for another delivery right now.';
+  if(id==='Vessa'&&v04known(id,'parcel'))return 'Elna received my parcel. Thank you. I will send another only if a new delivery is arranged.';
+  return null;
+ }
+ if(topic==='day'&&v04known(id,'bridge')){
+  f.acknowledged??={};if(!f.acknowledged[id]){f.acknowledged[id]=true;return V04_BRIDGE_QUOTES[id];}
+ }
+ if(topic==='rumor'){
+  const known=Object.keys(f.worldEvents).filter(q=>v04known(id,q));
+  if(!known.length)return null;
+  f.rumorCycle??={};const idx=f.rumorCycle[id]||0;f.rumorCycle[id]=idx+1;
+  if(idx%3===2)return null; // Regular unrelated rumors still happen.
+  const key=known[idx%known.length];
+  if(key==='bridge')return V04_BRIDGE_QUOTES[id]||'The village bridge has reopened.';
+  const quotes={ore:'Garrick received enough ore to finish an important order.',herbal:'Mira has the herbs she needed; the clinic is stocked again.',firewood:'Elna has firewood stacked for the stove now.',tracks:'Orven received a report about strange prints in the northern woods.',parcel:'Vessa’s delivery reached Elna without trouble.',hunt:'Renn has enough hunting supplies for the moment.'};
+  return quotes[key]||null;
+ }
+ return null;
+}
+const V04_PREV_NPC_DIALOGUE=v03npcDialogue;
+v03npcDialogue=function(id,topic){v03init();const n=state.npcs.find(p=>p.id===id);if(!n)return;
+ const line=v04npcEventLine(id,topic);
+ if(!line)return V04_PREV_NPC_DIALOGUE(id,topic);
+ updTime(4);remember(id,'talked about village changes',0);
+ modal(n.name,'“'+line+'”',[{text:'Ask something else',act:()=>talk(id)},{text:'Leave'}]);
+};
+const V04_PREV_TALK=talk;
+talk=function(id){v03init();V04_PREV_TALK(id);
+ if(!state.quests.bridge||state.quests.bridge.status!=='done')return;
+ const body=$('modal-body');if(!body)return;
+ btn(body,'🌉 Talk about the repaired bridge',()=>{
+  if(!v04known(id,'bridge')){v04learn(id,'bridge');notify('You tell '+id+' that the bridge has reopened. News shared.');}
+  v03npcDialogue(id,'bridge');
+ });
+};
+const V04_PREV_LOCAL_TALK=v03talkLocal;
+v03talkLocal=function(n){if(!n.canon)return V04_PREV_LOCAL_TALK(n);
+ v03init();const p=V03_BY_ID[state.zone.slice(7)];if(!p)return;
+ const choices=[{text:'🗣️ Talk about your ambitions and this place',act:()=>{updTime(7);n.relationship=Math.min(100,n.relationship+1);n.notes.unshift('Talked on day '+state.day);modal(n.name,'“'+v03localNews(p,n)+'”',[{text:'Continue talking',act:()=>v03talkLocal(n)},{text:'Leave'}]);}}];
+ if(['Asta','Magna Swing','Yami Sukehiro'].includes(n.name))choices.push({text:'🥊 Ask for combat training',act:()=>{
+  if(!dailyCap('canon-practice-'+n.id,1))return;updTime(35);
+  const before=state.skills.blade,xp=state.xp,level=state.level;skillUp('blade',1);gainXP(3);n.relationship=Math.min(100,n.relationship+1);
+  notify(n.name+' trains with you: Swordsmanship +'+(state.skills.blade-before)+', '+(state.level>level?'level up':('XP +'+Math.max(0,state.xp-xp)))+'.');
+ }});
+ if(['Yuno','Sister Lily','Witch Queen'].includes(n.name))choices.push({text:'✨ Study magical principles',act:()=>{
+  if(!dailyCap('canon-study-'+n.id,1))return;updTime(25);
+  const before=state.skills.magic,xp=state.xp,level=state.level;
+  skillUp('magic',1);gainXP(2);n.relationship=Math.min(100,n.relationship+1);n.notes.unshift('Shared magical knowledge on day '+state.day);
+  notify(n.name+' teaches you: Magic Theory +'+(state.skills.magic-before)+', '+(state.level>level?'level up':('XP +'+Math.max(0,state.xp-xp)))+'. (Not a base attribute increase.)');
+ }});
+ if(n.name==='Sister Lily')choices.push({text:'🩹 Request help with injuries',act:()=>{if(!dailyCap('lily-heal',1))return;updTime(20);state.hp=Math.min(state.maxHp,state.hp+10);notify('Sister Lily treats your injuries. +10 HP.');}});
+ if(n.name==='Yami Sukehiro')choices.push({text:'🛡️ Ask about joining the Black Bulls',act:()=>notify('Yami studies you. “Survive the Magic Knights entrance exam first. Then show me what you can do.”')});
+ choices.push({text:'Leave'});
+ modal(n.name+' · '+n.job,p.name+'. Relationship: '+n.relationship+'/100. '+(n.notes.length?'They remember your previous meetings.':'A first meeting.'),choices);
+};
+const V04_PREV_JOURNAL=v03journal;
+v03journal=function(){v03init();customModal('Quests · World Changes',body=>{
+ const quests=Object.entries(state.quests).sort((a,b)=>(a[1].status==='done')-(b[1].status==='done'));
+ html(body,'p',quests.length?'Accepted work — one entry per task, regardless of where you accepted it.':'No active quests. Visit the notice board or talk to villagers.');
+ for(const [id,q] of quests){const meta=V03_QUESTS[id],done=q.status==='done',box=html(body,'div','','banner');
+  html(box,'strong',(done?'✅ COMPLETED · ':'📌 ACTIVE · ')+(meta?.label||q.title));
+  html(box,'p',V03_JOURNAL_LABEL[id]||q.desc,'small');
+  if(!done&&meta){html(box,'div','Turn in to: '+meta.npc+(v03questReady(id)?' · READY':' · missing supplies'),'tag');if(id==='parcel'&&!state.items.parcel)btn(box,'Collect parcel from Vessa',()=>talk('Vessa'));}
+ }
+ html(body,'hr','','separator');html(body,'strong','Persistent village changes');
+ html(body,'div','Bridge: '+(state.flags.bridgeFixed?'REPAIRED / OPEN':'Under repair ('+state.flags.villageStatus.bridge+'%)'),'banner');
+ const events=Object.values(state.flags.v04.worldEvents);
+ if(!events.length)html(body,'p','No major village changes have been recorded yet.','small');
+ for(const e of events.slice().reverse())html(body,'div','Day '+e.day+': '+e.text+' · Known by '+e.knownBy.length+' villagers','list-row');
+ html(body,'hr','','separator');html(body,'strong','Recent events');for(const msg of state.log.slice(0,7))html(body,'div',msg,'list-row');
+ });
+};
+// Both original buttons opened the same atlas. Keep one recognizable control.
+atlasBtn.remove();
+const onlyWorld=$('actions').querySelector('[data-panel="world"]');if(onlyWorld)onlyWorld.innerHTML='<span>🌍</span>World Map';
+const brandV04=document.querySelector('.brand');if(brandV04){const tag=brandV04.querySelector('.sub');if(tag)tag.textContent='v0.4';}
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
