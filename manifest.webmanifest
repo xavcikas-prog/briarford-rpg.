@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Briarford — Black Clover fan RPG (v0.5)",
+  "name": "Briarford — Black Clover fan RPG (v0.6)",
   "short_name": "Briarford",
-  "description": "2D RPG fan prototype with World and Local Maps, a watchtower, NPC memories, equipment, and quests.",
+  "description": "Offline-friendly 2D RPG: distinct NPCs, branching investigations, a magic discipline tree and a sealed-grimoire mystery.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
