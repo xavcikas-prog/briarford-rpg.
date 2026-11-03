@@ -1,7 +1,18 @@
-# Briarford RPG — v0.4
+# Briarford RPG — v0.5
 An unofficial, independent **Black Clover** pixel-art RPG fan prototype, designed for a portrait-mode iPhone browser. Original code and graphics; no copyrighted anime art is included.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## What's new in v0.5
+- Restored two **different** navigation buttons:
+  - **World Map**: full Black Clover kingdoms atlas for long-distance travel.
+  - **Local Map**: clickable nearby map of **Briarford Village**, **Northern Forest**, and **Abandoned Watchtower**.
+- Watchtower is now a real walkable tile map, accessible from Local Map, with a collapsed gate, hall, ruined archive, and rain cistern. Searching the hall and archive earns finite discoveries, items or XP; the cistern provides limited water.
+- Forest travel restored, including herbs, tracks, iron and wolf encounters already present in the game.
+- NPC rumors have a larger person-specific set of non-quest topics. Completed job news appears only occasionally, not as the default for almost every rumor.
+- Garrick and other quest participants now speak in first person about their **own** completed jobs, rather than gossiping about themselves as if absent.
+- Haldric now discusses taxes, village stores, guards, and local issues after the bridge is repaired, while the repaired-bridge topic is still accessible under **Ask about village changes**.
+- v0.4 saves remain compatible; progress in tower discoveries is saved in the existing slots.
 
 ## What's new in v0.4
 - Removed redundant Atlas button: World Map opens the same canonical atlas.
