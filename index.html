@@ -44,7 +44,10 @@
 .s7-learn{width:100%;min-height:48px;background:#537047;border-color:#b7d282;color:white;margin:12px 0}.s7-related{width:100%;margin:6px 0;text-align:left;background:#2d4135}.s7-research{width:100%;margin-top:12px}
 @media(max-width:350px){.s7-node-name{font-size:11px}.s7-token{gap:5px;padding:6px}.s7-token span{font-size:10px}.s7-branch{padding:9px}}
 
-  </style>
+  .s8-manifest-row{position:relative;padding-top:0}
+.s8-manifest-row::before{content:"";position:absolute;width:2px;height:27px;left:50%;top:-27px;background:#82bfac;transform:translateX(-50%)}
+.s8-manifest-node{max-width:185px;border-color:#83c1ad;background:#285044}
+</style>
 </head>
 <body>
 <div class="app">
@@ -944,10 +947,10 @@ activityPanel=function(){
   {text:'🏚️ Search the watchtower hall',act:()=>goLandmark('towerHall')},
   {text:'📜 Examine the ruined archive',act:()=>goLandmark('towerArchive')},
   {text:'💧 Visit the rain cistern',act:()=>goLandmark('towerWell')},
-  {text:'🗺️ Local Map',act:v05localMap}
- ]);
+  {text:'🗺️ Local Map',act:v05localMap} ]);
 };
-function v05localMap(){ if(!state?.created)return;v03init();v05prepare();
+function v05localMap(){
+ if(!state?.created)return;v03init();v05prepare();
  if(indoors())return modal('Local Map','You are inside a building. Leave it to travel elsewhere.',[{text:'Close'}]);
  if(state.zone.startsWith('region:'))return modal('Local Map · '+(V03_BY_ID[state.zone.slice(7)]?.name||'Current region'),
   'This region can be explored using Activities and the settlement map. The Briarford Local Map is available once you return home.',[
@@ -1522,11 +1525,22 @@ function v08Status(){const f=v08();customModal('Uncertain Pulse · Field Notes',
  });}
 const V08_PREV_BRANCH=v07Branch;
 v07Branch=function(branch){V08_PREV_BRANCH(branch);if(branch!=='Unknown'||!state?.created)return;
- const body=$('modal-body'),f=v08();const card=html(body,'div','','banner');
- html(card,'strong',f.stage==='sealed'?'✧ Unresolved marks':'✧ Unsteady Pulse · observed');
- html(card,'p',f.stage==='sealed'?'No ability is available. The seal is still intact. Research and genuinely hazardous moments may reveal more.':
- 'A real but limited disturbance of active mana. It cannot negate ordinary physical attacks.','small');
- btn(card,f.stage==='sealed'?'View research notes':'Examine first manifestation',f.stage==='sealed'?v08ResearchDialog:v08Status,'secondary');
+ const body=$('modal-body'),f=v08();
+ if(f.stage!=='sealed'){
+  const tag=body.querySelector('.s7-controls .s7-tag');if(tag)tag.textContent='PARTIAL DISCOVERY';
+  const tree=body.querySelector('.s7-tree');
+  if(tree){const row=html(tree,'div','','s7-level s8-manifest-row');
+   const button=btn(row,'',v08Status,'s7-node s7-node-learned s8-manifest-node');
+   html(button,'span','✧','s7-node-icon');
+   html(button,'strong','Unsteady Pulse','s7-node-name');
+   html(button,'small','MANIFESTED · '+(f.stage==='steady'?'CONTROLLED':'UNSTABLE'),'s7-node-state');
+  }
+ }
+ const card=html(body,'div','','banner');
+ html(card,'strong',f.stage==='sealed'?'✧ Research paths':'✧ First manifestation · field notes');
+ html(card,'p',f.stage==='sealed'?'No usable ability yet. There are routes through careful study and through danger. Neither grants a contract.':
+ 'Disturbs active mana at a health and strain cost. Physical attacks are not negated. The sealed page above remains unexplained.','small');
+ btn(card,f.stage==='sealed'?'View research notes':'View control and costs',f.stage==='sealed'?v08ResearchDialog:v08Status,'secondary');
 };
 const V08_PREV_CHARACTER=v03character;
 v03character=function(){V08_PREV_CHARACTER();if(!state?.created)return;const f=v08();const body=$('modal-body');
