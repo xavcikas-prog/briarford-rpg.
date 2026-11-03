@@ -71,3 +71,20 @@ Caveats: tests use desktop Chromium mobile emulation. Physical iPhone Safari and
 - JavaScript syntax checked with Node 22; no JS page errors in tested flows
 
 Note: Chromium mobile emulation, not a physical iPhone Safari run.
+
+## v0.8 manifestation regression checks
+- Node 22 syntax validation: PASS
+- Chromium 390×844 mobile viewport page errors: none
+- Sealed grimoire Research Notes button reachable: PASS
+- Research readiness: requires distinct study days, observations and independent learned knowledge
+- Research-only route activates first limited power: PASS
+- Optional Living Ward tactical battle initializes: PASS
+- The pulse interrupts an enchanted shield and charging attack: PASS
+- Casting deducts HP and 2 AP and respects a daily limit: PASS
+- Manifestation state survives save / reload: PASS
+- Unknown skill tree gains an Unsteady Pulse node but preserves the locked Sealed Page: PASS
+- Three practice sessions on separate days yield better control: PASS
+- Near-fatal danger prompt can be accepted or refused: PASS
+- Refusing a fatal intervention leads to defeat rather than forced awakening: PASS
+
+These checks were performed with Chromium mobile emulation and a deterministic synthetic save; physical iPhone Safari and the player's actual save still need user-side verification.
