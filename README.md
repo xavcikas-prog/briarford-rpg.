@@ -1,7 +1,17 @@
-# Briarford RPG — v0.3
+# Briarford RPG — v0.4
 An unofficial, independent **Black Clover** pixel-art RPG fan prototype, designed for a portrait-mode iPhone browser. Original code and graphics; no copyrighted anime art is included.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## What's new in v0.4
+- Removed redundant Atlas button: World Map opens the same canonical atlas.
+- Strength training now gives 1–2 guaranteed practice points per drill, +2 XP (subject to the daily XP limit), and STR +1 on reaching its displayed threshold. The character panel explains exact progress; older saved training progress is carried over.
+- Yuno, Sister Lily, and Witch Queen magic lessons explicitly award **Magic Theory +1 and XP +2** when daily progression caps allow; the result message always reports the actual gains.
+- Bridge quest can be accepted once (Haldric or notice board), completed once, and rewarded once. The notice board shows ACTIVE or COMPLETED; no more repeat timber donations after completion.
+- Bridge repair makes the crossing fully repaired (100%) and maintains this state on later days. Existing completed bridge quests in older saves migrate to the repaired state.
+- Village event journal remembers completed work. Witnesses know immediately; other villagers gradually hear through gossip, or can learn directly when the player tells them. Quest givers stop repeating outdated job requests.
+- Journal shows persistent village changes and how many Briarford villagers have learned about them.
+- Existing saves remain in their original 3 local slots; export a JSON backup before major updates.
 
 ## What's new in v0.3
 - English-first gameplay and NPC dialogue. Some legacy v0.2 event messages and journal history may still be in Lithuanian.
