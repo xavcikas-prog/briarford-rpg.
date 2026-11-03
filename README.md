@@ -1,38 +1,32 @@
-# Briarford v0.1 — mobilus Black Clover fanų RPG prototipas
+# Briarford RPG — v0.2
 
-Tai **neoficialus, asmeninis fanų projektas**, ne susijęs su „Black Clover“ teisių savininkais. Visa grafika piešiama programiškai naršyklėje: nėra importuotų anime paveikslėlių, muzikos ar mokamo AI API.
+Nemokamas, neoficialus, tik asmeniniam naudojimui skirtas **Black Clover** fanų RPG prototipas. Pritaikytas vertikaliam iPhone ekranui, valdomas bakstelėjimais.
 
-## Kas jau veikia
+## Žaidimas
 
-- 2D pixel art žemėlapis (viršaus perspektyva), vertikalus telefono ekranas.
-- Sania, 15 m., su mažu nameliu Briarford pakraštyje.
-- Veikėjo kūrimas: **pasirinkti 2 įgūdžius, 1 atributo bonusą ir 1 daiktą**.
-- Ėjimas bakstelėjus su automatiniu maršruto radimu; žaidimo laikas slenka su judėjimu.
-- 9 vardiniai NPC su paprastomis dienotvarkėmis, asmenybės rodikliais, santykiais ir trumpa atmintimi.
-- Kontekstiniai pokalbiai, gandai, prekyba, dvi paprastos užduotys.
-- Inventorius, patirtis, lygiai, atributai, naudojant augantys įgūdžiai.
-- Šiaurinis miškas ir pagrindinė taktinė kova su vilku (AP ir papildomas veiksmas).
-- Trys išsaugojimo vietos naršyklės `localStorage`, galimybė išsaugoti ir kovos metu, rankinis JSON eksportas/importas.
-- PWA manifestas ir lokalaus veikimo talpykla (kai svetainė įkelta per HTTPS).
+Atidarykite: https://xavcikas-prog.github.io/briarford-rpg./
 
-## Žaisti kompiuteryje
+## Nauja v0.2 versijoje
 
-Aplanką galima paleisti tiesiog atidarius `index.html` Chrome ar kitoje šiuolaikinėje naršyklėje. Geresnis būdas paleisti vietinį serverį: `python -m http.server 8000`, tuomet naršyklėje atverti `http://localhost:8000`.
+- Septyni lankomi pastatai ir jų vidaus vaizdai: Sania namelis, smuklė, kalvė, gydykla, sodyba, medžiotojo namas, Elna trobelė.
+- Veiklų mygtukas: žvejyba, miško ištekliai, darbas, treniruotės, skelbimų lenta, amatai.
+- Skirtingos NPC dialogų temos, individualios istorijos ir situaciniai gandai.
+- Naujos užduotys ir atlygiai, daiktų gamyba, skrynia ir prekyba.
+- Kaimo būklės kaita dienomis: tiltas, mokesčių įtampa, maisto ir prekių tiekimas.
+- Vagystės bandymas su įtarimo ir santykių pasekmėmis.
 
-## Žaisti iPhone be mokamo hostingo
+## Valdymas
 
-1. Susikurk **viešą GitHub saugyklą** (jei dar neturi GitHub, užsiregistruoti galima nemokamai).
-2. Į saugyklos pagrindinį aplanką įkelk **visus** šio aplanko failus (ne vien ZIP).
-3. GitHub saugykloje atsidaryk **Settings → Pages** ir pasirink publikavimą iš `main` šakos, katalogo `/ (root)`.
-4. Atverk GitHub Pages nuorodą per iPhone **Safari**.
-5. Safari bendrinimo meniu pasirink **Add to Home Screen / Pridėti prie pradžios ekrano**. Pirmam įkėlimui reikia interneto; po jo PWA gali veikti ir be interneto.
+Bakstelėkite žemėlapyje, kur norite nueiti. Palieskite namo duris arba stogą, kad sužinotumėte, ar galite užeiti. Namų viduje palieskite baldus, personažą arba naudokite **Veiklos** mygtuką. Atskirose vietose ieškokite aukso spalvos ženklų. Naudokite žemėlapį kelionei į mišką.
 
-GitHub sąsajos žingsniai gali keistis. Viešos saugyklos turinys bus viešas. Asmeniniai išsaugojimai lieka įrenginyje, jie į GitHub nekeliami.
+## Išsaugojimas
 
-**Svarbu:** atidarius `index.html` iš iPhone „Files“ programos, JavaScript veikimas gali būti apribotas. Patikimiausia naudoti HTTPS prieigą per GitHub Pages. Taip pat iOS gali išvalyti svetainės saugojimo duomenis, todėl naudok JSON eksportą kaip atsarginę kopiją.
+Trys lokalūs išsaugojimo slotai ir JSON eksportas. **v0.1 išsaugojimai suderinami su v0.2**; naudokite tuos pačius Safari duomenis. Prieš atnaujinant rekomenduojama eksportuoti JSON atsarginę kopiją. Ištrynus naršyklės duomenis lokalūs išsaugojimai gali dingti.
 
-## Dabartinės ribos
+## Diegimas ir atnaujinimai
 
-Tai **ankstyvas prototipas, ne visas žaidimas**. ~140 Briarford gyventojų kol kas yra projekto vizija, o detaliai sukurti devyni aktyvūs NPC. Atskiri jų gebėjimų atributai ir pilnas ekonomikos, nusikaltimų, dinastijų, galingos magijos ir kanoninių anime veikėjų pasaulio simuliacijos kodas dar nesukurtas. Grimoaras sąmoningai lieka užantspauduotas. Miško kova skirta ėjimų logikos bandymui.
+GitHub Pages veikia iš `main` šakos `/(root)`. Programėlės cache versija v0.2. Jei atnaujinimo nesimato, uždarykite programėlę ir perkraukite Safari puslapį dar kartą.
 
-V1 valdikliai: bakstelėk laisvą žemėlapio langelį – Sania ten eis; bakstelėk NPC – prieis ir pradės pokalbį; atsidaryk „Žemėlapis“ – keliauk į mišką; miške bakstelėk vilką – prasidės kova.
+## Projekto būsena
+
+Tai vis dar mažos apimties prototipas, ne pilnas pasaulio ar 140 gyventojų simuliatorius. NPC dialogai generuojami iš kontekstinių šablonų ir nepretenduoja į neribotą generatyvinį AI.
