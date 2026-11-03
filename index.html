@@ -13,6 +13,37 @@
   <style>
   :root { --bg:#131918;--panel:#202c29;--panel2:#293934;--stroke:#405148;--text:#f1ead9;--muted:#b1bdac;--gold:#dfbd76;--accent:#7dc7a4;--danger:#e18e85; }
   * {box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.35 system-ui,-apple-system,sans-serif;min-height:100%;overscroll-behavior:none}body{background:radial-gradient(ellipse at center top,#27392f,#111615 75%)}button,select{font:inherit;touch-action:manipulation}button{color:var(--text);background:#31483d;border:1px solid #66806a;border-radius:9px;padding:10px 12px;font-weight:600;min-height:43px;cursor:pointer}button:active{filter:brightness(1.2)}button:disabled{opacity:.4;cursor:not-allowed}.secondary{background:#25322f;border-color:#44564d}.warning{background:#5b3434;border-color:#915957}.primary{background:#557559;border-color:#9ec69b;color:white}.app{width:min(100%,490px);margin:0 auto;min-height:100svh;background:#161d1c;box-shadow:0 0 35px #0006;padding-bottom:env(safe-area-inset-bottom)}header{padding:calc(8px + env(safe-area-inset-top)) 12px 7px;background:#202b27;border-bottom:1px solid #394e40}.topline{display:flex;justify-content:space-between;align-items:center;gap:6px}.brand{font-family:Georgia,serif;color:#e2c68b;font-size:17px;letter-spacing:.5px;font-weight:700}.sub{font-size:11px;color:var(--muted)}.pill{border:1px solid #58715c;border-radius:20px;padding:3px 8px;font-size:11px;background:#2a3e35}.meters{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:7px}.hpbox{display:flex;align-items:center;gap:5px;flex:1;max-width:240px}.hpbar{height:8px;background:#111a18;border:1px solid #60705a;border-radius:8px;flex:1;overflow:hidden}.hpfill{background:linear-gradient(90deg,#af4c47,#e08f66);height:100%}.gold{font-weight:700;color:var(--gold)}.scenehead{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;background:#1b2622}.scenehead span:last-child{color:var(--muted);font-size:11px}.canvas-wrap{position:relative;overflow:hidden;background:#293a30}canvas{display:block;width:100%;aspect-ratio:1/1;image-rendering:pixelated;touch-action:none}.canvas-tip{position:absolute;bottom:7px;left:7px;background:#101d1bd9;padding:5px 8px;border:1px solid #67765c;border-radius:6px;font-size:10px;pointer-events:none}.event{margin:7px 9px;padding:8px 10px;background:#25352d;border-left:3px solid var(--gold);min-height:47px;font-size:12px;color:#ede5d5}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:0 9px 7px}.actions button{font-size:12px;padding:9px 3px;min-height:46px}.actions button span{display:block;font-size:17px;margin-bottom:3px}.battlebar{padding:7px 9px;background:#372b27;display:none;grid-template-columns:repeat(3,1fr);gap:5px;border-top:1px solid #80594e}.battlebar button{font-size:12px;padding:8px 4px}.combat-title{grid-column:1/-1;text-align:center;color:#f0bd9f}.footer{padding:6px 10px;text-align:center;font-size:10px;color:#8da494}.overlay{position:fixed;inset:0;background:#080d0cca;z-index:10;display:none;align-items:center;justify-content:center;padding:15px;overflow:auto}.overlay.visible{display:flex}.modal{background:#21302b;border:1px solid #779073;border-radius:13px;width:min(100%,470px);max-height:min(86svh,850px);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 12px 55px #0009}.modal-title{display:flex;justify-content:space-between;align-items:center;padding:14px 15px;background:#31453b;border-bottom:1px solid #658066;font:700 18px Georgia,serif;color:#f0dcae}.close{background:transparent;border:none;font-size:21px;min-height:24px;padding:0 5px}.modal-body{overflow:auto;padding:12px 14px 15px}.modal-body p{margin:0 0 10px;color:#e4e5d6;line-height:1.48}.choice-list{display:grid;gap:7px}.choice-list button{text-align:left;width:100%;padding:12px 13px}.small{font-size:12px;color:var(--muted)}.list-row{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:8px 0;border-bottom:1px solid #3d5149}.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chip{display:inline-block;padding:5px 9px;border-radius:20px;border:1px solid #627765;color:#e1e5d4;background:#2b3b32;font-size:12px}.chip.active{background:#546e51;border-color:#c6d89e}.mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.mini{background:#293a33;border:1px solid #455b50;padding:9px;border-radius:8px}.muted{color:var(--muted)}.stat{font-weight:bold;color:var(--gold)}.separator{border:0;border-top:1px solid #44584c;margin:12px 0}.banner{padding:9px;border:1px solid #5d7356;background:#2b3b33;border-radius:7px;margin-bottom:10px}.tag{color:var(--gold);font-size:12px}.floating-label{position:absolute;top:8px;right:10px;background:#11201bd6;border:1px solid #54725b;padding:5px 7px;border-radius:6px;font-size:10px}.hidden{display:none!important}@media(min-width:540px){.app{border-left:1px solid #3e5646;border-right:1px solid #3e5646}}
+  /* v0.7 card-based talent tree. Deliberately scoped to Skills so gameplay screens stay unchanged. */
+.s7-top{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:4px 0 9px}
+.s7-token{background:#293b32;border:1px solid #617963;border-radius:10px;padding:8px 10px;display:flex;align-items:baseline;gap:9px;min-width:0}
+.s7-token b{font-size:22px;line-height:1;color:#efcc84}.s7-token span{font-size:11px;color:#c5cebc}
+.s7-hint{font-size:12px!important;color:#b6c4b9!important;margin:8px 0 12px!important;line-height:1.4!important}
+.s7-branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}
+.s7-branch{--s7-branch:#7dc7a4;min-width:0;min-height:122px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;text-align:left;padding:12px;background:linear-gradient(155deg,#34483e,#21342e);border:1px solid #5c7361;border-left:3px solid var(--s7-branch);border-radius:12px}
+.s7-branch:active,.s7-node:active,.s7-codex-item:active{transform:scale(.985)}
+.s7-icon{font-size:22px;line-height:1.2}.s7-name{font-size:14px;line-height:1.2;color:#f6eed8}.s7-count{font-size:11px;color:#bbcab9}
+.s7-progress{width:100%;height:5px;background:#17221d;border-radius:9px;overflow:hidden}.s7-progress-fill{display:block;height:100%;background:var(--s7-branch);border-radius:9px}
+.s7-overview-footer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0 6px}.s7-overview-footer button{font-size:12px;padding:7px}
+.s7-controls{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:11px}.s7-controls button{font-size:12px;min-height:40px}
+.s7-tag{border:1px solid #6c7b67;background:#293931;border-radius:20px;padding:5px 9px;color:#efdbb5;font-size:11px;text-align:center;white-space:nowrap}.s7-tag.s7-done{border-color:#61ad87;color:#9de2b0}.s7-tag.s7-available{border-color:#c0a45d;color:#e8c880}
+.s7-tree{position:relative;display:flex;flex-direction:column;gap:27px;min-height:86px;padding:7px 0 4px;isolation:isolate}
+.s7-level{display:flex;justify-content:center;gap:8px;z-index:1;position:relative;min-width:0}
+.s7-node{flex:1 1 0;min-width:0;max-width:185px;min-height:78px;padding:8px 6px 7px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;border-radius:12px;background:#2b3732;border:1px solid #657366;box-shadow:0 2px 10px #0003}
+.s7-node-icon{font-size:14px;line-height:1}.s7-node-name{font-size:12px;line-height:1.2;overflow-wrap:anywhere}.s7-node-state{font-size:9px;letter-spacing:.5px;color:#b8c3b6}
+.s7-node-learned{border-color:#79c6a0;background:#294839}.s7-node-learned .s7-node-state{color:#90e2b5}
+.s7-node-ready{border-color:#dcb972;background:#4c4531}.s7-node-ready .s7-node-state{color:#f1d08b}
+.s7-node-locked{opacity:.76}.s7-node-hidden{border-style:dashed;opacity:.85}
+.s7-edges{position:absolute;inset:0;z-index:0;overflow:visible;pointer-events:none}
+.s7-section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:18px 0 9px;padding-top:10px;border-top:1px solid #425448}.s7-section-head strong{font-size:14px}
+.s7-codex{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.s7-codex-item{min-width:0;min-height:72px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:6px;text-align:left;padding:9px 10px;background:#293a32;border:1px solid #607268;border-radius:9px}
+.s7-codex-name{font-size:12px;line-height:1.2}.s7-codex-sub{font-size:10px;color:#c0c7b7;line-height:1.3}
+.s7-description{padding:12px;background:#293a33;border:1px solid #526e5b;border-radius:9px;margin:8px 0 16px!important;font-size:13px;line-height:1.55!important}
+.s7-section-title{display:block;font-size:14px;margin:13px 0 7px;color:#ead3a2}
+.s7-reqs{display:flex;flex-wrap:wrap;gap:7px}.s7-req{font-size:11px;min-height:36px;padding:6px 9px;background:#263b30;border:1px solid #506b57}
+.s7-missing{background:#2e3430;padding:9px 12px;border:1px solid #666c60;border-radius:9px;font-size:12px;line-height:1.8}
+.s7-learn{width:100%;min-height:48px;background:#537047;border-color:#b7d282;color:white;margin:12px 0}.s7-related{width:100%;margin:6px 0;text-align:left;background:#2d4135}.s7-research{width:100%;margin-top:12px}
+@media(max-width:350px){.s7-node-name{font-size:11px}.s7-token{gap:5px;padding:6px}.s7-token span{font-size:10px}.s7-branch{padding:9px}}
+
   </style>
 </head>
 <body>
@@ -916,8 +947,7 @@ activityPanel=function(){
   {text:'🗺️ Local Map',act:v05localMap}
  ]);
 };
-function v05localMap(){
- if(!state?.created)return;v03init();v05prepare();
+function v05localMap(){ if(!state?.created)return;v03init();v05prepare();
  if(indoors())return modal('Local Map','You are inside a building. Leave it to travel elsewhere.',[{text:'Close'}]);
  if(state.zone.startsWith('region:'))return modal('Local Map · '+(V03_BY_ID[state.zone.slice(7)]?.name||'Current region'),
   'This region can be explored using Activities and the settlement map. The Briarford Local Map is available once you return home.',[
@@ -947,7 +977,8 @@ function v05localMap(){
 activityButton.onclick=activityPanel;
 const localMapButton=document.createElement('button');localMapButton.innerHTML='<span>🧭</span>Local Map';localMapButton.onclick=v05localMap;
 const worldButton=$('actions').querySelector('[data-panel="world"]');worldButton?.insertAdjacentElement('afterend',localMapButton);
-const V05_PREV_HUD=updateHUD;updateHUD=function(){V05_PREV_HUD();if(!state?.created)return;if(state.zone==='tower'){$('scene').textContent='Abandoned Watchtower · Briarford';$('worldtag').textContent='Watchtower';}};
+const V05_PREV_HUD=updateHUD;
+updateHUD=function(){V05_PREV_HUD();if(!state?.created)return;if(state.zone==='tower'){$('scene').textContent='Abandoned Watchtower · Briarford';$('worldtag').textContent='Watchtower';}};
 const V05_PREV_EVENT_LINE=v04npcEventLine;
 const V05_RUMORS={
  Garrick:['A trader brought unfamiliar metal scraps to the forge yesterday.','Teren has been asking to learn a more difficult joint. He is not ready yet.','The farm tools will need new teeth before the next harvest.','I heard hammering long after dusk, but nobody was in my workshop.','The stone near the old watchtower might once have been a quarry.'],
@@ -1195,6 +1226,175 @@ load=function(slot){V06_PREV_LOAD(slot);if(state?.created){v06();draw();updateHU
 // One in-world record of the expanded setting, available without spoilers.
 const worldGuide=document.createElement('button');worldGuide.innerHTML='<span>📚</span>People & Lore';worldGuide.onclick=()=>{if(!state?.created)return;const a=v06();customModal('People, Lore & Reputation',body=>{html(body,'p','Black Clover canon characters follow their established personalities and story-era knowledge; original Briarford residents have distinct goals, flaws and private motives.','small');html(body,'div','Village '+a.reputation.village+' · Guard '+a.reputation.guard+' · Merchants '+a.reputation.merchants,'tag');html(body,'strong','People you can meet');for(const id of [...state.npcs.map(x=>x.id),'Asta','Yuno','Sister Lily','Father Orsi','Yami Sukehiro','Magna Swing','Vanessa Enoteca','Witch Queen']){const p=v06profile(id);const b=html(body,'div','','list-row');html(b,'span',id+' · '+p.role);btn(b,'Profile',()=>v06bio(id),'secondary')}html(body,'hr','','separator');html(body,'strong','Magic traditions');html(body,'p','Clover: grimoires and Magic Knights. Heart: natural mana and Mana Method. Diamond: militarized magic research. Spade: harsh northern politics and forbidden dangers. Hino: ki traditions. These are different cultures, not an interchangeable player spell store.','small');btn(body,'Magic & Discipline Tree',v06talentUI);});};$('actions').appendChild(worldGuide);
 const v06brand=document.querySelector('.brand .sub');if(v06brand)v06brand.textContent='v0.6';
+
+/* v0.7 — Tappable discipline branches & visual progression paths.
+   UI-only redesign: no new stats, spells, point purchases or save keys. */
+const V07_BRANCHES={
+ Perception:{icon:'👁️',title:'Perception',sub:'Learn to recognize traces of mana and follow magical evidence.',accent:'#80c3bc'},
+ Discipline:{icon:'🥋',title:'Discipline',sub:'Train concentration, stamina, timing and bodily awareness.',accent:'#c8ab71'},
+ Theory:{icon:'✦',title:'Theory',sub:'Study spell structures, magic attributes and specialized methods.',accent:'#aeb5ee'},
+ Defense:{icon:'🛡️',title:'Defense',sub:'Understand barriers, protection and mental endurance.',accent:'#9ec4a2'},
+ History:{icon:'📜',title:'History',sub:'Read old records and investigate unusual grimoires.',accent:'#dfb991'},
+ Unknown:{icon:'❔',title:'Unknown',sub:'A page that has not yet yielded its secrets.',accent:'#a99ab4'}
+};
+const V07_LEVELS={
+ Perception:[['observe'],['insight','sense']],
+ Discipline:[['breath'],['discipline','balance'],['ki','deflect']],
+ Theory:[['pattern'],['formation'],['arrays'],['heartmethod']],
+ Defense:[['ward'],['wards','resistance']],
+ History:[['records'],['mystery']],
+ Unknown:[['sealed']]
+};
+const V07_SHORT={observe:'Observation',breath:'Breathing',insight:'Arcane Research',sense:'Mana Perception',discipline:'Combat Discipline',ki:'Ki Awareness',deflect:'Measured Guard',balance:'Body Balance',pattern:'Elemental Patterns',formation:'Spell Formation',arrays:'Runic Geometry',heartmethod:'Mana Method',ward:'Mana Skin Theory',wards:'Warding Analysis',resistance:'Pressure Control',records:'Ancient Records',mystery:'Unusual Grimoires',sealed:'Sealed Page'};
+// These describe the mechanics that already exist. They are NOT a new spell shop.
+const V07_TECHNIQUES={
+ Perception:[
+  {title:'Trace Reading',node:'observe',type:'Research',summary:'Compare residue, marks and clues left by magic.',detail:'An investigative discipline used to interpret evidence. It does not grant a mana-detection spell or reveal the identity of your seal.'},
+  {title:'Arcane Comparison',node:'insight',type:'Research',summary:'Improve interpretation of obscure symbols.',detail:'Supports the existing grimoire research checks and helps unlock more demanding study. This is not active combat magic.'},
+  {title:'Mana Sensing',node:'sense',type:'Theory',summary:'Learn to recognize mana in the environment.',detail:'Study of ambient mana and spell signatures. Sania has not yet developed a castable sensing spell.'}
+ ],
+ Discipline:[
+  {title:'Controlled Breathing',node:'breath',type:'Passive',summary:'Regain focus while resting.',detail:'Already functional: resting restores extra focus when this discipline is learned. It is a trained skill, not a spell.'},
+  {title:'Defensive Stance',node:'discipline',type:'Combat',summary:'Reduce incoming damage through training.',detail:'Already functional: Combat Discipline improves damage reduction during tactical combat.'},
+  {title:'Ki Awareness',node:'ki',type:'Teacher-gated',summary:'Notice physical intent, not magical energy.',detail:'Requires personal teaching by Yami. Already affects certain patrol and scouting checks; it does not copy Yami’s Dark Magic.'},
+  {title:'Measured Guard',node:'deflect',type:'Combat',summary:'Harden the guard stance.',detail:'Already functional: a learned Measured Guard reduces an additional point of damage in the existing combat guard logic.'}
+ ],
+ Theory:[
+  {title:'Elemental Signatures',node:'pattern',type:'Study',summary:'Distinguish the traces of different attributes.',detail:'Knowledge of Fire, Water, Wind and Earth Magic does not give Sania those attributes. Training identifies signs and structures only.'},
+  {title:'Spell Formation',node:'formation',type:'Study',summary:'Identify how spells are structured.',detail:'Understand spell construction without being able to cast other people’s spells. The player’s innate power is not a freely selectable class.'},
+  {title:'Rune Arrays',node:'arrays',type:'Theory only',summary:'Study patterned formulas and arrays.',detail:'Runic Geometry is a prerequisite to more advanced methods. No rune casting has yet been implemented for Sania.'},
+  {title:'Mana Method',node:'heartmethod',type:'Theory only',summary:'Research techniques associated with Heart Kingdom.',detail:'Requires Heart Kingdom experience. Even after learning this theory, practical Heart Kingdom Mana Method spells remain unavailable.'}
+ ],
+ Defense:[
+  {title:'Mana Skin',node:'ward',type:'Uncastable theory',summary:'Study reinforcement with natural mana.',detail:'This is theory only. The playable prototype does not currently let Sania cast Mana Skin.'},
+  {title:'Warding Analysis',node:'wards',type:'Investigation',summary:'Interpret protective marks and magical traps.',detail:'The skill represents technical understanding. Interactive ward detection in physical locations is still limited in this prototype.'},
+  {title:'Resisting Pressure',node:'resistance',type:'Research',summary:'Stay composed around disturbing phenomena.',detail:'Already functional: Concentration Under Pressure improves selected checks when researching the sealed grimoire.'}
+ ],
+ History:[
+  {title:'Ancient Records',node:'records',type:'Research',summary:'Interpret old texts, oral legends and symbols.',detail:'Historical learning helps contextualize discoveries. It does not automatically reveal Sania’s true origin.'},
+  {title:'Unusual Grimoires',node:'mystery',type:'Research',summary:'Study exceptional grimoire accounts.',detail:'A prerequisite for future investigation, not a completed devil contract or an instantly learned forbidden spell.'}
+ ],
+ Unknown:[
+  {title:'Sealed Grimoire',node:'sealed',type:'Undiscovered',summary:'Contents unknown.',detail:'Its exact attribute, the presence or identity of any entity, and its potential spells have not been established in Sania’s experience. Research is voluntary.'}
+ ]
+};
+let v07GraphObserver=null;
+function v07CleanGraph(){if(v07GraphObserver){v07GraphObserver.disconnect();v07GraphObserver=null;}}
+function v07NodeKnown(node){const a=v06();return !!(a.learned[node.id]||state.flags.v03.magic[node.id]);}
+function v07Economy(){const a=v06();const earned=Math.floor(state.level/2)+Math.min(3,Math.floor(state.skills.magic/45))+a.insight;
+ const spent=V06_MAGIC_NODES.filter(v07NodeKnown).reduce((sum,n)=>sum+n.cost,0);return {earned,spent,free:Math.max(0,earned-spent)};}
+function v07Requirements(node){const a=v06(),balance=v07Economy();const issues=[];
+ if(node.hidden){issues.push('Not yet discovered');return {issues,ready:false,balance};}
+ for(const id of node.req){const req=V06_MAGIC_NODES.find(n=>n.id===id);if(req&&!v07NodeKnown(req))issues.push('Learn '+req.name);}
+ if(state.skills.magic<node.min)issues.push('Magic Theory '+node.min+' ('+state.skills.magic+' now)');
+ if(node.teacher&&!a.teacher[node.teacher])issues.push('Train with '+node.teacher);
+ if(node.region&&!state.flags.v03.routeHistory.some(x=>V03_BY_ID[x.to]?.realm===node.region))issues.push('Study in '+node.region+' Kingdom');
+ if(balance.free<node.cost)issues.push('Need '+node.cost+' Insight ('+balance.free+' available)');
+ return {issues,ready:issues.length===0,balance};
+}
+function v07State(node){if(v07NodeKnown(node))return 'learned';if(node.hidden)return 'hidden';return v07Requirements(node).ready?'ready':'locked';}
+function v07Status(node){const status=v07State(node);return status==='learned'?'LEARNED':status==='ready'?'AVAILABLE':status==='hidden'?'UNDISCOVERED':'LOCKED';}
+function v07Tag(parent,label,style){return html(parent,'span',label,'s7-tag'+(style?' s7-'+style:''));}
+function v07Top(body,subtitle){const wrap=html(body,'div','','s7-top');const balance=v07Economy();const left=html(wrap,'div','','s7-token');html(left,'b',String(balance.free));html(left,'span','Insight available');const right=html(wrap,'div','','s7-token');html(right,'b',String(state.skills.magic));html(right,'span','Magic Theory');if(subtitle)html(body,'p',subtitle,'s7-hint');}
+function v07TalentUI(){
+ v07CleanGraph();if(!state?.created)return;const a=v06();const bodyTitle='Skills · Magic & Discipline';
+ customModal(bodyTitle,body=>{
+  v07Top(body,'Select a discipline to inspect its path. Tap any node to see requirements and effects.');
+  const grid=html(body,'div','','s7-branches');
+  for(const [id,config] of Object.entries(V07_BRANCHES)){
+   const nodes=V06_MAGIC_NODES.filter(n=>n.branch===id);const done=nodes.filter(n=>v07NodeKnown(n)).length;
+   const card=btn(grid,'',()=>v07Branch(id),'s7-branch');card.style.setProperty('--s7-branch',config.accent);
+   html(card,'span',config.icon,'s7-icon');html(card,'strong',config.title,'s7-name');
+   html(card,'small',id==='Unknown'?'Mystery':`${done} / ${nodes.length} learned`,'s7-count');
+   const bar=html(card,'span','','s7-progress');const fill=html(bar,'span','','s7-progress-fill');fill.style.width=(done/nodes.length*100)+'%';
+  }
+  const footer=html(body,'div','','s7-overview-footer');
+  btn(footer,'📖 Sealed grimoire',v06grimoire,'secondary');
+  btn(footer,'👤 Character',v03character,'secondary');
+  html(body,'p','Research disciplines are not the same as castable spells. Your grimoire has not revealed a working spell.','s7-hint');
+ });
+}
+function v07Tree(branch,parent){
+ const ids=V07_LEVELS[branch];const graph=html(parent,'div','','s7-tree');
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','s7-edges');svg.setAttribute('aria-hidden','true');graph.appendChild(svg);
+ const buttons={};
+ for(const group of ids){const row=html(graph,'div','','s7-level');for(const id of group){const n=V06_MAGIC_NODES.find(x=>x.id===id);const st=v07State(n);
+  const b=btn(row,'',()=>v07NodeDetail(id),'s7-node s7-node-'+st);b.setAttribute('aria-label',n.name+', '+v07Status(n));b.dataset.node=id;
+  const badge=html(b,'span',st==='learned'?'✓':st==='ready'?'✦':st==='hidden'?'?':'🔒','s7-node-icon');
+  html(b,'strong',V07_SHORT[id]||n.name,'s7-node-name');html(b,'small',v07Status(n),'s7-node-state');buttons[id]=b;
+ }}
+ function edges(){if(!graph.isConnected)return;const box=graph.getBoundingClientRect(),w=graph.clientWidth,h=graph.scrollHeight;
+  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.setAttribute('width',String(w));svg.setAttribute('height',String(h));svg.replaceChildren();
+  for(const group of ids)for(const id of group){const node=V06_MAGIC_NODES.find(n=>n.id===id);for(const dep of node.req){const a=buttons[dep],b=buttons[id];if(!a||!b)continue;const ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();
+    const x1=ra.left+ra.width/2-box.left,y1=ra.bottom-box.top,x2=rb.left+rb.width/2-box.left,y2=rb.top-box.top;
+    const e=document.createElementNS('http://www.w3.org/2000/svg','path');const my=(y1+y2)/2;
+    e.setAttribute('d',`M${x1} ${y1} C${x1} ${my} ${x2} ${my} ${x2} ${y2}`);
+    e.setAttribute('stroke',v07NodeKnown(node)?'#7bc4a2':'#697a6b');e.setAttribute('stroke-width','2');e.setAttribute('fill','none');e.setAttribute('opacity',v07NodeKnown(node)?'1':'.75');svg.appendChild(e);
+  }}
+ }
+ requestAnimationFrame(edges);
+ if(typeof ResizeObserver!=='undefined'){v07GraphObserver=new ResizeObserver(()=>requestAnimationFrame(edges));v07GraphObserver.observe(graph);}
+}
+function v07Branch(branch){
+ v07CleanGraph();if(!state?.created)return;const cfg=V07_BRANCHES[branch],a=v06();if(!cfg)return v07TalentUI();
+ customModal(cfg.icon+' '+cfg.title+' · Path',body=>{
+  const controls=html(body,'div','','s7-controls');btn(controls,'← All branches',v07TalentUI,'secondary');
+  const nodes=V06_MAGIC_NODES.filter(n=>n.branch===branch);const done=nodes.filter(v07NodeKnown).length;
+  v07Tag(controls,branch==='Unknown'?'Undiscovered':done+'/'+nodes.length+' learned',done===nodes.length&&branch!=='Unknown'?'done':'');
+  html(body,'p',cfg.sub,'s7-hint');
+  v07Top(body,'Tap a square in the tree. A green square is learned; gold can be learned now; grey still has requirements.');
+  v07Tree(branch,body);
+  html(body,'p','Paths may also need skills from a different discipline. Tap a locked node to see what is missing.','s7-hint');
+  const head=html(body,'div','','s7-section-head');html(head,'strong','Techniques & spell notes');v07Tag(head,'Details on tap');
+  const codex=html(body,'div','','s7-codex');
+  for(let index=0;index<V07_TECHNIQUES[branch].length;index++){
+   const tech=V07_TECHNIQUES[branch][index];const n=V06_MAGIC_NODES.find(q=>q.id===tech.node);
+   const button=btn(codex,'',()=>v07Codex(branch,index),'s7-codex-item');
+   html(button,'strong',tech.title,'s7-codex-name');html(button,'small',(v07NodeKnown(n)?'✓ Studied':tech.type)+' · View details','s7-codex-sub');
+  }
+  if(branch==='Unknown')btn(body,'Examine the sealed grimoire',v06grimoire,'s7-research');
+ });
+}
+function v07NodeDetail(id){
+ v07CleanGraph();const node=V06_MAGIC_NODES.find(n=>n.id===id);if(!node)return v07TalentUI();const checks=v07Requirements(node),status=v07Status(node),branch=node.branch;
+ customModal(node.name,body=>{
+  const controls=html(body,'div','','s7-controls');btn(controls,'← '+branch,v=>v07Branch(branch),'secondary');v07Tag(controls,status,status==='LEARNED'?'done':status==='AVAILABLE'?'available':'');
+  html(body,'strong','What it does','s7-section-title');html(body,'p',node.hidden?'The page has not disclosed what lies beyond the seal.':node.eff,'s7-description');
+  if(!node.hidden){
+   html(body,'strong','Prerequisites','s7-section-title');
+   if(!node.req.length)html(body,'p','No prerequisite skills.','s7-hint');
+   const reqList=html(body,'div','','s7-reqs');
+   for(const depId of node.req){const dep=V06_MAGIC_NODES.find(n=>n.id===depId);if(!dep)continue;
+    btn(reqList,(v07NodeKnown(dep)?'✓ ':'○ ')+dep.name+(dep.branch!==branch?' ↗':''),()=>v07NodeDetail(depId),'s7-req');
+   }
+   html(body,'p','Magic Theory '+node.min+' required · '+node.cost+' Insight · 20 minutes to study.','s7-hint');
+   if(node.teacher)html(body,'p','Teacher: '+node.teacher,'s7-hint');
+   if(node.region)html(body,'p','Regional studies: '+node.region+' Kingdom','s7-hint');
+  }
+  if(status==='LEARNED')html(body,'div','✓ Already learned. Your saved progress is unchanged.','s7-result');
+  else if(checks.issues.length){html(body,'strong','Still needed','s7-section-title');const missing=html(body,'div','','s7-missing');for(const issue of checks.issues)html(missing,'div','• '+issue);}
+  if(status==='AVAILABLE')btn(body,'✦ Learn for '+node.cost+' Insight',()=>v07BuyNode(id),'s7-learn');
+  const matching=(V07_TECHNIQUES[branch]||[]).filter(t=>t.node===id);
+  if(matching.length){html(body,'strong','Related techniques','s7-section-title');for(const tech of matching){const i=V07_TECHNIQUES[branch].indexOf(tech);btn(body,tech.title+' →',()=>v07Codex(branch,i),'s7-related');}}
+ });
+}
+function v07BuyNode(id){const node=V06_MAGIC_NODES.find(x=>x.id===id);if(!node||node.hidden)return;const current=v07Requirements(node);
+ if(v07NodeKnown(node)||!current.ready){v07NodeDetail(id);return;}
+ const a=v06();a.learned[id]=true;state.flags.v03.magic[id]=true;updTime(20);updateHUD();notify('Learned '+node.name+' · -'+node.cost+' Insight.');v07Branch(node.branch);
+}
+function v07Codex(branch,index){v07CleanGraph();const info=V07_TECHNIQUES[branch]?.[index];if(!info)return v07Branch(branch);const node=V06_MAGIC_NODES.find(n=>n.id===info.node);
+ customModal(info.title,body=>{
+  const controls=html(body,'div','','s7-controls');btn(controls,'← '+branch,v=>v07Branch(branch),'secondary');v07Tag(controls,info.type);
+  html(body,'p',info.summary,'s7-description');html(body,'strong','What this actually means','s7-section-title');html(body,'p',info.detail,'s7-description');
+  html(body,'p','Associated study: '+node.name+' · '+(v07NodeKnown(node)?'learned':'not learned'),'s7-hint');
+  btn(body,'Open '+node.name+' in skill tree',()=>v07NodeDetail(node.id),'s7-related');
+ });
+}
+// Keep all old shortcuts and save data; replace presentation only.
+v06talentUI=v07TalentUI;
+v03talents=v07TalentUI;
+$('v03magic').onclick=v07TalentUI;
+const v07brand=document.querySelector('.brand .sub');if(v07brand)v07brand.textContent='v0.7';
 
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
