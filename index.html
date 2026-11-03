@@ -573,23 +573,44 @@ creation=function(){state=newState();draw();updateHUD();let stat='STR',starter='
 /* Living town layer: three residents per visited location, local memories and jobs. */
 const V03_LOCAL_NAMES=['Aven','Meriel','Caro','Bryn','Fenn','Talia','Isen','Nell','Soren','Dama','Orla','Eris','Davin','Marn','Leto','Neris','Ilya','Varo','Reina','Tobin'];
 const V03_LOCAL_PROFESSIONS=['Merchant','Guard','Craftsperson'];
-Object.assign(COLOURS,{MarketTrader:['#5b4631','#ba9672','#c2a05d'],TownGuard:['#393a44','#cbaa89','#68849b'],TownSmith:['#4d3029','#c29470','#8d7365']});
+Object.assign(COLOURS,{Asta:['#b2bdba','#e2b590','#292b2e'],Yuno:['#272a29','#caa888','#5c6755'],'Sister Lily':['#eee7d9','#e0b08d','#f2efdf'],'Father Orsi':['#d4c8af','#d4a381','#89745b'],'Yami Sukehiro':['#242323','#b48e72','#282e35'],'Magna Swing':['#e5af43','#cc916d','#5d3327'],'Vanessa Enoteca':['#994d60','#ddaa89','#b75a71'],'Witch Queen':['#171519','#d4ab95','#3e303c'],MarketTrader:['#5b4631','#ba9672','#c2a05d'],TownGuard:['#393a44','#cbaa89','#68849b'],TownSmith:['#4d3029','#c29470','#8d7365']});
 function v03townLocals(){if(!state.zone.startsWith('region:'))return[];v03init();const id=state.zone.slice(7),v=state.flags.v03;v.locals??={};if(!v.locals[id]){
  const seed=id.split('').reduce((a,ch)=>a+ch.charCodeAt(0),0);
- v.locals[id]=[0,1,2].map((n)=>({id:id+'-'+n,name:V03_LOCAL_NAMES[(seed+n*7)%V03_LOCAL_NAMES.length],job:V03_LOCAL_PROFESSIONS[n],x:[28,33,20][n],y:[18,25,28][n],relationship:35+n*5,notes:[],visits:0}));
+ const cast={
+   hage:[['Asta','Grimoire bearer'],['Yuno','Wind mage'],['Sister Lily','Church caretaker'],['Father Orsi','Church elder']],
+   bulls:[['Yami Sukehiro','Black Bulls captain'],['Magna Swing','Black Bulls knight'],['Vanessa Enoteca','Black Bulls knight']],
+   witch:[['Witch Queen','Witches’ ruler'],['Witch Guard','Forest sentinel'],['Herbalist','Witch apprentice']]
+ };const people=cast[id];
+ v.locals[id]=(people||[0,1,2].map(n=>[V03_LOCAL_NAMES[(seed+n*7)%V03_LOCAL_NAMES.length],V03_LOCAL_PROFESSIONS[n]])).map(([name,job],n)=>({id:id+'-'+n,name,job,x:[28,33,20,24][n],y:[18,25,28,31][n],relationship:35+n*5,notes:[],visits:0,canon:!!people&&name!=='Witch Guard'&&name!=='Herbalist'}));
  }return v.locals[id];
 }
 function v03localAt(x,y){return v03townLocals().find(n=>n.x===x&&n.y===y)}
 const V03_TOWN_DRAW=draw;
 draw=function(){V03_TOWN_DRAW();if(!state.zone.startsWith('region:'))return;for(const [i,n] of v03townLocals().entries()){
  const x=n.x-state.camera[0],y=n.y-state.camera[1];if(x<0||y<0||x>=20||y>=20)continue;
- drawPerson(x,y,i===0?'MarketTrader':i===1?'TownGuard':'TownSmith');ctx.fillStyle='#f4ce81';ctx.fillRect(x*16+5,y*16-2,6,2);
+ drawPerson(x,y,COLOURS[n.name]?n.name:i===0?'MarketTrader':i===1?'TownGuard':'TownSmith');ctx.fillStyle='#f4ce81';ctx.fillRect(x*16+5,y*16-2,6,2);
  }};
-function v03localNews(p,n){const realm=v03regionFor(p);const world={Clover:['The Magic Knights are preparing to assess new recruits.','The court cannot agree on the next border patrol.','Our traders prefer these roads before the rainy season.'],Heart:['The forest responds strangely to certain kinds of magic.','Old river paths are safer than the royal road.','The guardians have been watching the outer boundaries.'],Spade:['The cold is getting worse farther north.','Do not ask too many questions of the soldiers.','A family left before dawn without a word.'],Diamond:['New ore quotas have made our lives difficult.','The mountain routes are watched day and night.','The eastern mines need workers.'],Neutral:['The old ruins predate the kingdoms.','Some places draw mana toward themselves.','Travel lightly and keep your supplies dry.'],Hino:['People here value discipline as much as talent.','The sea hides the journey from most travelers.','Few outsiders learn our ways quickly.']}[realm]||['People are watching the roads.'];return world[(state.day+n.visits)%world.length]}
+function v03localNews(p,n){const canon={
+ Asta:'I have no magic, but that does not mean I will stop training. I am going to become the Wizard King!',
+ Yuno:'The grimoire chose me. That does not mean I can afford to stop improving.',
+ 'Sister Lily':'The children are safe. I worry about Asta pushing himself too hard again.',
+ 'Father Orsi':'The grimoire ceremony is over. Now our young people must decide who they want to become.',
+ 'Yami Sukehiro':'You want to be a Magic Knight? First survive the entrance exam. Then we will talk.',
+ 'Magna Swing':'I work hard for every scrap of progress. A little talent means nothing without guts.',
+ 'Vanessa Enoteca':'The Black Bulls are a strange family, but that is what makes us a family.',
+ 'Witch Queen':'This forest belongs to witches. Strangers should choose their words carefully.'
+ };if(canon[n.name])return canon[n.name];const realm=v03regionFor(p);const world={Clover:['The Magic Knights are preparing to assess new recruits.','The court cannot agree on the next border patrol.','Our traders prefer these roads before the rainy season.'],Heart:['The forest responds strangely to certain kinds of magic.','Old river paths are safer than the royal road.','The guardians have been watching the outer boundaries.'],Spade:['The cold is getting worse farther north.','Do not ask too many questions of the soldiers.','A family left before dawn without a word.'],Diamond:['New ore quotas have made our lives difficult.','The mountain routes are watched day and night.','The eastern mines need workers.'],Neutral:['The old ruins predate the kingdoms.','Some places draw mana toward themselves.','Travel lightly and keep your supplies dry.'],Hino:['People here value discipline as much as talent.','The sea hides the journey from most travelers.','Few outsiders learn our ways quickly.']}[realm]||['People are watching the roads.'];return world[(state.day+n.visits)%world.length]}
 function v03localMission(p){const missions=state.flags.v03.missions,mission=missions[p.id];if(!mission){const type=p.tier<=2?'wood':p.tier<=4?'herbs':'ore';const count=p.tier<5?2:3;missions[p.id]={item:type,count,status:'active',owner:'local',pay:9+p.tier*3};return notify('New local task: bring '+count+' '+itemNames[type]+' to the workshop in '+p.name+'.')}
  if(mission.status==='done')return notify('The town remembers your previous help.');if((state.items[mission.item]||0)<mission.count)return notify('Still needed: '+mission.count+' × '+itemNames[mission.item]+'.');
  addItem(mission.item,-mission.count);state.gold+=mission.pay;gainXP(6+p.tier);mission.status='done';state.flags.v03.discoveries.push('Helped '+p.name);updTime(8);notify('Task delivered in '+p.name+'! +'+mission.pay+' yul, +'+(6+p.tier)+' XP.');}
 function v03talkLocal(n){v03init();const p=V03_BY_ID[state.zone.slice(7)];if(!p)return;n.visits++;const mis=state.flags.v03.missions?.[p.id];
+ if(n.canon){const choices=[{text:'🗣️ Talk about your ambitions and this place',act:()=>{updTime(7);n.relationship=Math.min(100,n.relationship+1);n.notes.unshift('Talked on day '+state.day);modal(n.name,'“'+v03localNews(p,n)+'”',[{text:'Continue talking',act:()=>v03talkLocal(n)},{text:'Leave'}]);}}];
+ if(['Asta','Magna Swing','Yami Sukehiro'].includes(n.name))choices.push({text:'🥊 Ask for combat training',act:()=>{const key='canon-practice-'+n.id;if(!dailyCap(key,1))return;updTime(35);skillUp('blade',1);gainXP(3);n.relationship++;notify('You spend time practicing with '+n.name+'. Swordsmanship +1, XP +3.')}});
+ if(['Yuno','Sister Lily','Witch Queen'].includes(n.name))choices.push({text:'✨ Ask about magic',act:()=>{const key='canon-study-'+n.id;if(!dailyCap(key,1))return;updTime(25);skillUp('magic',1);n.relationship++;notify(n.name+' shares a little knowledge about the principles of magic.')}});
+ if(n.name==='Sister Lily')choices.push({text:'🩹 Request help with injuries',act:()=>{if(!dailyCap('lily-heal',1))return;updTime(20);state.hp=Math.min(state.maxHp,state.hp+10);notify('Sister Lily treats your injuries. +10 HP.');}});
+ if(n.name==='Yami Sukehiro')choices.push({text:'🛡️ Ask about joining the Black Bulls',act:()=>{notify('Yami studies you. “Survive the Magic Knights entrance exam first. Then show me what you can do.”');}});
+ choices.push({text:'Leave'});modal(n.name+' · '+n.job,`${p.name}. Relationship: ${n.relationship}/100. ${n.notes.length?'They remember your earlier conversations.':'A first meeting.'}`,choices);return;
+ }
  const options=[{text:'🗣️ Ask about life here',act:()=>{updTime(6);n.relationship=Math.min(100,n.relationship+1);n.notes.unshift('Spoke on day '+state.day);modal(n.name,`“${v03localNews(p,n)}”`,[{text:'Talk again',act:()=>v03talkLocal(n)},{text:'Leave'}]);}},{text:'🪙 Browse local goods',act:shop},{text:'📜 '+(mis?.status==='active'?'Turn in / check local task':'Ask for a local task'),act:()=>v03localMission(p)},{text:'🏘️ Explore this settlement',act:()=>v03explore(p)},{text:'Leave'}];
  modal(n.name+' · '+n.job,`${p.name} resident. Relationship: ${n.relationship}/100. ${n.notes.length?'You have spoken before.':'You have not talked before.'}`,options);
 }
