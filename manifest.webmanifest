@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Briarford — Black Clover fan RPG (prototipas)",
+  "name": "Briarford — Black Clover fan RPG (v0.3)",
   "short_name": "Briarford",
-  "description": "Neoficialus 2D pixel-art mobilus RPG prototipas. Vietinis išsaugojimas, NPC, dialogai ir taktinė kova.",
+  "description": "Offline-friendly mobile 2D RPG prototype with a world atlas, equipment, NPC quests and tactical combat.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -10,7 +10,17 @@
   "theme_color": "#171c1c",
   "orientation": "portrait",
   "icons": [
-    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
