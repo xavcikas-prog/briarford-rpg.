@@ -1,8 +1,18 @@
-# Briarford RPG — v0.7
+# Briarford RPG — v0.8
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## New in v0.8
+- Organic first grimoire manifestation with **two independent paths**: (1) deliberate research and (2) a real near-fatal danger moment. Neither forces the player to accept an unknown power or makes a devil pact.
+- The research path requires eight binding observations, three different in-world study days, at least Magic Theory 30 and an independent comparison (learn Observation or study the watchtower evidence). The attempt uses an INT check; failed attempts cause minor harm and leave evidence, with a guaranteed discovery after enough careful attempts.
+- Danger path may be prompted during life-threatening combat after exposure to genuine anomalous evidence. Player may accept a brief release or refuse; refusal can mean defeat. This cannot be farmed every round and does not grant immunity to injuries.
+- The **Unsteady Pulse** disrupts an active magical ward (shield and charging attack for two turns), but **does not negate physical attacks**. It costs 2 AP and HP, raises strain, and is limited to one use per game day initially.
+- New optional **Living Ward** encounter in Briarford's abandoned watchtower. The animated-looking pixel glyph is a real rendered, damageable tactical opponent with shield, charging magic, collision and counterplay. It can also be beaten with weapons or escaped; grimoire research is never compulsory.
+- Multiple careful uses across distinct days make the first pulse more controllable (two uses per day, lower cost). This is **not** a full devil form, Anti Magic arsenal, or a second power reveal.
+- The **Unknown** discipline now displays an actual green, connected Unsteady Pulse node only after in-world manifestation. Details and strain are visible on demand; unrevealed pages stay hidden.
+- Existing v0.1–v0.7 save slots stay compatible. New progress persists solely under `state.flags.v08`. Export your current save as JSON before updating.
 
 ## New in v0.7
 - Rebuilt the Skills / Magic & Discipline screen for iPhone: a grid of **six tappable discipline cards** (Perception, Discipline, Theory, Defense, History, Unknown) instead of a tall list of all 18 nodes.
