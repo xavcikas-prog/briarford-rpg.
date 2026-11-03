@@ -31,3 +31,15 @@ Known caveats: tests run in a Chromium mobile viewport, not on a physical iPhone
 - No browser JavaScript page errors in the tested flows
 
 Physical iPhone Safari remains a user-side test. Some older Lithuanian event lines and historical saves are still untranslated.
+
+## v0.5 smoke tests (mobile Chromium, 390x844)
+- One World Map button and one distinct Local Map button
+- Local Map graphically marks Briarford village, northern forest and abandoned watchtower
+- Travel Village → Forest → Watchtower → Village; correct zone and walkable map
+- Watchtower Activities menu, pathfinding to hall and collection of finite hall rewards
+- Garrick local rumor no longer describes Garrick in third person; Haldric gossip mixes non-bridge topics
+- Explicit village changes button replaces permanent repaired-bridge shortcut
+- No page JavaScript exceptions in the tested flows
+- Syntax check passed for compiled inline JavaScript
+
+The physical iPhone Safari and older existing user save were not available in test runner. Back up your save before refreshing.
