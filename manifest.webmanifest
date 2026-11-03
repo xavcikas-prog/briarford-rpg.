@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Briarford — Black Clover fan RPG (v0.7)",
+  "name": "Briarford — Black Clover fan RPG (v0.8)",
   "short_name": "Briarford",
-  "description": "Offline-friendly mobile RPG with interactive magic discipline trees, NPC stories, and a sealed-grimoire mystery.",
+  "description": "2D mobile RPG with an optional first grimoire manifestation via danger or research, tactical enchanted ward, and visible skill progression.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
