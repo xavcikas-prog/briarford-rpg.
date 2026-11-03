@@ -814,6 +814,191 @@ atlasBtn.remove();
 const onlyWorld=$('actions').querySelector('[data-panel="world"]');if(onlyWorld)onlyWorld.innerHTML='<span>🌍</span>World Map';
 const brandV04=document.querySelector('.brand');if(brandV04){const tag=brandV04.querySelector('.sub');if(tag)tag.textContent='v0.4';}
 
+/* v0.5 — Local Map restored, playable watchtower, believable contextual rumors. */
+function v05prepare(){
+ if(!state?.created)return;
+ state.flags.v05??={};
+ const f=state.flags.v05;
+ f.rumors??={};f.workTalks??={};f.tower??={};
+}
+const V05_TOWER_SPOTS=[
+ {id:'towerGate',name:'Collapsed gate',x:25,y:27,zone:'tower',mark:'!',desc:'The old gate leads into the deserted watchtower.'},
+ {id:'towerHall',name:'Watchtower hall',x:25,y:18,zone:'tower',mark:'⌂',desc:'An open hall. Broken timbers and weathered stone remain.'},
+ {id:'towerArchive',name:'Ruined archive',x:30,y:21,zone:'tower',mark:'?',desc:'The sealed-looking shelves have fallen beneath the rubble.'},
+ {id:'towerWell',name:'Old rain cistern',x:20,y:22,zone:'tower',mark:'≈',desc:'A narrow stone basin catches rainwater.'}
+];
+for(const p of V05_TOWER_SPOTS)if(!LANDMARKS.find(x=>x.id===p.id))LANDMARKS.push(p);
+const V05_BASE_MAP=makeMap;
+makeMap=function(which){
+ if(which!=='tower')return V05_BASE_MAP(which);
+ if(mapCache.tower)return mapCache.tower;
+ const grid=[];
+ for(let y=0;y<H;y++){
+  const row=[];
+  for(let x=0;x<W;x++){
+   let t='grass';
+   const noise=hash(x+19,y+47)%100;
+   if(x<2||x>49||y<2||y>35)t='trees';
+   else if(noise<22)t='brush';
+   if(x>=17&&x<=33&&y>=10&&y<=30)t='grass';
+   if(x>=19&&x<=31&&y>=13&&y<=26)t='floor';
+   if((x===19||x===31)&&y>=13&&y<=25)t='wall';
+   if((y===13||y===25)&&x>=19&&x<=31)t='wall';
+   if(x===25&&y===25)t='floor'; // gateway
+   if(y>=26&&y<=33&&x>=24&&x<=26)t='road';
+   if(x>=23&&x<=27&&y>=18&&y<=24)t='floor';
+   if(x>=21&&x<=29&&y>=16&&y<=22)t='floor';
+   if((x===23&&y===17)||(x===28&&y===20)||(x===22&&y===23))t='brush';
+   if(x===20&&y===22)t='floor';
+   if(x===30&&y===21)t='floor';
+   row.push(t);
+  }
+  grid.push(row);
+ }
+ mapCache.tower=grid;return grid;
+};
+function v05travelLocal(zone){
+ if(!state?.created)return;
+ v03init();v05prepare();
+ if(state.combat)return notify('You cannot travel during combat.');
+ if(indoors())return notify('Leave this building before traveling.');
+ if(state.zone.startsWith('region:'))return notify('You are away from Briarford. Return there via World Map first.');
+ if(zone===state.zone){closeModal();return notify('You are already here.');}
+ if(!['village','forest','tower'].includes(zone))return;
+ closeModal();stopMoving();
+ if(zone==='tower'){
+  state.zone='tower';state.x=25;state.y=30;
+  state.seen=Array.from(new Set([...(state.seen||[]),'tower']));
+  updTime(40);notify('You arrive at the abandoned watchtower. The broken gate stands open.');
+ }else{
+  travel(zone);
+ }
+ draw();updateHUD();
+}
+function v05towerAction(id){
+ v05prepare();const s=state.flags.v05.tower;
+ if(id==='towerGate')return modal('Abandoned watchtower · Gate',
+   'The outer wall has partly collapsed. The courtyard is silent. The road back to Briarford remains open.',[
+   {text:'🔍 Inspect old masonry',act:()=>{if(!dailyCap('tower-masonry',1))return;updTime(15);skillUp('craft',1);gainXP(2);notify('You study the old stonework. Crafting +1, XP +2.');}},
+   {text:'🗺️ Open Local Map',act:v05localMap},
+   {text:'Leave'}]);
+ if(id==='towerHall')return modal('Watchtower · Hall',
+   s.hall?'You have already surveyed the hall. Broken furniture and worn emblems offer few new clues.':'Sunlight falls across a faded military crest. The room has been abandoned for years.',[
+   {text:'🔎 Search the hall',act:()=>{
+    if(s.hall)return notify('You have already searched the hall thoroughly.');
+    s.hall=true;updTime(30);gainXP(8);addItem('wood',2);
+    state.flags.v03.discoveries??=[];state.flags.v03.discoveries.push('Surveyed the abandoned Briarford watchtower hall');
+    notify('You find usable timber and a weathered crest. +2 firewood, +8 XP. The discovery is recorded.');
+   }},{text:'Leave'}]);
+ if(id==='towerArchive')return modal('Watchtower · Archive',
+   s.archive?'You removed the few readable papers. Most records have decayed beyond recovery.':'Water stains cover a collapsed cabinet. A scrap of faded writing lies beneath the stone.',[
+   {text:'📜 Examine the old records',act:()=>{
+    if(s.archive)return notify('You have already studied the remaining archive pages.');
+    s.archive=true;updTime(40);skillUp('magic',2);gainXP(6);
+    state.flags.v03.discoveries??=[];state.flags.v03.discoveries.push('Old watchtower archives: a frontier patrol ledger with missing pages');
+    notify('You identify traces of a former patrol ledger. Magic Theory +2, XP +6. No grimoire secret is revealed.');
+   }},{text:'Leave'}]);
+ if(id==='towerWell')return modal('Watchtower · Rain Cistern',
+   'The abandoned basin still collects rainwater. You can refill your water skin.',[
+   {text:'💧 Collect water',act:()=>{if(!dailyCap('tower-water',2))return;addItem('water');updTime(5);notify('You collected 1 water.');}},
+   {text:'🔍 Check the stonework',act:()=>{if(!dailyCap('tower-cistern',1))return;updTime(15);gainXP(2);notify('The masonry is older than the nearby houses. +2 XP.');}},
+   {text:'Leave'}]);
+}
+const V05_PREV_LANDMARK=landmarkAction;
+landmarkAction=function(id){if(id.startsWith('tower'))return v05towerAction(id);return V05_PREV_LANDMARK(id)};
+const V05_PREV_ACTIVITY=activityPanel;
+activityPanel=function(){
+ if(state?.zone!=='tower')return V05_PREV_ACTIVITY();
+ v05prepare();modal('Abandoned Watchtower · Activities','Explore the ruins or use the Local Map to return to Briarford.',[
+  {text:'🏚️ Search the watchtower hall',act:()=>goLandmark('towerHall')},
+  {text:'📜 Examine the ruined archive',act:()=>goLandmark('towerArchive')},
+  {text:'💧 Visit the rain cistern',act:()=>goLandmark('towerWell')},
+  {text:'🗺️ Local Map',act:v05localMap}
+ ]);
+};
+function v05localMap(){
+ if(!state?.created)return;v03init();v05prepare();
+ if(indoors())return modal('Local Map','You are inside a building. Leave it to travel elsewhere.',[{text:'Close'}]);
+ if(state.zone.startsWith('region:'))return modal('Local Map · '+(V03_BY_ID[state.zone.slice(7)]?.name||'Current region'),
+  'This region can be explored using Activities and the settlement map. The Briarford Local Map is available once you return home.',[
+  {text:'🌍 Open World Map',act:()=>v03worldMap()},{text:'Close'}]);
+ const locs=[
+  {zone:'village',name:'Briarford Village',desc:'Home, tavern, forge, clinic, fields and the repaired bridge.',x:183,y:148,icon:'⌂'},
+  {zone:'forest',name:'Northern Forest',desc:'Wildlife, iron outcrop, herbs and hunter trails.',x:95,y:59,icon:'♣'},
+  {zone:'tower',name:'Abandoned Watchtower',desc:'Enter the ruins, search the hall, review the old archive.',x:64,y:153,icon:'♜'}
+ ];
+ customModal('Local Map · Briarford',body=>{
+  html(body,'p','Nearby places around Briarford. This map changes your local area; World Map takes you across kingdoms.','small');
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 270 208');
+  svg.style.cssText='width:100%;display:block;background:#24382e;border:1px solid #688066;border-radius:9px;margin-bottom:10px';
+  svg.innerHTML='<rect x="0" y="0" width="270" height="208" fill="#294537"/><path d="M-10 45 Q85 80 115 115 T280 150" stroke="#355d74" stroke-width="24" fill="none"/><path d="M-10 45 Q85 80 115 115 T280 150" stroke="#6398aa" stroke-width="13" fill="none"/><path d="M96 53 Q125 91 181 148 L250 200" stroke="#8f8464" stroke-width="7" stroke-dasharray="7 3" fill="none"/><path d="M61 152 L181 148" stroke="#8f8464" stroke-width="7" stroke-dasharray="7 3" fill="none"/><g fill="#477552"><circle cx="29" cy="47" r="25"/><circle cx="65" cy="27" r="23"/><circle cx="101" cy="28" r="18"/><circle cx="41" cy="92" r="22"/><circle cx="116" cy="70" r="20"/></g><rect x="164" y="126" width="44" height="35" fill="#a39471"/><rect x="175" y="112" width="19" height="16" fill="#775947"/><rect x="52" y="134" width="25" height="31" fill="#6f665e"/><rect x="59" y="123" width="10" height="17" fill="#68665f"/>';
+  for(const l of locs){
+   const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.style.cursor='pointer';
+   const ring=document.createElementNS('http://www.w3.org/2000/svg','circle');ring.setAttribute('cx',l.x);ring.setAttribute('cy',l.y);ring.setAttribute('r',state.zone===l.zone?16:12);ring.setAttribute('fill',state.zone===l.zone?'#f4e2a5':'#17281e');ring.setAttribute('stroke','#eee6b9');ring.setAttribute('stroke-width',state.zone===l.zone?3:1.5);g.append(ring);
+   const txt=document.createElementNS('http://www.w3.org/2000/svg','text');txt.setAttribute('x',l.x);txt.setAttribute('y',l.y+5);txt.setAttribute('text-anchor','middle');txt.setAttribute('font-size','17');txt.setAttribute('fill',state.zone===l.zone?'#22342c':'#e9d8a6');txt.textContent=l.icon;g.append(txt);
+   const label=document.createElementNS('http://www.w3.org/2000/svg','text');label.setAttribute('x',l.x);label.setAttribute('y',l.y+26);label.setAttribute('text-anchor','middle');label.setAttribute('font-size','9');label.setAttribute('fill','#f8eee0');label.textContent=l.name.replace('Briarford ','').replace('Abandoned ','');g.append(label);
+   g.addEventListener('click',()=>v05travelLocal(l.zone));svg.append(g);
+  }
+  body.append(svg);
+  for(const l of locs){const row=html(body,'div','','list-row');const left=html(row,'div','');html(left,'strong',(state.zone===l.zone?'📍 ':'')+l.name);html(left,'div',l.desc,'small');btn(row,state.zone===l.zone?'Here':'Travel',()=>v05travelLocal(l.zone),'secondary');}
+  btn(body,'🌍 Open World Map',()=>v03worldMap(),'secondary');
+ });
+}
+activityButton.onclick=activityPanel;
+const localMapButton=document.createElement('button');localMapButton.innerHTML='<span>🧭</span>Local Map';localMapButton.onclick=v05localMap;
+const worldButton=$('actions').querySelector('[data-panel="world"]');worldButton?.insertAdjacentElement('afterend',localMapButton);
+const V05_PREV_HUD=updateHUD;
+updateHUD=function(){V05_PREV_HUD();if(!state?.created)return;if(state.zone==='tower'){$('scene').textContent='Abandoned Watchtower · Briarford';$('worldtag').textContent='Watchtower';}};
+const V05_PREV_EVENT_LINE=v04npcEventLine;
+const V05_RUMORS={
+ Garrick:['A trader brought unfamiliar metal scraps to the forge yesterday.','Teren has been asking to learn a more difficult joint. He is not ready yet.','The farm tools will need new teeth before the next harvest.','I heard hammering long after dusk, but nobody was in my workshop.','The stone near the old watchtower might once have been a quarry.'],
+ Haldric:['The granary inventory is due before the next market day.','The council has yet to decide how much grain to hold for winter.','Orven wants additional patrols on the northern road.','The last census counted several empty homes on the outskirts.','A traveling clerk claims the road tax will change next season. No decree has arrived.'],
+ Vessa:['A merchant caravan was delayed south of the crossroads.','Salt is getting dearer farther inland.','Travelers from Kikka speak of preparations for the Magic Knights examination.','The road to Hage is busy with young hopefuls this week.','I sold the last blue cloth to a woman I had never seen before.'],
+ Mira:['I am collecting rainwater for my clinic; the river is too muddy after storms.','A child recovered from fever yesterday. That was a good day.','Some wild plants smell different after a mana surge.','I need more clean cloth for the next dressing.','An old healer once kept a ledger of herbs in the watchtower.'],
+ Orven:['I found tracks on the north road that do not match the local cart wheels.','The night watch heard stones falling near the ruined tower.','A traveler left the inn before sunrise without his luggage.','The next patrol will check the mill and the old ford.','If someone sees a wolf close to the farms, I want a report, not a rumor.'],
+ Renn:['The wolves are moving farther uphill after the rains.','A hunter noticed a fallen tree covering the east trail.','I found a quiet place by the river where the fish hide.','Someone has been using our old snares without asking.','There is an abandoned watchtower beyond the hunter trail. We should be careful there.'],
+ Liora:['The water near the mill looked cloudy this morning.','I heard two travelers arguing about the Magic Knights examination.','The old tree on the hill survived another storm.','Mother thinks the fields will need more help before harvest.','There are strange carvings on stones near the tower path.'],
+ Teren:['I sharpened three axes this morning. Garrick still says I rush.','One day I will show you a proper enchanted blade.','The merchants brought a shield with an unfamiliar crest.','My arms hurt after yesterday’s practice, but I will be back tomorrow.','I heard someone searching the deserted tower for old weapons.'],
+ Elna:['The innkeeper saved me fresh bread this morning.','Someone has been leaving small offerings near the roadside shrine.','I have seen fewer trading carts passing the orchard.','The weather has been kinder to our vegetable beds this week.','I remember when guards still used the old watchtower.']
+};
+function v05eventQuote(id,ev){
+ const self={Garrick:{ore:'I finished my iron order. The new tools are finally off the bench.'},Mira:{herbal:'I received the herbs for the clinic. There is no shortage today.'},Elna:{firewood:'I have enough wood for my stove now.',parcel:'Vessa’s parcel reached me safely.'},Orven:{tracks:'I received the forest tracks report. I will compare it with the patrol logs.'},Renn:{hunt:'I have the hunting supplies I needed.'},Vessa:{parcel:'My delivery to Elna was completed without trouble.'},Haldric:{bridge:'The bridge repair is complete. I have struck it from the work ledger.'}};
+ if(self[id]?.[ev])return self[id][ev];
+ if(ev==='bridge')return V04_BRIDGE_QUOTES[id]||'The eastern bridge has reopened.';
+ const general={ore:'Garrick finished his iron order and is back to ordinary tools.',herbal:'The clinic has replenished its medicinal herbs.',firewood:'Elna has enough firewood for now.',tracks:'Orven received a report about unusual animal tracks.',parcel:'Elna received a sealed delivery from Vessa.',hunt:'Renn has enough supplies for his next hunt.'};
+ return general[ev]||'I have heard about that event, though I know little more.';
+}
+function v05worldRumor(id){
+ v05prepare();const f=state.flags.v05;const turns=f.rumors[id]||0;f.rumors[id]=turns+1;
+ const lines=V05_RUMORS[id]||['A traveling merchant passed the crossroads.','Someone found animal prints by the river.'];
+ const events=Object.keys(state.flags.v04.worldEvents||{}).filter(q=>v04known(id,q));
+ // An NPC talks about completed jobs once every five rumor requests rather than endlessly.
+ if(events.length&&turns%5===4)return v05eventQuote(id,events[Math.floor(turns/5)%events.length]);
+ return lines[(turns+state.day+id.length)%lines.length];
+}
+
+v04npcEventLine=function(id,topic){
+ if(topic==='rumor')return v05worldRumor(id);
+ if(topic==='job'&&id==='Haldric'&&v04known(id,'bridge')){
+  v05prepare();const i=state.flags.v05.workTalks.Haldric||0;state.flags.v05.workTalks.Haldric=i+1;
+  const lines=['The bridge repairs are complete. I have filed the expense report.','Now I am checking grain stocks and tax records. The village is not run on timber alone.','The mill road will need inspecting before winter.','I want the guards to check the watchtower trail, but we have limited hands.'];return lines[i%lines.length];
+ }
+ return V05_PREV_EVENT_LINE(id,topic);
+};
+const V05_PREV_TALK=talk;
+talk=function(id){V05_PREV_TALK(id);if(!state?.created)return;
+ const body=$('modal-body');if(!body||!state.quests.bridge||state.quests.bridge.status!=='done')return;
+ for(const b of Array.from(body.querySelectorAll('button')))if(b.textContent.includes('Talk about the repaired bridge'))b.remove();
+ btn(body,'📰 Ask about village changes',()=>{
+  v05prepare();const events=Object.keys(state.flags.v04.worldEvents||{});
+  const choices=events.map(key=>({text:(key==='bridge'?'🌉 ': '🗣️ ')+(V04_EVENT_LABELS[key]||key),act:()=>{
+   if(!v04known(id,key))v04learn(id,key);
+   if(key==='bridge')v03npcDialogue(id,'bridge');
+   else modal(state.npcs.find(n=>n.id===id)?.name||id,'“'+v05eventQuote(id,key)+'”',[{text:'Ask something else',act:()=>talk(id)}]);
+  }}));choices.push({text:'Back',act:()=>talk(id)});modal('Village changes · '+id,'Ask about specific events. Villagers only speak about what they have witnessed or heard.',choices);
+ });
+};const v05brand=document.querySelector('.brand .sub');if(v05brand)v05brand.textContent='v0.5';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
