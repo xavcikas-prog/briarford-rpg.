@@ -58,3 +58,16 @@ The physical iPhone Safari and older existing user save were not available in te
 - JavaScript syntax parsed with Node 22
 
 Caveats: tests use desktop Chromium mobile emulation. Physical iPhone Safari and the user's exact Day 5 save file were not accessible for direct testing.
+
+## v0.7 interactive Skills UI (mobile Chromium)
+- Existing toolbar Skills button opens exactly six discipline tiles, not the original 18-node wall of text
+- Tap Perception to reveal a branching three-node graph with visible connectors
+- Locked nodes remain clickable for readable prerequisites
+- Learning Magical Observation deducts exactly one insight and returns to the branch with a green learned node
+- Defense codex clarifies Mana Skin is theory only; existing combat abilities remain distinct from spells
+- Unknown branch hides grimoire content and cannot be purchased
+- Learned nodes survive save and reload unchanged
+- 320/375/390/430px mobile viewport checks: no horizontal tree overflow
+- JavaScript syntax checked with Node 22; no JS page errors in tested flows
+
+Note: Chromium mobile emulation, not a physical iPhone Safari run.
