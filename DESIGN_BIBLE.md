@@ -109,3 +109,10 @@ The earlier seven village jobs remain. Rewards must be idempotent (never two pay
 - Worldbuilding discussion: https://www.reddit.com/r/BlackClover/comments/1ijg6ae
 
 All community commentary is inspiration, not automatically canon. Do not reproduce copyrighted dialogue, sprites, anime stills or manga pages in the playable build.
+## v0.8 implemented: optional first manifestation (spoiler-safe)
+- Research and peril are independent causal routes. Research: 8 observations, 3 separate study days, Magic Theory 30 and a real comparison; a cautious challenge can fail temporarily without forcing a discovery.
+- Peril: only during serious injury following anomalous exposure; the player can choose to accept a tiny response or remain unaided.
+- Initially observed effect is an original **Unsteady Pulse** that disrupts maintained magic, with concrete HP/AP/strain costs and a daily limit. It is **not** canon Anti Magic granted to Sania, not a free transformation and not a pact.
+- The first manifestation does not settle whether the grimoire holds a devil or reveal that entity's name, motives, class or the contradictory second power. Player-facing prose keeps mystery intact.
+- The watchtower Living Ward makes the pulse tactically testable; its physical body can still attack, and weapons can still defeat it. All roads remain optional.
+- Known issue: only one added enchanted enemy archetype; a full resource-based spell system, extensive injury simulation, companions and complex magic duels are still future milestones.
