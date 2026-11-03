@@ -1,14 +1,17 @@
-# Briarford v0.1 – bandymo protokolas
+# Briarford RPG v0.3 — Testing notes
 
-2026-11-03 atliktas automatizuotas Chromium naršyklės funkcijų patikrinimas, 390 × 844 telefono dydžio vaizdo lange.
+Automated mobile-sized Chromium smoke tests:
+- Character creation and two chosen skills
+- Character, equipment and arcane tree panels
+- Atlas with 36 locations and location filters
+- Travel to Hage and Kikka, then back to Briarford
+- Accept parcel quest from the board without parcel; collect parcel from Vessa
+- Deliver parcel to Elna via explicit Turn in quest dialog; verify item removed, reward paid and status done
+- Deliver blacksmith task using iron ore
+- Equip Iron Sword; verify HUD and persistent slot
+- Save and reload while in a region scene
+- Test persistent local residents and region work
+- Confirm canonical residents Asta/Yuno/Sister Lily/Father Orsi in Hage and Yami/Magna/Vanessa at hideout
+- Zero page errors in tested flows
 
-- Naujo veikėjo sukūrimas: pavyko.
-- Du pradiniai įgūdžiai ir pirmojo atributo pasirinkimas: pavyko.
-- Žemėlapio rodymas ir judėjimas bakstelint: pavyko.
-- Pokalbis su kalviu Garrick ir naujos užduoties gavimas: pavyko.
-- Perėjimas į miško zoną: pavyko.
-- Vilko taktinės kovos pradžia, ataka ir priešo ėjimas: pavyko.
-- Rankinis išsaugojimas pirmajame slote: pavyko.
-- JavaScript vykdymo klaidų patikrinimo metu nepastebėta.
-
-**Netestuota:** faktinis veikimas fiziniame iPhone, ilgalaikis žaidimas, išsaugojimų migravimas tarp skirtingų iOS įrenginių, visa galima sąveikų kombinatorika. Tai ankstyva kūrimo versija; žaidime dar gali būti klaidų.
+Known caveats: tests run in a Chromium mobile viewport, not on a physical iPhone. User-provided day-4 save JSON was not accessible for direct test, so the old-save upgrade path uses compatible v0.1 schema validation and migration helpers. Keep a backup before adopting a new version.
