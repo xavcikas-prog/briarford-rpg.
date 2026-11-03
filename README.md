@@ -1,8 +1,15 @@
-# Briarford RPG — v0.6
+# Briarford RPG — v0.7
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## New in v0.7
+- Rebuilt the Skills / Magic & Discipline screen for iPhone: a grid of **six tappable discipline cards** (Perception, Discipline, Theory, Defense, History, Unknown) instead of a tall list of all 18 nodes.
+- Every discipline opens a compact **visual progression tree** with connected nodes and learned / available / locked states. Tap any node for its full description, requirements, cost, teacher/region prerequisites and a safe Learn button.
+- A separate **Techniques & spell notes** section shows short tappable entries and longer explanations only on demand. Clearly distinguishes passive effects, research/theory and spells that Sania cannot cast.
+- Persistent insight costs, skills, existing unlocks and previous save slots are unchanged. The undiscovered grimoire remains unrevealed.
+- Tested at mobile viewport widths 320px, 375px, 390px and 430px with horizontal overflow checks.
 
 ## New in v0.6
 - 17 major named NPCs with distinct goals, fears, flaws, values, voice styles, magic/lore boundaries, individual relationships, dialogue and remembered interactions.
