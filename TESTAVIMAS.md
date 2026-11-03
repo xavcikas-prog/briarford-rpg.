@@ -43,3 +43,18 @@ Physical iPhone Safari remains a user-side test. Some older Lithuanian event lin
 - Syntax check passed for compiled inline JavaScript
 
 The physical iPhone Safari and older existing user save were not available in test runner. Back up your save before refreshing.
+
+## v0.6 smoke tests (Chromium 390x844 mobile emulation)
+- New game creation, world toolbar and People & Lore panel
+- Garrick discussion offers missing iron investigation and individual social actions
+- Missing iron: evidence from two NPCs, resolution through responsible NPC, unique reward and persistent outcome
+- Haldric levy: books, Elna household concerns, three alternative policy outcomes and one-way completion
+- Mira character dossier hides undiscovered fears and flaws
+- Expanded 18-node Magic & Discipline tree, gated by theory and teacher requirements
+- Grimoire observation changes state without revealing or automatically casting forbidden powers
+- Regional travel to Hage and Yuno lessons
+- Save/load returns the new quest outcome and flags
+- 0 page JavaScript errors in tested flows
+- JavaScript syntax parsed with Node 22
+
+Caveats: tests use desktop Chromium mobile emulation. Physical iPhone Safari and the user's exact Day 5 save file were not accessible for direct testing.
