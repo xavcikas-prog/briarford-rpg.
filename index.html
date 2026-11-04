@@ -2116,7 +2116,7 @@ else V09_SPRITE_IMAGE.addEventListener('load',v12InitSkin,{once:true});
 const V12_PREV_ANIMATE=v11Animate;
 v11Animate=function(name,action,dir='down',ms=650){
  // A focus action is mundane until Sania discovers a first manifestation.
- if(name==='Sania'&&action==='cast'&&state?.flags?.v08?.stage!=='manifested')action='defend';
+ if(name==='Sania'&&action==='cast'&&!['fractured','steady'].includes(state?.flags?.v08?.stage))action='defend';
  return V12_PREV_ANIMATE(name,action,dir,ms);
 };
 // Render 2D avatar action frames outside Hage as well; no passive game-time ticks.
@@ -3239,7 +3239,7 @@ draw=function(){V23_DRAW_BEFORE_WOLF();v23DrawWolf();};
 /* v0.23 ANIMATION-01 — real atlas gallery; the old 32x40 palette-preview is
    replaced, NOT presented as Sania's approved 64x64 art. */
 function v23SaniaPowerVisible(){
- return ['manifested','steady'].includes(state?.flags?.v08?.stage);
+ return ['fractured','steady'].includes(state?.flags?.v08?.stage);
 }
 function v23GalleryFrames(name){
  const detailed=name==='Sania' && v21Ready && V21_SANIA.naturalWidth===512;
@@ -3325,6 +3325,23 @@ function v23Gallery(){
 v13Gallery=v23Gallery;
 // The Sania-only entry and the full gallery now use the same exact 64px atlas path.
 v21Preview=v23Gallery;
+
+
+/* Real discovered-power action timing: visual cast only after valid ward pulse.
+   No changes to AP, damage, HP, daily limits or grimoire story flags. */
+const V23_PREV_PULSE=v08Pulse;
+v08Pulse=function(){
+ const before=state?.combat,ap=before?.ap,uses=state?.flags?.v08?.uses;
+ const result=V23_PREV_PULSE();
+ if(before&&state.combat===before&&state.combat.ap<ap&&
+    (state.flags?.v08?.uses??0)>(uses??0)){
+  v11Animate('Sania','cast',V11_POSITIONS.get('Sania')?.direction||'down',850);
+  draw();
+ }
+ return result;
+};
+const v23PulseButton=$('v08-pulse');
+if(v23PulseButton)v23PulseButton.onclick=v08Pulse;
 
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
