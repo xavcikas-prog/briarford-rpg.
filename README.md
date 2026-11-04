@@ -1,5 +1,7 @@
 # Briarford RPG — v0.21
 
+**Project planning source of truth:** [PROJECT_TASKS.md](./PROJECT_TASKS.md) — maintained backlog of implemented code, partial prototypes, missing mechanics, known regressions and next priorities. Never equate generated graphics with working gameplay.
+
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
