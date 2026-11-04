@@ -2566,6 +2566,7 @@ v17BattleButton('v17aim','🎯 Aim · bonus',()=>{
  c.bonus--;c.aim=3;notify('You take aim. +3 to your next attack roll.');updateHUD();
 });
 function v17Shop(){
+ if(!state||!(state.zone==='village'||state.zone.startsWith('region:')))return notify('Visit a settlement to reach the armory.');
  const catalog=['spear','axe','longbow','gambeson','mail','ring'];
  customModal('Armory · Stock & Equipment',body=>{
   html(body,'p','A practical collection of locally available gear. Equipment can be changed from the top HUD. Weapon reach and stamina use differ.','small');
