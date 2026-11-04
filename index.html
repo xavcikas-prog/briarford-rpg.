@@ -1867,6 +1867,120 @@ const V09_REFRESH_TIMER=setInterval(()=>{
  if(!$('overlay').classList.contains('visible'))draw();
 },120);
 const v09Brand=document.querySelector('.brand .sub');if(v09Brand)v09Brand.textContent='v0.9';
+
+/* v0.10 — movement synchronized to actual world distance, fixed boots anchor.
+   This replaces the teleporting v0.9 tile scheduler without modifying saves. */
+clearInterval(V09_REFRESH_TIMER);
+const V10_ANCHORS=new Map();
+const V10_ROUTE=[[28,18],[29,18],[30,18],[31,18],[32,18],[32,19],[32,20],[31,20],[30,20],[29,20],[28,20],[28,19]];
+const v10Motion={active:false,zone:'',x:28,y:18,fromX:28,fromY:18,toX:28,toY:18,start:0,duration:440,dir:'down',phase:0,next:0,index:0,mode:'walk',last:0};
+function v10Anchor(id){
+ if(V10_ANCHORS.has(id))return V10_ANCHORS.get(id);
+ let point={x:16,y:38};
+ try{
+  const t=document.createElement('canvas');t.width=32;t.height=40;const c=t.getContext('2d',{willReadFrequently:true});
+  c.drawImage(V09_SPRITE_IMAGE,(id%10)*32,Math.floor(id/10)*40,32,40,0,0,32,40);
+  const dat=c.getImageData(0,0,32,40).data;let minX=32,maxX=0,bottom=0;
+  for(let y=18;y<40;y++)for(let x=8;x<25;x++){const z=(y*32+x)*4,alpha=dat[z+3];if(alpha<160)continue;
+   const r=dat[z],g=dat[z+1],b=dat[z+2];if(g>r*1.45&&g>b*1.25)continue;
+   if(y>bottom)bottom=y;if(y>18&&y<32){minX=Math.min(minX,x);maxX=Math.max(maxX,x);}
+  }
+  if(bottom>=25){point.y=bottom+1;point.x=minX<=maxX?(minX+maxX)/2:16;}
+ }catch(e){/* Default anchor retained if pixel readback is unavailable. */}
+ V10_ANCHORS.set(id,point);return point;
+}
+function v10Sprite(context,img,id,tileX,tileY,width=23,height=29){
+ if(!img?.naturalWidth)return false;
+ const anchor=img===V09_SPRITE_IMAGE?v10Anchor(id):{x:16,y:38};
+ const footX=Math.round(tileX*16+8),footY=Math.round(tileY*16+15);
+ const dx=Math.round(footX-anchor.x*width/32),dy=Math.round(footY-anchor.y*height/40);
+ context.save();context.imageSmoothingEnabled=false;
+ context.fillStyle='#0e1e17aa';context.fillRect(footX-6,footY-1,12,2);
+ context.drawImage(img,(id%10)*32,Math.floor(id/10)*40,32,40,dx,dy,width,height);
+ context.restore();return true;
+}
+function v10SetDirection(dx,dy){
+ if(Math.abs(dx)>Math.abs(dy))v10Motion.dir=dx>0?'right':'left';
+ else if(Math.abs(dy)>0)v10Motion.dir=dy>0?'down':'up';
+}
+function v10Reset(now){
+ const npc=state?.zone==='region:hage'?v03townLocals().find(n=>n.name==='Yuno'):null;
+ if(!npc)return;
+ v10Motion.zone=state.zone;v10Motion.x=npc.x;v10Motion.y=npc.y;
+ v10Motion.fromX=npc.x;v10Motion.fromY=npc.y;
+ v10Motion.toX=npc.x;v10Motion.toY=npc.y;
+ v10Motion.index=0;v10Motion.active=false;v10Motion.next=now+350;v10Motion.last=now;v10Motion.phase=0;
+}
+function v10Tick(now){
+ if(!state?.created||document.hidden||state.zone!=='region:hage'||state.combat)return;
+ if(v10Motion.zone!==state.zone)v10Reset(now);
+ const npc=v03townLocals().find(n=>n.name==='Yuno');if(!npc)return;
+ if($('overlay').classList.contains('visible')||now<v09Action.until){v10Motion.last=now;return;}
+ const delta=Math.min(90,Math.max(0,now-(v10Motion.last||now)));
+ v10Motion.last=now;
+ if(v10Motion.active){
+  const t=Math.min(1,(now-v10Motion.start)/v10Motion.duration);
+  const x=v10Motion.fromX+(v10Motion.toX-v10Motion.fromX)*t;
+  const y=v10Motion.fromY+(v10Motion.toY-v10Motion.fromY)*t;
+  v10Motion.phase+=Math.hypot(x-v10Motion.x,y-v10Motion.y);
+  v10Motion.x=x;v10Motion.y=y;
+  if(t>=1){
+   npc.x=v10Motion.toX;npc.y=v10Motion.toY;v10Motion.active=false;
+   v10Motion.next=now+(v10Motion.index%4===0?680:100);
+  }
+  return;
+ }
+ if(now<v10Motion.next||moveTimer)return;
+ for(let attempts=0;attempts<V10_ROUTE.length;attempts++){
+  const next=V10_ROUTE[v10Motion.index++%V10_ROUTE.length];
+  if(!walkable(next[0],next[1]))continue;
+  const dist=Math.hypot(next[0]-v10Motion.x,next[1]-v10Motion.y);
+  if(dist<.01)continue;
+  if(dist>2){v10Motion.next=now+240;continue;}
+  v10Motion.fromX=v10Motion.x;v10Motion.fromY=v10Motion.y;
+  v10Motion.toX=next[0];v10Motion.toY=next[1];
+  v10SetDirection(next[0]-v10Motion.x,next[1]-v10Motion.y);
+  v10Motion.start=now;v10Motion.duration=dist*(v10Motion.mode==='run'?245:470);
+  v10Motion.active=true;break;
+ }
+}
+function v10Pose(){
+ const now=performance.now(),acting=now<v09Action.until;
+ if(acting){const name=v09Action.name==='run'?'run':v09Action.name;return {anim:name,dir:v09Action.dir,index:v09FrameId(name,v09Action.dir,now-v09Action.started)};}
+ const moving=v10Motion.active;
+ const anim=moving?'run':'idle';
+ const k=moving?Math.floor(v10Motion.phase*6):Math.floor(now/275);
+ const m=V09_ANIM[anim],i=V09_DIRS.indexOf(v10Motion.dir);
+ return {anim,dir:v10Motion.dir,index:m.start[Math.max(0,i)]+k%m.count};
+}
+drawPerson=function(px,py,name){
+ if(name==='Yuno'&&state?.zone==='region:hage'&&v09AtlasReady){
+  if(v10Motion.zone!=='region:hage')v10Reset(performance.now());
+  const frameId=v10Pose().index;
+  return v10Sprite(ctx,V09_SPRITE_IMAGE,frameId,v10Motion.x-state.camera[0],v10Motion.y-state.camera[1]);
+ }
+ return V09_BASE_DRAW_PERSON(px,py,name);
+};
+const V10_OLD_WORLD_ACTION=v09WorldAction;
+v09WorldAction=function(name='cast',dir='down'){
+ if(name==='run'&&state?.zone==='region:hage'){
+  closeModal();v10Motion.mode='run';v10Motion.next=performance.now();
+  notify('Yuno starts a quicker overworld run. The walk cycle is distance-synchronized.');
+  return;
+ }
+ if(name==='idle')v10Motion.mode='walk';
+ return V10_OLD_WORLD_ACTION(name,dir);
+};
+let v10LastPaint=0;
+function v10Loop(now){
+ requestAnimationFrame(v10Loop);
+ if(!state?.created||document.hidden||state.zone!=='region:hage')return;
+ v10Tick(now);
+ if(!$('overlay').classList.contains('visible')&&now-v10LastPaint>=28){v10LastPaint=now;draw();}
+}
+requestAnimationFrame(v10Loop);
+const v10Badge=document.querySelector('.brand .sub');if(v10Badge)v10Badge.textContent='v0.10';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
