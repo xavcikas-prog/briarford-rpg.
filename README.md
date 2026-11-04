@@ -1,10 +1,19 @@
-# Briarford RPG — 2D v0.21 + optional 3D experiment v0.22
+# Briarford RPG — 2D v0.23 (wolf visibility patch; iPhone QA pending) + optional 3D experiment v0.22
 
 **Project planning source of truth:** [PROJECT_TASKS.md](./PROJECT_TASKS.md) — maintained backlog of implemented code, partial prototypes, missing mechanics, known regressions and next priorities. Never equate generated graphics with working gameplay.
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## v0.23 step 1 — IPH-BUG-01 wolf visibility (code complete; user acceptance pending)
+- The forest wolf is now a readable, high-contrast pixel model overlaid at its real combat tile (no changes to combat rules or saves).
+- A square target highlight turns green when your current weapon can reach the wolf, amber when it cannot. Bow and spear range are honored.
+- During combat, the wolf has a readable **WOLF** label and live HP bar; if it moves beyond the viewport, an edge indicator remains.
+- The wolf disappears after being defeated; the magical Living Ward and other zone scenes keep their own appearance.
+- Regression harness: `node tests/wolf-visibility.test.cjs` (12/12 verified in an isolated JavaScript runtime; the full page script also parsed).
+- **Not yet physically accepted** on iPhone Safari. This task remains pending mobile review; the next combat HUD redesign will not start until this step is accepted.
+- Restore code from `savepoints/v0.22-pre-combat-ux` or `savepoints/iph-bug-01-wolf-visibility`.
 
 ## Optional 3D TEST (v0.22; separate from normal 2D)
 
