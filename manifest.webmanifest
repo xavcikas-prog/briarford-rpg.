@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Briarford — Black Clover fan RPG (v0.8)",
+  "name": "Briarford — Black Clover fan RPG (v0.9)",
   "short_name": "Briarford",
-  "description": "2D mobile RPG with an optional first grimoire manifestation via danger or research, tactical enchanted ward, and visible skill progression.",
+  "description": "2D mobile RPG featuring animated Yuno pixel sprites in Hage, nine action groups and a playable world.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
