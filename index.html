@@ -2451,6 +2451,52 @@ for(const name of ['Magna Swing','Vanessa Enoteca', 'Luck','Sister Lily','Father
  setTimeout(()=>v14Install(name),200+Math.random()*200);
 const v15Brand=document.querySelector('.brand .sub');if(v15Brand)v15Brand.textContent='v0.15';
 
+
+/* v0.16 — genuine village NPC sprites: occupation silhouettes, coats, props, movement. */
+Object.assign(V14_HEROES,{
+ Liora:{kind:'apprentice',height:29,torso:7,head:8,hair:'#b27034',hair2:'#dda36a',skin:'#e5b28c',cloth:'#71759c',cloth2:'#5b557a',legs:'#62504a',trim:'#d7ae7c',weapon:'staff',cape:true,gait:1.2},
+ Renn:{kind:'hunter',height:30,torso:9,head:8,hair:'#806348',hair2:'#b08a5b',skin:'#cda47c',cloth:'#58714a',cloth2:'#354634',legs:'#4b4437',trim:'#ac936e',weapon:'bow',cape:false,gait:1.4},
+ Teren:{kind:'smith',height:31,torso:11,head:9,hair:'#8b513a',hair2:'#b27857',skin:'#d3a17d',cloth:'#776049',cloth2:'#413a33',legs:'#544940',trim:'#c79760',weapon:'hammer',cape:false,gait:1.18},
+ Garrick:{kind:'smith',height:34,torso:13,head:10,hair:'#554037',hair2:'#847060',skin:'#c6a080',cloth:'#564841',cloth2:'#453a34',legs:'#463a34',trim:'#b99570',weapon:'hammer',cape:false,gait:.8},
+ Mira:{kind:'healer',height:31,torso:8,head:8,hair:'#67515b',hair2:'#a18188',skin:'#e0b498',cloth:'#688ca0',cloth2:'#d0d7d5',legs:'#5d7274',trim:'#c9e1db',weapon:'water',cape:true,gait:.75},
+ Haldric:{kind:'elder',height:32,torso:11,head:9,hair:'#9d9b93',hair2:'#c4c0af',skin:'#ccaa8a',cloth:'#796359',cloth2:'#b6a17f',legs:'#565050',trim:'#d2bb89',weapon:'staff',cape:true,gait:.48},
+ Orven:{kind:'guard',height:34,torso:12,head:10,hair:'#38434b',hair2:'#5e666c',skin:'#c49b82',cloth:'#53677b',cloth2:'#3c5161',legs:'#36424a',trim:'#bfc4c2',weapon:'spear',cape:false,gait:.9},
+ Vessa:{kind:'trader',height:30,torso:9,head:8,hair:'#985d2f',hair2:'#d19a5d',skin:'#e3b18a',cloth:'#ad8156',cloth2:'#6b513f',legs:'#755540',trim:'#e2c388',weapon:'coin',cape:true,gait:1.02},
+ Elna:{kind:'elder',height:29,torso:9,head:8,hair:'#9f9587',hair2:'#c4ae9d',skin:'#cfa98d',cloth:'#8b738a',cloth2:'#695664',legs:'#554d51',trim:'#dfc3a7',weapon:'staff',cape:false,gait:.5},
+ MarketTrader:{kind:'trader',height:30,torso:9,head:8,hair:'#8f6b4b',hair2:'#b6916e',skin:'#c99f80',cloth:'#98764b',cloth2:'#624e3a',legs:'#52473c',trim:'#d4b77a',weapon:'coin',cape:true,gait:1},
+ TownGuard:{kind:'guard',height:34,torso:12,head:9,hair:'#394651',hair2:'#6a7580',skin:'#c39a80',cloth:'#53687a',cloth2:'#364759',legs:'#3b4351',trim:'#b6bec4',weapon:'spear',cape:false,gait:1},
+ TownSmith:{kind:'smith',height:33,torso:12,head:9,hair:'#6e5242',hair2:'#a47b5b',skin:'#c69b76',cloth:'#685146',cloth2:'#483c33',legs:'#443c35',trim:'#c1a27c',weapon:'hammer',cape:false,gait:.85}
+});
+const V16_ART_BASE=v14DrawDistinct;
+v14DrawDistinct=function(c,p,frameId){
+ V16_ART_BASE(c,p,frameId);
+ const d=v14Direction(frameId),action=d.action,f=d.f;
+ if(!['apprentice','hunter','smith','healer','elder','guard','trader'].includes(p.kind))return;
+ c.save();c.translate(16,34);
+ const v=v14Shape;
+ switch(p.kind){
+  case 'apprentice':v(c,-10,-20,3,11,p.cloth2);v(c,7,-20,3,11,p.cloth2);
+    v(c,7,-30,2,29,'#c5aa82');if(action==='cast')v(c,6,-32-f,5,6,'#a3d9c9');break;
+  case 'hunter':v(c,-10,-24,3,18,'#5a4333');v(c,8,-24,3,18,'#5a4333');
+    if(action==='attack'||action==='defend'){c.strokeStyle='#d3ac71';c.lineWidth=2;c.beginPath();c.arc(8,-15,10,Math.PI/2,Math.PI*1.5);c.stroke();}
+    break;
+  case 'smith':v(c,-p.torso/2+2,-17,p.torso-4,17,'#b0916a');v(c,-p.torso/2+4,-15,p.torso-8,4,'#625447');
+    if(action==='attack'||action==='cast'){v(c,9,-22-f*2,4,8,'#a5abb1');v(c,10,-14-f*2,2,18,'#9b7659');}break;
+  case 'healer':v(c,-8,-24,4,18,'#d4dbdb');v(c,6,-24,4,18,'#c8d6db');v(c,-2,-18,4,7,'#e3ece8');
+    if(action==='cast'){c.strokeStyle='#8ad6e4';c.lineWidth=2;c.beginPath();c.arc(0,-14,11+f,0,6);c.stroke();}break;
+  case 'elder':v(c,-p.torso/2-3,-17,3,17,'#ad9580');v(c,7,-20,2,22,'#b99a71');
+    if(action==='run')v(c,8,-10,2,10,'#c7ac89');break;
+  case 'guard':v(c,-p.torso/2-4,-20,6,9,'#8e939a');v(c,p.torso/2-2,-20,6,9,'#8e939a');
+    v(c,11,-32,2,33,'#a0a9ad');v(c,9,-34,6,7,'#cdd0cf');break;
+  case 'trader':v(c,-p.torso/2-4,-13,7,14,'#9a794d');v(c,7,-10,7,12,'#8e734d');
+    if(action==='attack'||action==='cast')v(c,10,-16-f*2,5,4,'#d7c271');break;
+ }
+ c.restore();
+};
+for(const name of ['Liora','Renn','Teren','Garrick','Mira','Haldric','Orven','Vessa','Elna','MarketTrader','TownGuard','TownSmith'])
+ setTimeout(()=>v14Install(name),320+(Object.keys(V14_HEROES).indexOf(name)%9)*65);
+const v16Brand=document.querySelector('.brand .sub');if(v16Brand)v16Brand.textContent='v0.16';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
