@@ -1930,6 +1930,7 @@ function v10Tick(now){
   }
   return;
  }
+ if(v10Motion.mode==='run'&&now>(v10Motion.runUntil||0))v10Motion.mode='walk';
  if(now<v10Motion.next||moveTimer)return;
  for(let attempts=0;attempts<V10_ROUTE.length;attempts++){
   const next=V10_ROUTE[v10Motion.index++%V10_ROUTE.length];
@@ -1964,7 +1965,7 @@ drawPerson=function(px,py,name){
 const V10_OLD_WORLD_ACTION=v09WorldAction;
 v09WorldAction=function(name='cast',dir='down'){
  if(name==='run'&&state?.zone==='region:hage'){
-  closeModal();v10Motion.mode='run';v10Motion.next=performance.now();
+  closeModal();v10Motion.mode='run';v10Motion.runUntil=performance.now()+2200;v10Motion.next=performance.now();
   notify('Yuno starts a quicker overworld run. The walk cycle is distance-synchronized.');
   return;
  }
