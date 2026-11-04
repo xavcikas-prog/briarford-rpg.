@@ -3046,6 +3046,106 @@ v03travel=function(destination){
 
 const v20brand=document.querySelector('.brand .sub');if(v20brand)v20brand.textContent='v0.20';
 
+
+/* v0.21: actual 64x64 image-backed Sania animation runtime.
+   Only real animation states are wired; sealed magic remains inaccessible. */
+const V21_SANIA=new Image();
+let v21Ready=false,v21PreviewDir='down';
+const V21_DIR=['down','left','right','up'];
+const V21_FRAMES={
+ idle:[0,4,8,12],run:[16,24,32,40],attack:[48,52,56,60],cast:[64,68,72,76]
+};
+const V21_COUNTS={idle:4,run:8,attack:4,cast:4};
+V21_SANIA.onload=()=>{
+ v21Ready=!!V21_SANIA.naturalWidth;
+ if(state?.created)draw();
+};
+V21_SANIA.onerror=()=>console.warn('The Sania 64px atlas failed; keep the original pixel fallback.');
+fetch('./assets/sania-64-atlas.b64').then(r=>{
+ if(!r.ok)throw Error('Asset '+r.status);
+ return r.text();
+}).then(s=>{
+ const payload=s.replace(/\s+/g,'');
+ if(payload.length<100000)throw Error('Incomplete Sania asset');
+ V21_SANIA.src='data:image/webp;base64,'+payload;
+}).catch(e=>console.warn('Sania detail art unavailable; game remains playable:',e));
+function v21Frame(action,dir,elapsed,distance=null){
+ const d=Math.max(0,V21_DIR.indexOf(dir));
+ const a=V21_FRAMES[action]?action:'idle';
+ const count=V21_COUNTS[a];
+ const k=a==='run'&&distance!==null?Math.floor(distance*5):Math.floor(elapsed/(a==='idle'?270:a==='run'?105:a==='attack'?150:190));
+ return V21_FRAMES[a][d]+(Math.abs(k)%count);
+}
+function v21Paint(context,id,tileX,tileY,scale=1){
+ if(!v21Ready)return false;
+ const footX=Math.round(tileX*16+8),footY=Math.round(tileY*16+15);
+ const w=Math.round(34*scale),h=Math.round(39*scale);
+ context.save();context.imageSmoothingEnabled=false;
+ context.fillStyle='#14251bbb';context.fillRect(footX-7,footY-1,14,2);
+ context.drawImage(V21_SANIA,(id%8)*64,Math.floor(id/8)*64,64,64,Math.round(footX-w/2),footY-h,w,h);
+ context.restore();return true;
+}
+function v21Pose(){
+ const pos=V11_POSITIONS.get('Sania'),now=performance.now();
+ const action=V11_ACTIONS.get('Sania');
+ const dir=action?.dir||pos?.direction||'down';
+ if(action && now<action.end){
+  const name=action.name==='cast'&&(state.flags?.v08?.stage==='sealed'||!state.flags?.v08)?'idle':action.name;
+  const accepted=V21_FRAMES[name]?name:name==='defend'||name==='hurt'?'idle':name==='dash'?'run':'idle';
+  return {id:v21Frame(accepted,dir,now-action.start),dir,action:accepted};
+ }
+ const moving=!!pos?.moving;
+ return {id:v21Frame(moving?'run':'idle',dir,now,moving?(pos?.distance||0):null),dir,action:moving?'run':'idle'};
+}
+const V21_PREV_DRAW_PERSON=drawPerson;
+drawPerson=function(px,py,name){
+ if(name!=='Sania'||!v21Ready||!state?.created)return V21_PREV_DRAW_PERSON(px,py,name);
+ const p=v11Track('Sania',px+state.camera[0],py+state.camera[1]);
+ const pose=v21Pose();
+ return v21Paint(ctx,pose.id,p.x-state.camera[0],p.y-state.camera[1],1);
+};
+function v21Preview(){
+ let dir='down',action='idle',started=performance.now();
+ const unlocked=state?.flags?.v08?.stage==='manifested'||state?.flags?.v08?.stage==='steady';
+ customModal('Sania · 64px Animation Test',body=>{
+  html(body,'p','This uses Sania’s actual sprite atlas, shared with the live map. Special power remains gated by the in-game grimoire state.','small');
+  const preview=document.createElement('canvas');
+  preview.width=224;preview.height=185;preview.style.cssText='display:block;width:100%;max-width:360px;margin:auto;background:#17241e;border:1px solid #718879;border-radius:10px;image-rendering:pixelated';
+  body.appendChild(preview);
+  const controls=html(body,'div','','chips');
+  ['idle','run','attack',...(unlocked?['cast']:[])].forEach(a=>btn(controls,a,()=>{action=a;started=performance.now()},'chip'));
+  const facing=html(body,'div','','chips');
+  V21_DIR.forEach(d=>btn(facing,d,()=>{dir=d;started=performance.now()},'chip'));
+  if(!unlocked)html(body,'div','Anomaly casting is unavailable until Sania discovers it through gameplay.','small');
+  function tick(now){
+   if(!preview.isConnected||!$('overlay').classList.contains('visible'))return;
+   const c=preview.getContext('2d');c.clearRect(0,0,224,185);
+   c.fillStyle='#294333';c.fillRect(0,144,224,41);
+   c.fillStyle='#e3d4ad';c.font='12px system-ui';c.fillText(action+' / '+dir,12,22);
+   if(v21Ready){
+    const id=v21Frame(action,dir,now-started);
+    c.imageSmoothingEnabled=false;
+    c.drawImage(V21_SANIA,id%8*64,Math.floor(id/8)*64,64,64,54,18,116,116);
+   }else c.fillText('Loading sprite asset…',40,90);
+   requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+ });
+}
+const V21_PREV_ACTIVITY=activityPanel;
+activityPanel=function(){
+ const r=V21_PREV_ACTIVITY();
+ if(state?.created&&!state.combat&&$('overlay').classList.contains('visible')){
+  const block=html($('modal-body'),'div','','banner');
+  html(block,'strong','🎨 Sania character animations');
+  btn(block,'Preview Sania 64px animations',v21Preview,'secondary');
+ }
+ return r;
+};
+activityButton.onclick=activityPanel;
+const v21Label=document.querySelector('.brand .sub');
+if(v21Label)v21Label.textContent='v0.21';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
