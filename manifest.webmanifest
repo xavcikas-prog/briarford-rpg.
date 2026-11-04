@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Briarford — Black Clover fan RPG (v0.19)",
+  "name": "Briarford — Black Clover fan RPG (v0.20)",
   "short_name": "Briarford",
-  "description": "Pixel RPG with synchronized movement, separate combat visuals, animated Sania and distinctive NPC/canon-inspired sprites.",
+  "description": "Offline-friendly 2D pixel RPG with individual character rigs, tactical stamina, lore-bound magic, reactive NPCs, branching quests and enterable towns.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
