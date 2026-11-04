@@ -3239,7 +3239,7 @@ draw=function(){V23_DRAW_BEFORE_WOLF();v23DrawWolf();};
 /* v0.23 ANIMATION-01 — real atlas gallery; the old 32x40 palette-preview is
    replaced, NOT presented as Sania's approved 64x64 art. */
 function v23SaniaPowerVisible(){
- return !!(state?.flags?.v08 && state.flags.v08.stage!=='sealed');
+ return ['manifested','steady'].includes(state?.flags?.v08?.stage);
 }
 function v23GalleryFrames(name){
  const detailed=name==='Sania' && v21Ready && V21_SANIA.naturalWidth===512;
