@@ -1,9 +1,17 @@
-# Briarford RPG — v0.18
+# Briarford RPG — v0.19
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.19 — Life beyond static quests
+- Daily NPC agendas determined by local supply/food, public concerns and road/river conditions. They can change without Sania accepting a mission.
+- Village events spread from witnesses through NPC knowledge networks on later days; no universal instant knowledge.
+- **The Bitter River**: investigate Mira, Liora and an actual river sample; resolve by field-made filters (materials), a publicly funded fix (tax implications) or public warning. Each choice changes the world.
+- **The Missing Convoy**: collect Vessa manifest, Orven guard report and forest tracks; escort with supplies, hire scouts or warn travelers. Outcomes affect road security and relationships.
+- Quests persist in `state.flags.v19` and can be resolved only once. Major resolutions require physically reaching the relevant location/person.
+- Activities → Village Developments offers an overview and optional entry point; important NPCs offer the same story context.
+- Savepoint: `savepoints/v0.19`.
 ## New in v0.18 — Attribute-bound magic
 - 15 listed magic attributes and a starter set of documented character spells (Wind, Water, Fire, Lightning, Dark, Thread, Anti-Magic, Unknown), each with range/AP/mana and grounded owner.
 - Future-era canon spells stay locked; no instant arbitrary Fire/Water/Dark spells for Sania.
