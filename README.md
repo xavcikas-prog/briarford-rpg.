@@ -1,8 +1,17 @@
-# Briarford RPG — v0.8
+# Briarford RPG — v0.9
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## New in v0.9 — animated Yuno visual test
+- Integrated a **116-frame top-down pixel art sprite atlas** at `assets/yuno-animated-atlas.png`, rebuilt using an image supplied as a visual reference by the player.
+- Yuno in **Hage Village** now uses original 4-direction animated idle and run frames on the actual overworld canvas instead of the simple placeholder character.
+- He walks a short path during local life, while remaining interactable through the existing NPC conversation system.
+- Speak to Yuno and select **Preview all 9 animations** to view idle, running, attack, wind cast, defend, hurt, dash, knockdown and wind bird; choose one of four directions where supported.
+- Hage's **Activities → Open animation studio** provides a shortcut. Yuno's dialogue also includes **Watch wind magic in the village** and **Watch Yuno sprint**.
+- The combat and wind spell animations in this version are **visual demonstrations only**, not a new tactical duel or newly unlocked canon spells. They do not change Sania's progress.
+- Existing save slots are retained. This sprite pack is a fan-art test, not a licensed asset pack; get permission or replace with fully independent art before broader public distribution.
 
 ## New in v0.8
 - Organic first grimoire manifestation with **two independent paths**: (1) deliberate research and (2) a real near-fatal danger moment. Neither forces the player to accept an unknown power or makes a devil pact.
