@@ -1981,6 +1981,89 @@ function v10Loop(now){
 requestAnimationFrame(v10Loop);
 const v10Badge=document.querySelector('.brand .sub');if(v10Badge)v10Badge.textContent='v0.10';
 
+
+/* v0.11 — shared actor renderer with distinct overworld and combat animation sets. */
+const V11_PIPELINE={
+ overworld:{idle:'idle',walk:'run',run:'run',interact:'defend',cast:'cast'},
+ combat:{idle:'idle',attack:'attack',cast:'cast',defend:'defend',hurt:'hurt',dash:'dash',knockdown:'knockdown',summon:'summon'}
+};
+const V11_SKINS=new Map([['Yuno',{image:V09_SPRITE_IMAGE,scale:1.0,style:'canon',idle:'down'}]]);
+const V11_ACTIONS=new Map();
+const V11_POSITIONS=new Map();
+function v11Register(name,image,scale=1,style='original'){
+ V11_SKINS.set(name,{image,scale,style,idle:'down'});
+ V10_ANCHORS.clear();
+}
+function v11Animate(name,move,dir='down',ms=650){
+ if(!V09_ANIM[move])return;
+ const now=performance.now();
+ V11_ACTIONS.set(name,{name:move,dir,start:now,end:now+ms});
+}
+function v11AnimFrame(name,phase='overworld',dir='down',moving=false,distance=0){
+ const now=performance.now(),a=V11_ACTIONS.get(name);
+ if(a && now<a.end){const anim=V11_PIPELINE[phase][a.name]||a.name;return {anim,dir:a.dir,frame:v09FrameId(anim,a.dir,now-a.start)};}
+ if(a)V11_ACTIONS.delete(name);
+ const anim=moving?'run':'idle';
+ const count=V09_ANIM[anim].count;
+ const d=V09_DIRS.indexOf(dir);
+ const idx=moving?Math.floor(distance*6):Math.floor(now/270);
+ return {anim,dir,frame:V09_ANIM[anim].start[Math.max(0,d)]+idx%count};
+}
+function v11DrawActor(name,x,y,options={}){
+ const skin=V11_SKINS.get(name);
+ if(!skin?.image?.naturalWidth)return false;
+ const phase=options.phase||(state?.combat?'combat':'overworld');
+ const moving=!!options.moving;
+ const dir=options.dir||skin.idle||'down';
+ const pose=v11AnimFrame(name,phase,dir,moving,options.distance||0);
+ const tall=Math.round(29*skin.scale),wide=Math.round(23*skin.scale);
+ return v10Sprite(ctx,skin.image,pose.frame,x,y,wide,tall);
+}
+function v11Track(name,x,y,now=performance.now()){
+ const old=V11_POSITIONS.get(name);
+ if(!old || old.zone!==state.zone || Math.hypot(x-old.targetX,y-old.targetY)>3){
+  const fresh={zone:state.zone,fromX:x,fromY:y,targetX:x,targetY:y,x,y,start:now,duration:95,direction:'down',distance:0,moving:false};
+  V11_POSITIONS.set(name,fresh);return fresh;
+ }
+ if(x!==old.targetX||y!==old.targetY){
+  old.fromX=old.x;old.fromY=old.y;old.targetX=x;old.targetY=y;
+  old.start=now;old.duration=name==='Sania'?105:210;
+  const dx=x-old.fromX,dy=y-old.fromY;
+  old.direction=Math.abs(dx)>=Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up');
+  old.moving=true;
+ }
+ if(old.moving){
+  const t=Math.min(1,(now-old.start)/old.duration);
+  const nx=old.fromX+(old.targetX-old.fromX)*t,ny=old.fromY+(old.targetY-old.fromY)*t;
+  old.distance+=Math.hypot(nx-old.x,ny-old.y);old.x=nx;old.y=ny;
+  if(t>=1){old.moving=false;old.x=old.targetX;old.y=old.targetY;}
+ }
+ return old;
+}
+const V11_OLD_RENDER=drawPerson;
+drawPerson=function(px,py,name){
+ const skin=V11_SKINS.get(name);
+ if(!skin||!skin.image?.naturalWidth)return V11_OLD_RENDER(px,py,name);
+ if(name==='Yuno' && state?.zone==='region:hage'){
+  if(v10Motion.zone!=='region:hage')v10Reset(performance.now());
+  const action=V11_ACTIONS.get(name);
+  if(action && performance.now()<action.end){
+   return v11DrawActor(name,v10Motion.x-state.camera[0],v10Motion.y-state.camera[1],{dir:action.dir});
+  }
+  // Yuno's existing stance previews keep working without moving his ground position.
+  if(performance.now()<v09Action.until){
+   return v10Sprite(ctx,skin.image,v09FrameId(v09Action.name,v09Action.dir,performance.now()-v09Action.started),v10Motion.x-state.camera[0],v10Motion.y-state.camera[1]);
+  }
+  return v11DrawActor(name,v10Motion.x-state.camera[0],v10Motion.y-state.camera[1],{moving:v10Motion.active,dir:v10Motion.dir,distance:v10Motion.phase});
+ }
+ const pos=v11Track(name,px+state.camera[0],py+state.camera[1]);
+ return v11DrawActor(name,pos.x-state.camera[0],pos.y-state.camera[1],{phase:state.combat&&name==='Sania'?'combat':'overworld',moving:pos.moving,dir:pos.direction,distance:pos.distance});
+};
+[['attackBtn','attack',650],['guardBtn','defend',550],['focusBtn','cast',700],['healBtn','cast',600],['fleeBtn','dash',800]].forEach(function(pair){
+ const b=$(pair[0]);if(b)b.addEventListener('click',()=>v11Animate('Sania',pair[1],V11_POSITIONS.get('Sania')?.direction||'down',pair[2]),true);
+});
+const v11Badge=document.querySelector('.brand .sub');if(v11Badge)v11Badge.textContent='v0.11';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
