@@ -119,3 +119,12 @@ Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cac
 - v0.17 stamina, ranged-reach combat and armory; v0.18 gated spell codex; v0.19 2 evidence-gated branching quests; v0.20 Hage/Kikka interiors.
 - Save data remains in existing keys; new story flags stored under `state.flags.v19` / `state.flags.v20`.
 - NOTE: Real iPhone Safari gameplay and performance regressions have not yet been tested; browser visual interaction remains a user-side regression test.
+
+## v0.21 real Sania artwork integration
+- Optimized original approved sprite sheet into exactly 80 visual frames arranged in 8 columns × 10 rows at 64×64 resolution.
+- Image payload valid WebP RIFF and uploaded to GitHub Pages assets as base64 text (loaded as browser data-image).
+- Playable drawPerson('Sania') now uses image atlas with existing interpolated world position and foot anchor.
+- Idle/run/attack frames are chosen from actual game movement and action state.
+- Unsteady Pulse cast sheet is gated by saved v0.8 manifestation state; preview hides it beforehand.
+- Same save format and old artwork fallback retained.
+- Entire game JavaScript passes syntax validation. Physical iPhone Safari has not yet been tested.
