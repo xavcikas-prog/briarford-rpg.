@@ -1,9 +1,16 @@
-# Briarford RPG — v0.19
+# Briarford RPG — v0.20
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.20 — Contextual buildings and local-world exploration
+- **Hage Village**: enter a custom chapel and village storehouse, walk within each distinct map, investigate furnishings and leave through the entrance.
+- **Kikka**: enter the Magic Knights examination registry and a roadside inn. Register only a non-binding interest, take aptitude *practice* (not the full entrance exam), rent a room, hear traveler rumors.
+- Church records and daily assistance are optional; no arbitrary chosen-one plot or automatic demon revelation.
+- New interiors use `site:chapel`, `site:guild`, `site:exam`, `site:inn`, with location-aware menus and remembered flags.
+- Buildings can be reached via Activities → Local venues or mapped settlement points. Other cities currently retain the original regional templates.
+- Restore checkpoint: `savepoints/v0.20`. All previous branches v0.13–v0.19 retained.
 ## New in v0.19 — Life beyond static quests
 - Daily NPC agendas determined by local supply/food, public concerns and road/river conditions. They can change without Sania accepting a mission.
 - Village events spread from witnesses through NPC knowledge networks on later days; no universal instant knowledge.
