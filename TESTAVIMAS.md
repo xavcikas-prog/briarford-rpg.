@@ -147,3 +147,11 @@ Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cac
 - Combat toolbar shows ~13 tightly packed actions, some wrapping/clipping in the narrow iPhone view. Priority UX regression.
 - This evidence **does not** cover optional v0.22 3D WebGL, all quest reward edge cases, restored saves, or physical enemy collision in all zones.
 - New canonical issue IDs: IPH-BUG-01, IPH-BUG-02, IPH-QA-05, IPH-QA-06. See PROJECT_TASKS.md.
+
+## 2026-11-05 — IPH-BUG-01 (wolf visibility) reproducible regression
+- Added `tests/wolf-visibility.test.cjs` runnable in Node without extra packages.
+- Runtime-tested the exact GitHub `index.html` patch with mocked canvas / save state and original JS compilation.
+- **12/12 PASS**: two sprite frames, forest encounter, labeled combat wolf, proportional HP, green in-reach, amber out-of-reach, bow range, enemy movement updates, off-screen indicator, disappears after defeat, ward exclusion, no rendering in village.
+- Does NOT test physical iPhone pixels, actual user save or 60 FPS graphics. Therefore `IPH-BUG-01` is **implementation complete but awaiting iPhone user acceptance**.
+- Existing combat action system, HP values, AP/stamina, NPC routines, save/load keys and both 2D / 3D entry points remain unmodified.
+- Savepoints: `savepoints/v0.22-pre-combat-ux`, `savepoints/iph-bug-01-wolf-visibility`.
