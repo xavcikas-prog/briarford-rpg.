@@ -139,3 +139,11 @@ Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cac
 - Existing slots are copied into `briarford_pre3d_slot_1..3` only when first entering the test. Always export JSON before major changes.
 - Fallback restores old 2D canvas if browser cannot create WebGL context.
 - Savepoints: `savepoints/v0.21-pre-3d` and `savepoints/v0.22-3d-test`.
+
+## Real iPhone video evidence — 2026-11-04, recorded 2D v0.21 (146.75 seconds)
+- A user's actual Safari recording demonstrates loaded Day 8 / Level 5 character with STR 14 and Magic Theory 120.
+- Six completed quests displayed, Local Map opens Northern Forest, NPC/activities and grimoire research panes open.
+- Tactical fight with wolf starts and resolves. Wolf sprite is difficult to distinguish from the player/terrain; attack effects rely too heavily on textual alerts.
+- Combat toolbar shows ~13 tightly packed actions, some wrapping/clipping in the narrow iPhone view. Priority UX regression.
+- This evidence **does not** cover optional v0.22 3D WebGL, all quest reward edge cases, restored saves, or physical enemy collision in all zones.
+- New canonical issue IDs: IPH-BUG-01, IPH-BUG-02, IPH-QA-05, IPH-QA-06. See PROJECT_TASKS.md.
