@@ -148,19 +148,22 @@
 - [ ] `OPS-02` Atnaujinti `DESIGN_BIBLE.md`, dabar jis žymimas v0.6 ir nuo v0.8 tik papildytas; išlaikyti kanono laikotarpio, galių, geografinio pasaulio ir žaidėjo agentiškumo nuoseklumą.
 - [ ] `OPS-03` Iki tol, kol nėra nuoseklaus iPhone testo, **neskelbti** „visos animacijos veikia“, „visas pasaulis padarytas“, „NPC tikras AI“, „visi burtai sukurti“.
 
-## 9. Sekančio kūrimo ciklo siūloma tvarka
+## 9. Aktyvi 2D žaidimo kūrimo eilė (3D sustabdytas vartotojo prašymu)
 
-1. **v0.22 Stability & Sania**: `P0-01,02,03,04,05,06` — tikras Sania 64px testas, tinkami combat action frames, iPhone regresijos, išsaugojimai. *Nepridėti naujų izoliuotų paveikslėlių.*
-2. **v0.23 Combat Integration**: `COMBAT-01–05` — animacija/hitbox/damage, hurt/guard/dash, AI, nauji priešai. Tikrinami valdymo veiksmai.
-3. **v0.24 Magic Integration**: `MAG-02–04, MAG-08, ART-05` — realūs compatiblūs burtai, maną naudojantys NPC, aktyvus Sania ribotas impulso VFX, unlock gating.
-4. **v0.25 Briarford Living Village**: `NPC-01–05, QUEST-04/05, MAP-03` — gyventojų darbotvarkės, namai, sutartys, daugiau gyvenimiškų veiklų ir reakcijų.
-5. **v0.26 Character Art High Quality**: `ART-06–08,10` — didelio detalumo Asta, Yuno, Noelle, Yami, kiti. Kiekvieną integruoti su gameplay ir naudoti aiškų art QA.
-6. **v0.27+ Canon World Expansion**: `MAP-04/05, FACTION-01, MAG-05–07` — tikri miestai, atskiros karjeros, Knights atranka ir ilgametė grimoaro istorija.
+**Dabartinis sprendimas (2026-11-04):** 3D v0.22 palikti veikiančiu, bet **neplėtoti**, kol žaidėjas vėl paprašys. Pagrindinė kūrimo kryptis vėl 2D, pradedant nuo v0.21 žaidimo sistemos. 3D galima atidaryti atskirai su `?view=3d`, bet tai nėra naujo žaidimo bazė.
 
-**Pastaba:** etapų numeriai yra planas, ne pažadas, kad visa išvardyta jau sukurta. P0 regresijos turi pirmenybę prieš naujus feature.
+1. **v0.23 — 2D Stability & Sania:** `P0-01,02,03,04,05,06,07` — tikras 64×64 Sania pasirodymas iPhone, ėjimo/bėgimo animacijos, combat action frames, offline / save/load saugumas, ankstesni vartotojo raportuoti bugai. Jokių papildomų izoliuotų grafikos paketų.
+2. **v0.24 — Combat Integration:** `COMBAT-01–05` — animacija → pataikymas → žala / statusas, guard/dash/hurt, patikima priešų taktika, daugiau pasirinkimų.
+3. **v0.25 — Magic Integration:** `MAG-02–04, MAG-08, ART-05` — realūs mana / AP burtai ir gynyba, NPC elementų skirtumai, Sania riboto impulso vizualai *tik atrakinti*.
+4. **v0.26 — Living Briarford:** `NPC-01–05, QUEST-04/05, MAP-03` — įeinami namai, individualūs NPC, savarankiškas gyvenimas, dalykiški dialogai, quest pasekmės, įvairesnės veiklos.
+5. **v0.27 — High-quality Individual Character Art:** `ART-06–08,10` — Asta, Yuno, Noelle, Yami ir Briarford NPC 64×64 detalūs, unikalūs animaciniai modeliai, prijungti prie tikrų veiksmų.
+6. **v0.28+ — Black Clover World Expansion:** `MAP-04/05, FACTION-01, MAG-05–07` — unikalūs regionai, Magic Knights atranka, profesijos, frakcijos, Sania paslaptingos galios istoriniai keliai.
 
+**Nuolatinis principas:** 3D prototipas `v0.22` liks saugykloje; neperrašyti `2D` versijos ir neprarasti savepointų. Užduotį žymėti baigta tik po techninių testų ir žaidėjo grįžtamojo ryšio.
 
-## 11. Atskirai patvirtintas 3D bandymas — nesupainioti su pagrindiniu 2D žaidimu
+## 11. 3D bandymas — LAIKINAI ATIDĖTAS, išsaugotas atskirai
+
+**Statusas: PAUSED (vartotojo sprendimas 2026-11-04). Kol kas nieko daugiau 3D nekuriame; grįžtame prie prioritetinio 2D backlog.**
 
 - [x] `3D-TEST-01` Sukurta atskira `?view=3d` peržiūra iš to paties žaidimo, numatytasis 2D režimas nepakeistas.
 - [x] `3D-TEST-02` Tikras WebGL erdvinis rendereris: perspektyva, pasukama kamera, pastatai, medžiai, upė, keliai, low-poly veikėjai, 3D touch picking, perjungimas 2D, tie patys NPC/quests/world state.
