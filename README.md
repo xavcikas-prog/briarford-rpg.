@@ -1,9 +1,17 @@
-# Briarford RPG — v0.16
+# Briarford RPG — v0.17
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.17 — Real equipment & tactical options
+- Tactical stamina pool: 8 points, recovering each turn; attacks must pay AP and stamina.
+- Light, standard and heavy strikes with different hit chances, damage and potential stagger.
+- Weapon reach matters: bows can attack at range, spears from two tiles, blades within one tile.
+- Aim grants accuracy at a bonus-action cost.
+- Armor remains part of combat defense; new weapon/armor choices in the Armory while in settlements.
+- Existing wolf/ward encounters still work, including the sealed grimoire pulse and player defeat.
+- Rollback checkpoint: `savepoints/v0.17`.
 ## New in v0.16
 - Every existing **named Briarford villager** now has an original sprite geometry rig: Liora, Renn, Teren, Garrick, Mira, Haldric, Orven, Vessa and Elna.
 - Distinct village roles and silhouettes: hunter's bow and equipment, smith's apron and hammer, water healer's robe, watch captain's spear and shoulder plates, trader's bags, elderly staff and practical apprentice clothing.
