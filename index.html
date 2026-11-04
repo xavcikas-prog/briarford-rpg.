@@ -1709,6 +1709,164 @@ draw=function(){
 };
 const v08brand=document.querySelector('.brand .sub');if(v08brand)v08brand.textContent='v0.8';
 
+/* v0.9 | Yuno original top-down sprite integration.
+   Rebuilt from the user's style reference and edited into 116 evenly indexed cells.
+   Visual testing only: animation selections do not award combat XP or invent canon spells. */
+const V09_ANIM={
+  idle:{start:[0,10,20,30],count:4,fps:4},
+  run:{start:[4,14,24,34],count:6,fps:9},
+  attack:{start:[40,48,56,64],count:4,fps:9},
+  cast:{start:[44,52,60,68],count:4,fps:7},
+  defend:{start:[72,79,86,93],count:2,fps:4},
+  hurt:{start:[74,81,88,95],count:2,fps:5},
+  dash:{start:[76,83,90,97],count:3,fps:10},
+  knockdown:{start:[100,100,100,100],count:8,fps:6},
+  summon:{start:[108,108,108,108],count:8,fps:7}
+};
+const V09_DIRS=['down','left','right','up'];
+const V09_SPRITE_IMAGE=new Image();
+let v09AtlasReady=false;
+let v09Walk={index:0,dir:'down',next:0,moving:false};
+let v09Action={name:'idle',until:0,started:0,dir:'down'};
+const V09_SPRITE_URL='./assets/yuno-animated-atlas.png';
+V09_SPRITE_IMAGE.onload=()=>{v09AtlasReady=true;if(state?.created)draw();};
+V09_SPRITE_IMAGE.onerror=()=>{v09AtlasReady=false;console.warn('Yuno sprite atlas could not be loaded; pixel fallback retained.');};
+V09_SPRITE_IMAGE.src=V09_SPRITE_URL;
+function v09FrameId(name,dir,elapsed){
+ const meta=V09_ANIM[name]||V09_ANIM.idle;
+ const ix=Math.max(0,V09_DIRS.indexOf(dir));
+ const raw=Math.floor(Math.max(0,elapsed)*meta.fps/1000);
+ const frame=name==='knockdown'||name==='summon'?Math.min(meta.count-1,raw):raw%meta.count;
+ return meta.start[ix]+frame;
+}
+function v09DrawSprite(context,id,x,y,width=26,height=35){
+ if(!v09AtlasReady||!V09_SPRITE_IMAGE.naturalWidth)return false;
+ const sx=(id%10)*32,sy=Math.floor(id/10)*40;
+ context.save();context.imageSmoothingEnabled=false;
+ context.drawImage(V09_SPRITE_IMAGE,sx,sy,32,40,x,y,width,height);
+ context.restore();return true;
+}
+const V09_BASE_DRAW_PERSON=drawPerson;
+drawPerson=function(px,py,name){
+ if(name==='Yuno' && state?.zone==='region:hage' && v09AtlasReady){
+   const now=performance.now(),anim=now<v09Action.until?v09Action.name:(v09Walk.moving?'run':'idle');
+   const dir=now<v09Action.until?v09Action.dir:v09Walk.dir;
+   const elapsed=now<v09Action.until?now-v09Action.started:now;
+   const frameId=v09FrameId(anim,dir,elapsed);
+   // Align the character's boots to the bottom of one 16px tile; body extends above it.
+   const cx=px*16-5,cy=py*16-20;
+   ctx.fillStyle='rgba(7,19,13,.33)';ctx.fillRect(px*16+2,py*16+14,14,2);
+   return v09DrawSprite(ctx,frameId,cx,cy,26,35);
+ }
+ return V09_BASE_DRAW_PERSON(px,py,name);
+};
+const V09_PATH=[[32,25],[31,25],[30,25],[29,25],[28,25],[29,25],[30,25],[31,25],[32,25],[33,25]];
+function v09UpdateNpcMovement(now){
+ if(state?.zone!=='region:hage'||state.combat||!state.created)return;
+ if($('overlay').classList.contains('visible')||moveTimer)return;
+ const yuno=v03townLocals().find(n=>n.name==='Yuno');if(!yuno)return;
+ if(now<v09Action.until){v09Walk.moving=false;return;}
+ if(now<v09Walk.next)return;
+ v09Walk.next=now+760;
+ const [x,y]=V09_PATH[v09Walk.index++%V09_PATH.length];
+ if(!walkable(x,y))return;
+ const dx=x-yuno.x,dy=y-yuno.y;
+ v09Walk.moving=dx!==0||dy!==0;
+ if(Math.abs(dx)>=Math.abs(dy)&&dx!==0)v09Walk.dir=dx>0?'right':'left';
+ else if(dy!==0)v09Walk.dir=dy>0?'down':'up';
+ yuno.x=x;yuno.y=y;
+}
+function v09WorldAction(name='cast',dir='down'){
+ if(state?.zone!=='region:hage')return;
+ closeModal();
+ v09Action={name,dir,started:performance.now(),until:performance.now()+(name==='summon'?1800:1400)};
+ v09Walk.moving=false;
+ notify(name==='summon'?'Yuno demonstrates a stylized wind-bird animation. This is a visual test, not a new spell unlocked.':'Yuno demonstrates a '+name+' stance. Animation preview only.');
+ draw();
+}
+function v09Showcase(){
+ if(!state?.created)return;
+ const stateView={anim:'idle',dir:'down',stamp:performance.now()};
+ customModal('Yuno · Animation Studio',body=>{
+  html(body,'p','Top-down pixel-animation test. Toggle an action and a direction to preview its frames. This does not affect combat, relationships or progress.','small');
+  const c=document.createElement('canvas');c.width=260;c.height=176;c.style.cssText='display:block;width:100%;max-width:360px;margin:9px auto;background:#222d2b;border:1px solid #647d67;border-radius:10px;image-rendering:pixelated';body.append(c);
+  const holder=html(body,'div','','mini-grid');holder.style.cssText='grid-template-columns:repeat(3,minmax(0,1fr));gap:6px';
+  const actionButtons={};
+  for(const [name] of Object.entries(V09_ANIM)){
+   const b=btn(holder,({idle:'Idle',run:'Running',attack:'Attack',cast:'Wind cast',defend:'Defend',hurt:'Hurt',dash:'Dash',knockdown:'Knockdown',summon:'Wind bird'}[name]||name),()=>{
+      stateView.anim=name;stateView.stamp=performance.now();
+      for(const [k,v] of Object.entries(actionButtons))v.style.borderColor=k===name?'#f0d28f':'#657f69';
+   },'secondary');
+   b.style.cssText='min-width:0;padding:9px 3px;font-size:11px';actionButtons[name]=b;
+  }
+  actionButtons.idle.style.borderColor='#f0d28f';
+  html(body,'p','Direction (available for standing, movement, attacks and spells):','small');
+  const dirs=html(body,'div','','mini-grid');dirs.style.cssText='grid-template-columns:repeat(4,minmax(0,1fr));gap:5px';
+  const dirButtons={};
+  for(const dir of V09_DIRS){dirButtons[dir]=btn(dirs,dir.toUpperCase(),()=>{
+    stateView.dir=dir;stateView.stamp=performance.now();
+    for(const [k,v] of Object.entries(dirButtons))v.style.borderColor=k===dir?'#f0d28f':'#657f69';
+  },'secondary');dirButtons[dir].style.cssText='font-size:10px;padding:8px 0;min-width:0';}
+  dirButtons.down.style.borderColor='#f0d28f';
+  html(body,'div','116 source frames · transparent atlas · native 4-direction support.','tag');
+  btn(body,'Return to Yuno',()=>{const npc=v03townLocals().find(n=>n.name==='Yuno');if(npc)v06canonOrLocal(npc);else closeModal()},'secondary');
+  const context=c.getContext('2d');
+  let lastDraw=0;
+  function tick(now){
+    if(!c.isConnected||!$('overlay').classList.contains('visible'))return;
+    if(now-lastDraw>=60){lastDraw=now;
+      context.clearRect(0,0,c.width,c.height);
+      context.fillStyle='#172820';context.fillRect(0,123,c.width,53);
+      context.fillStyle='#345c46';context.fillRect(0,125,c.width,2);
+      context.fillStyle='#385843';for(let i=9;i<260;i+=23)context.fillRect(i,145+(i%3),8,3);
+      context.fillStyle='#d3bf93';context.font='12px system-ui';context.fillText(stateView.anim.toUpperCase()+' · '+stateView.dir.toUpperCase(),10,18);
+      if(v09AtlasReady){
+       const index=v09FrameId(stateView.anim,stateView.dir,now-stateView.stamp);
+       v09DrawSprite(context,index,86,22,88,112);
+      }else{context.fillStyle='#eed6a2';context.fillText('Sprite still loading…',56,86);}
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+ });
+}
+const V09_PREV_CANON_DIALOG=v06canonOrLocal;
+v06canonOrLocal=function(n){
+ const result=V09_PREV_CANON_DIALOG(n);
+ if(n.name==='Yuno'&&state?.zone==='region:hage'&&$('overlay').classList.contains('visible')){
+  const body=$('modal-body');
+  const row=html(body,'div','','banner');row.style.marginTop='12px';
+  html(row,'strong','🎨 New sprite test');
+  html(row,'p','A 2D overhead animation test for Yuno. All mechanics and canon story remain unchanged.','small');
+  btn(row,'Preview all 9 animations',v09Showcase,'primary');
+  btn(row,'Watch wind magic in the village',()=>v09WorldAction('cast','down'),'secondary');
+  btn(row,'Watch Yuno sprint',()=>v09WorldAction('run','right'),'secondary');
+ }
+ return result;
+};
+
+// Dedicated Hage shortcut so the animation test is discoverable even if Yuno is walking.
+const V09_PREV_ACTIVITY_PANEL=activityPanel;
+activityPanel=function(){
+ const result=V09_PREV_ACTIVITY_PANEL();
+ if(state?.created && state.zone==='region:hage' && $('overlay').classList.contains('visible')){
+   const body=$('modal-body');
+   const section=html(body,'div','','banner');section.style.marginTop='12px';
+   html(section,'strong','🎞 Yuno · Sprite test');
+   html(section,'p','See every animation and all four directions without starting combat.','small');
+   btn(section,'Open animation studio',v09Showcase,'primary');
+ }
+ return result;
+};
+activityButton.onclick=activityPanel;
+
+// Refresh Yuno while visible without accelerating in-game time or the NPC scheduler.
+const V09_REFRESH_TIMER=setInterval(()=>{
+ if(!state?.created||state.zone!=='region:hage'||document.hidden)return;
+ const now=performance.now();v09UpdateNpcMovement(now);
+ if(!$('overlay').classList.contains('visible'))draw();
+},120);
+const v09Brand=document.querySelector('.brand .sub');if(v09Brand)v09Brand.textContent='v0.9';
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
