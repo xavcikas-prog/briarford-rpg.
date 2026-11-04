@@ -1,9 +1,15 @@
-# Briarford RPG — v0.10
+# Briarford RPG — v0.11
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.11 — Shared animation pipeline
+- Separate state maps for **overworld** (idle, walk, run, interact, light cast) and **combat** (attack, cast, defend, hurt, dash, knockdown, special).
+- Unified animated actor registry with distinct skins, speeds, directional actions and visual pose lifetimes.
+- Player combat toolbar now publishes visual actions without changing damage or XP mechanics.
+- Yuno overworld motion interpolation and all previously unlocked skills remain intact.
+- Restore checkpoint: `savepoints/v0.11` branch.
 ## New in v0.10 — Overworld motion correction
 - Yuno moves smoothly between tile centers; animation frames advance by distance traveled, not an independent clock.
 - Foot-anchor normalization prevents vertical sprite jitter across animation frames.
