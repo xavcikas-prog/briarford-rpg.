@@ -2859,6 +2859,149 @@ activityPanel=function(){const r=V19_PREV_ACTIVITIES();
 };activityButton.onclick=activityPanel;
 const v19Brand=document.querySelector('.brand .sub');if(v19Brand)v19Brand.textContent='v0.19';
 
+
+/* v0.20 — true local venue interiors, Hage / Kikka differences and contextual world interactions. */
+const V20_SITES={
+ chapel:{label:'Hage · Village Chapel',region:'hage',door:[12,15],kind:'sanctuary',lead:'Sister Lily and Father Orsi have cared for children here for years.'},
+ exam:{label:'Kikka · Knight Examination Hall',region:'kikka',door:[40,20],kind:'registry',lead:'A public registry for future Magic Knight hopefuls. Candidates still must pass the official exam.'},
+ inn:{label:'Kikka · Roadside Inn',region:'kikka',door:[12,15],kind:'inn',lead:'Merchants and aspirants share a modest warm common room.'},
+ guild:{label:'Hage · Village Storehouse',region:'hage',door:[40,20],kind:'storehouse',lead:'Tools, donated grain and simple farm supplies are stacked in the barn.'}
+};
+function v20Venue(){return state?.zone?.startsWith('site:')?state.zone.slice(5):null;}
+function v20Map(site){
+ const m=[];const type=V20_SITES[site]?.kind;
+ for(let y=0;y<H;y++){const row=[];for(let x=0;x<W;x++){
+  let tile=(x>=17&&x<=34&&y>=11&&y<=30)?'floor':'void';
+  if(x===17||x===34||y===11||y===30)tile='wall';
+  if(x===25&&y===30)tile='exit';
+  if(type==='sanctuary' && ((x>=22&&x<=28&&y>=16&&y<=18)||(x===20&&y===23)||(x===31&&y===23)))tile='furniture';
+  if(type==='registry' && ((x>=21&&x<=29&&y>=16&&y<=17)||(x===22&&y===22)||(x===29&&y===22)))tile='furniture';
+  if(type==='inn'&& ((x>=19&&x<=22&&y>=17&&y<=20)||(x>=28&&x<=31&&y>=17&&y<=20)||(x>=23&&x<=28&&y>=25&&y<=26)))tile='furniture';
+  if(type==='storehouse'&&((x>=19&&x<=23&&y>=17&&y<=19)||(x>=27&&x<=31&&y>=17&&y<=19)||(x>=20&&x<=29&&y===25)))tile='furniture';
+  row.push(tile);
+ }m.push(row);}return m;
+}
+const V20_PREV_MAP=makeMap;
+makeMap=function(zone){
+ if(!zone?.startsWith('site:'))return V20_PREV_MAP(zone);
+ if(!mapCache[zone])mapCache[zone]=v20Map(zone.slice(5));
+ return mapCache[zone];
+};
+const V20_PREV_HUD=updateHUD;
+updateHUD=function(){V20_PREV_HUD();const site=v20Venue();
+ if(site){$('scene').textContent=V20_SITES[site]?.label||'Interior';$('worldtag').textContent='Local interior';$('tip').textContent='Tap furniture to inspect · exit near the south door';}
+};
+function v20Enter(id){
+ if(state?.combat)return notify('You cannot enter during combat.');
+ const venue=V20_SITES[id];if(!venue||state.zone!=='region:'+venue.region)return notify('You need to travel to '+venue.region+' first.');
+ if(venue.kind==='registry'&&(state.minute<390||state.minute>1140))return notify('The examination registry is closed for the night.');
+ stopMoving();state.flags.v20??={};state.flags.v20.prev=state.zone;state.flags.v20.exit={x:venue.door[0],y:venue.door[1]};
+ state.zone='site:'+id;state.x=25;state.y=27;updTime(3);notify('You enter '+venue.label+'.');draw();updateHUD();
+}
+function v20Exit(){
+ const v=state.flags.v20||{};if(!v20Venue())return;
+ stopMoving();state.zone=v.prev||'region:hage';state.x=v.exit?.x||24;state.y=v.exit?.y||22;
+ if(!walkable(state.x,state.y)){state.x=24;state.y=22;}
+ updTime(2);notify('You step back into the settlement.');draw();updateHUD();
+}
+function v20InteriorObject(x,y){
+ const id=v20Venue(),q=V20_SITES[id];if(!q)return;
+ const close=Math.abs(state.x-x)+Math.abs(state.y-y);
+ if(close>2)return notify('Walk closer to inspect the object.');
+ const menu=[{text:'Leave through the entrance',act:v20Exit}];
+ if(id==='chapel'){
+  menu.unshift({text:'Study the old hymn and grimoire records',act:()=>{
+   if(!dailyCap('v20-chapel-study',1))return;
+   updTime(25);skillUp('magic',1);notify('You compare old hymn markings with modern grimoire symbols. Magic Theory +1. No seal opened.');
+  }},{text:'Help care for the church courtyard',act:()=>{
+   if(!dailyCap('v20-chapel-help',1))return;
+   updTime(40);state.gold+=2;remember('Elna','helped at the Hage chapel',1);notify('You help clean the chapel steps. +2 coins for honest work.');
+  }},{text:'Examine church archives without taking anything',act:()=>{
+   const v=state.flags.v20;v.archives??={};if(v.archives.chapel)return notify('You already copied the local history of Hage.');
+   v.archives.chapel=state.day;updTime(17);gainXP(3);notify('You copy names from Hage’s old birth register. +3 XP. No answer about Sania’s origins is given.');
+  }}); 
+ }else if(id==='exam'){
+  menu.unshift({text:'Review official application requirements',act:()=>{
+   updTime(12);notify('Candidates must be present for the selection. Your age and grimoire are relevant, but no squad captain is obliged to recruit you.');
+  }},{text:'Take a non-binding aptitude practice',act:()=>{
+   if(!dailyCap('v20-exam-practice',1))return;
+   const dex=check('DEX',12,Math.floor(state.skills.blade/8)),mind=check('INT',11,Math.floor(state.skills.magic/30));
+   updTime(35);gainXP(3);notify('Preliminary practice: movement '+(dex.pass?'passed':'needs training')+', theory '+(mind.pass?'passed':'needs training')+'. +3 XP. This is NOT the entrance exam.');
+  }},{text:'Register interest without joining any squad',act:()=>{
+   state.flags.v20.examInterest=state.day;updTime(9);notify('Your name is recorded for information only. No selection or commitment has occurred.');
+  }});
+ }else if(id==='inn'){
+  menu.unshift({text:'Buy a meal (3 coins)',act:()=>{
+   if(state.gold<3)return notify('Not enough coins for a meal.');
+   state.gold-=3;state.hp=Math.min(state.maxHp,state.hp+7);updTime(25);notify('Hot food restores +7 HP.');
+  }},{text:'Rest in a rented bed (7 coins)',act:()=>{
+   if(state.gold<7)return notify('A room costs 7 coins.');
+   state.gold-=7;updTime(360);state.hp=Math.min(state.maxHp,state.hp+12);notify('You rent a modest bed and recover +12 HP.');
+  }},{text:'Hear travelers discuss the selection',act:()=>notify('People disagree about which squads recruit commoners. Rumors are not a guaranteed invitation.')});
+ }else{
+  menu.unshift({text:'Sort grain and tools for local pay',act:()=>{
+   if(!dailyCap('v20-store-help',2))return;updTime(40);state.gold+=4;skillUp('craft',1);
+   notify('You organize farm equipment and receive 4 coins. Crafting improves.');
+  }},{text:'Inspect supply ledger',act:()=>{
+   updTime(6);notify('Hage stores grain and tools in careful quantities; a missing cart would be noticed here.');
+  }});
+ }
+ modal(q.label,q.lead,menu);
+}
+const V20_PREV_REGION_ACTION=v03regionalAction;
+v03regionalAction=function(action){
+ const r=V20_PREV_REGION_ACTION(action);
+ if(!state?.zone?.startsWith('region:')||!$('overlay').classList.contains('visible'))return r;
+ const region=state.zone.slice(7);
+ const places=Object.entries(V20_SITES).filter(([id,p])=>p.region===region);
+ if(places.length){
+  const b=html($('modal-body'),'div','','banner');html(b,'strong','🚪 Places you can actually enter');
+  for(const [id,p] of places){btn(b,'Visit '+p.label,()=>v20GoTo(id),'secondary');}
+ }
+ return r;
+};
+function v20GoTo(id){
+ const p=V20_SITES[id];if(state.zone!=='region:'+p.region)return notify('Travel to '+p.region+' first.');
+ closeModal();const path=pathTo(state.x,state.y,p.door[0],p.door[1],true);
+ startMove(path,()=>v20Enter(id));
+}
+const V20_OLD_ACTIVITY=activityPanel;
+activityPanel=function(){
+ if(v20Venue())return v20InteriorObject(26,20);
+ const r=V20_OLD_ACTIVITY();
+ if(state?.created&&state.zone.startsWith('region:')&&$('overlay').classList.contains('visible')){
+  const zone=state.zone.slice(7),sites=Object.entries(V20_SITES).filter(([id,p])=>p.region===zone);
+  if(sites.length){
+   const b=html($('modal-body'),'div','','banner');html(b,'strong','🏘 Local venues');
+   sites.forEach(([id,p])=>btn(b,'Go to '+p.label,()=>v20GoTo(id),'secondary'));
+  }
+ }
+ return r;
+};activityButton.onclick=activityPanel;
+cn.addEventListener('pointerdown',function(ev){
+ const venue=v20Venue();if(!venue||!state?.created||state.combat||$('overlay').classList.contains('visible'))return;
+ ev.preventDefault();ev.stopImmediatePropagation();
+ const [x,y]=toTile(ev);
+ if(Math.abs(x-25)+Math.abs(y-30)<=1){
+  startMove(pathTo(state.x,state.y,25,29,true),v20Exit);return;
+ }
+ const tile=makeMap(state.zone)[y]?.[x];
+ if(tile==='furniture'){
+  startMove(pathTo(state.x,state.y,x,y,true),()=>v20InteriorObject(x,y));return;
+ }
+ if(walkable(x,y)){startMove(pathTo(state.x,state.y,x,y));return;}
+ notify('A wall or locked furnishing blocks the path.');
+},true);
+const V20_PREV_DRAW=draw;
+draw=function(){V20_PREV_DRAW();
+ const id=v20Venue();if(!id)return;
+ // Structural details and light sources differentiate each building.
+ const x=25-state.camera[0],y=16-state.camera[1];
+ ctx.fillStyle=id==='chapel'?'#ebdeab':id==='exam'?'#c4b58b':'#d8ab69';
+ ctx.fillRect(x*16+4,y*16+6,8,3);
+};
+const v20brand=document.querySelector('.brand .sub');if(v20brand)v20brand.textContent='v0.20';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
