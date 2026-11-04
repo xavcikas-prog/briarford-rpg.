@@ -2709,10 +2709,12 @@ function v19Solve(id,decision){
  const quality=v.riverQuality,safety=v.routeSafety;
  if(id==='river'){
   if(decision==='filter'){
+   if(state.zone!=='village'||Math.abs(state.x-10)+Math.abs(state.y-30)>5)return notify('Carry the filter materials to the riverbank before installing them.');
    if((state.items.wood||0)<2||(state.items.herbs||0)<1)return notify('The filter needs 2 firewood and 1 medicinal herb.');
    addItem('wood',-2);addItem('herbs',-1);v.riverQuality=Math.min(100,quality+38);remember('Mira','helped install a clean-water filter',9);
    state.flags.villageStatus.food=Math.min(12,state.flags.villageStatus.food+1);
   }else if(decision==='levy'){
+   const h=state.npcs.find(n=>n.id==='Haldric');if(state.zone!=='village'||!h||Math.abs(state.x-h.x)+Math.abs(state.y-h.y)>5)return notify('Find Haldric in person to agree public spending.');
    v.riverQuality=Math.min(100,quality+25);state.flags.villageStatus.taxMood=Math.min(100,state.flags.villageStatus.taxMood+13);
    remember('Haldric','supported paying for a river purifier',5);remember('Vessa','heard that new public expenditure raised levies',-2);
   }else{
@@ -2722,6 +2724,7 @@ function v19Solve(id,decision){
   v19Event('river-resolved','The river response is underway: '+decision+'.',['Mira','Liora','Haldric']);
  }else{
   if(decision==='escort'){
+   const o=state.npcs.find(n=>n.id==='Orven');if(state.zone!=='village'||!o||Math.abs(state.x-o.x)+Math.abs(state.y-o.y)>5)return notify('Meet Orven first; escorts are organized with the village guard.');
    if((state.items.bread||0)<1)return notify('An escort needs at least one ration.');
    addItem('bread',-1);v.routeSafety=Math.min(100,safety+31);remember('Orven','organized a convoy escort',7);
    v19Event('convoy-resolved','Guards escorted the convoy through the northern bend.',['Orven','Vessa','Renn']);
