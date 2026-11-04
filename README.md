@@ -1,10 +1,22 @@
-# Briarford RPG — v0.21
+# Briarford RPG — 2D v0.21 + optional 3D experiment v0.22
 
 **Project planning source of truth:** [PROJECT_TASKS.md](./PROJECT_TASKS.md) — maintained backlog of implemented code, partial prototypes, missing mechanics, known regressions and next priorities. Never equate generated graphics with working gameplay.
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## Optional 3D TEST (v0.22; separate from normal 2D)
+
+- **2D original remains default:** https://xavcikas-prog.github.io/briarford-rpg./
+- **Optional 3D prototype:** https://xavcikas-prog.github.io/briarford-rpg./?view=3d
+- This is the SAME RPG state and menus, not a second game. World Map, Local Map, NPC conversations, combat, quests, inventory, skills and saved slots still use the original 2D rules.
+- The 3D canvas uses custom lightweight WebGL (no external CDN or paid APIs), with perspective terrain, low-poly buildings, paths, water, forests, stylized 3D characters and a follow/orbit camera. Drag to rotate, tap to walk/interact, +/− to zoom, 2D to return.
+- Visuals are **prototype 3D geometry**, not full-detail anime character models. This is a renderer test to decide if the gameplay should ultimately transition to 3D.
+- Entering 3D copies any existing slot to separate `briarford_pre3d_slot_{1..3}` local backup keys once. Original slots are not overwritten merely by opening 3D, **but saving inside 3D uses normal save slots**. Export JSON backups before testing to prevent any accidental overwrite.
+- 2D main remains unchanged except for an optional `Try 3D` shortcut; dropping `?view=3d` immediately restores normal 2D. Code rollback checkpoints: `savepoints/v0.21-pre-3d` and `savepoints/v0.22-3d-test`.
+- Important: WebGL runtime and actual 3D presentation have NOT yet been verified on a physical iPhone. Chromium sandbox here disallows real WebGL contexts; JS parser and simulated GPU flow pass, but mobile screenshots/interaction still need user testing.
+- Not a complete 3D remake of every city or character. Lore/story/progression are inherited, while 3D level art is an early general-purpose procedural renderer.
 
 ## New in v0.21 — integrated actual Sania pixel art
 - Replaces Sania's geometry-built placeholder **in the playable game** with an original approved high-detail 64×64 frame atlas.
