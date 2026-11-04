@@ -3146,6 +3146,95 @@ activityButton.onclick=activityPanel;
 const v21Label=document.querySelector('.brand .sub');
 if(v21Label)v21Label.textContent='v0.21';
 
+
+/* IPH-BUG-01 / v0.23-step-1: readable wolf target in real exploration/combat.
+   A pure display layer — no changes to enemy positions, damage or save schema. */
+const V23_WOLF_FRAMES=[];
+function v23WolfFrame(step){
+ const sheet=document.createElement('canvas');sheet.width=36;sheet.height=30;
+ const g=sheet.getContext('2d');g.imageSmoothingEnabled=false;
+ const r=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h);};
+ // Distinct dark outline plus light fur means the wolf remains readable on grass.
+ const ink='#182123',dark='#394147',shadow='#626b71',fur='#9ca9a9',light='#e4e5d9';
+ const paws=step===0?0:1;
+ // Tail, slightly mobile; attached to the body, not a separate moving enemy.
+ r(2,9+paws,3,4,ink);r(4,10+paws,4,4,dark);r(6,12,4,4,shadow);
+ // Legs and dark paws.
+ r(10,20+paws,6,9,ink);r(12,21+paws,3,6,shadow);r(23,20-paws,6,9,ink);r(24,21-paws,3,6,shadow);
+ r(9,27+paws,8,2,'#e0ddc6');r(22,27-paws,9,2,'#e0ddc6');
+ // Body: outlined silhouette, muscular shoulder and shaggy back.
+ r(8,10,19,13,ink);r(9,9,11,2,ink);r(10,10,18,11,dark);
+ r(10,12,14,7,shadow);r(11,10,14,4,fur);
+ r(12,11,10,2,light);r(16,16,10,4,'#bac4c4');
+ r(11,20,15,3,dark);
+ // Neck, head, ears, muzzle and luminous eyes.
+ r(23,8,10,13,ink);r(24,6,4,7,ink);r(29,5,4,8,ink);
+ r(25,7,3,6,fur);r(29,6,3,6,fur);r(24,11,10,8,shadow);
+ r(25,10,8,4,fur);r(28,12,3,3,light);
+ r(32,15,4,5,ink);r(32,16,3,2,'#b8b3a8');r(34,17,2,2,'#13181a');
+ r(29,13,2,2,'#f8d778');r(30,13,1,1,'#1b1c1b');
+ r(26,19,6,3,light);r(27,22,3,2,shadow);
+ // Neck tufts so it cannot be mistaken for an idle human sprite.
+ r(23,18,3,4,fur);r(19,21,4,3,fur);
+ return sheet;
+}
+V23_WOLF_FRAMES.push(v23WolfFrame(0),v23WolfFrame(1));
+function v23WolfTarget(){
+ if(!state?.created||state.zone!=='forest')return null;
+ const c=state.combat;
+ if(c && c.kind==='ward')return null;
+ if(!c&&!state.enemy?.wolfAlive)return null;
+ if(c && (!Number.isFinite(c.enemyX)||!Number.isFinite(c.enemyY)))return null;
+ const x=c?c.enemyX:20,y=c?c.enemyY:17;
+ if(!Number.isFinite(x)||!Number.isFinite(y))return null;
+ return {x,y,inCombat:!!c,hp:c?.hp??18,maxHp:Math.max(1,c?.maxHp??18)};
+}
+function v23DrawWolf(){
+ const target=v23WolfTarget();
+ if(!target||!state.camera)return;
+ const g=ctx,cam=state.camera;
+ const px=(target.x-cam[0])*16+8,py=(target.y-cam[1])*16+15;
+ // When target is off screen, show an edge cue instead of losing combat orientation.
+ if(px<-8||py<-8||px>328||py>328){
+  if(!target.inCombat)return;
+  const ax=Math.max(23,Math.min(296,px)),ay=Math.max(25,Math.min(294,py));
+  g.save();g.imageSmoothingEnabled=false;
+  g.fillStyle='#251c1bd9';g.fillRect(ax-21,ay-14,43,23);
+  g.strokeStyle='#e6ba72';g.lineWidth=2;g.strokeRect(ax-21,ay-14,43,23);
+  g.textAlign='center';g.font='bold 10px sans-serif';g.fillStyle='#ffe8ab';
+  g.fillText('WOLF',ax,ay+1);
+  g.restore();return;
+ }
+ g.save();g.imageSmoothingEnabled=false;
+ // Explicit battlefield target ring: red/orange = not currently in weapon range.
+ const distance=Math.abs(state.x-target.x)+Math.abs(state.y-target.y);
+ const reach=target.inCombat?(typeof v17Reach==='function'?v17Reach():1):1;
+ const inRange=distance>=1&&distance<=reach;
+ if(target.inCombat){
+  const tileX=Math.round(px-8),tileY=Math.round(py-15);
+  g.fillStyle=inRange?'#7de0a538':'#ecaa7445';
+  g.fillRect(tileX,tileY,16,16);
+  g.lineWidth=2;g.strokeStyle=inRange?'#b5edaa':'#ffd086';
+  g.strokeRect(tileX+1,tileY+1,14,14);
+ }
+ // Cover the tiny legacy wolf with a readable pixel-art silhouette anchored to the actual target tile.
+ g.drawImage(V23_WOLF_FRAMES[Math.floor(performance.now()/320)%2],Math.round(px-18),Math.round(py-28),36,30);
+ if(target.inCombat){
+  // HP indicator remains visible even on the mobile 320×320 internal canvas.
+  const bx=Math.max(2,Math.min(280,Math.round(px-16)));
+  const by=py>45?Math.round(py-40):Math.round(py+5);
+  g.fillStyle='#141c1be6';g.fillRect(bx-1,by-13,36,24);
+  g.textAlign='left';g.font='bold 9px sans-serif';
+  g.fillStyle='#fff0ce';g.fillText('WOLF',bx,by-5);
+  g.fillStyle='#6b2e32';g.fillRect(bx,by,32,5);
+  g.fillStyle='#d9e4be';g.fillRect(bx,by,Math.round(32*Math.max(0,Math.min(1,target.hp/target.maxHp))),5);
+  g.strokeStyle='#f5dda1';g.lineWidth=1;g.strokeRect(bx-.5,by-.5,33,6);
+ }
+ g.restore();
+}
+const V23_DRAW_BEFORE_WOLF=draw;
+draw=function(){V23_DRAW_BEFORE_WOLF();v23DrawWolf();};
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
