@@ -111,3 +111,11 @@ Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cac
 - Index HTML syntax parsed with JavaScript Function constructor after each code addition.
 - GitHub savepoint branches hold previous versions for rollback. No save data migration needed.
 - Physical iPhone rendering, body anchor quality and heavy per-device performance still require direct test; color variants are early prototype art, not approved final portraits.
+
+## v0.14–v0.20 engineering checkpoint
+- Each release updates GitHub main and creates independent `savepoints/v0.XX` rollback branch.
+- Static JavaScript syntax validation in the GitHub update environment passed after every stage.
+- 116-frame bespoke procedural rigs implemented for 5 heroes, 6 additional canonical actors, and 9 primary Briarford villagers.
+- v0.17 stamina, ranged-reach combat and armory; v0.18 gated spell codex; v0.19 2 evidence-gated branching quests; v0.20 Hage/Kikka interiors.
+- Save data remains in existing keys; new story flags stored under `state.flags.v19` / `state.flags.v20`.
+- NOTE: Real iPhone Safari gameplay and performance regressions have not yet been tested; browser visual interaction remains a user-side regression test.
