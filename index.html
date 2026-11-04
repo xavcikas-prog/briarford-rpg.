@@ -2064,6 +2064,70 @@ drawPerson=function(px,py,name){
 });
 const v11Badge=document.querySelector('.brand .sub');if(v11Badge)v11Badge.textContent='v0.11';
 
+
+/* v0.12 — Sania: original playable 4-direction avatar, derived using the shared
+   sprite atlas dimensions and palette. Never alters grimoire/spell progression. */
+const V12_STYLES={
+ Sania:{hair:'#553c34',coat:'#394747',trim:'#b89a60',glow:'#647b82',skin:'#cda68b',accent:'#674640',scale:.96,detail:'scarf'}
+};
+function v12Hex(s){return [1,3,5].map(i=>parseInt(s.slice(i,i+2),16));}
+function v12PaletteImage(style){
+ const c=document.createElement('canvas');c.width=V09_SPRITE_IMAGE.naturalWidth;c.height=V09_SPRITE_IMAGE.naturalHeight;
+ const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(V09_SPRITE_IMAGE,0,0);
+ const d=x.getImageData(0,0,c.width,c.height),a=d.data;
+ const hair=v12Hex(style.hair),coat=v12Hex(style.coat),glow=v12Hex(style.glow),trim=v12Hex(style.trim);
+ for(let y=0;y<c.height;y++)for(let i=0;i<c.width;i++){
+  const j=(y*c.width+i)*4,alpha=a[j+3];if(alpha<70)continue;
+  const r=a[j],g=a[j+1],b=a[j+2],fy=y%40,fx=i%32;
+  let color=null,shade=1;
+  if(g>r*1.32&&g>b*1.12&&g>68){color=glow;shade=Math.min(1.85,Math.max(.5,(r+g+b)/245));}
+  else if(fy<18&&r<100&&g<105&&b<115&&fx>3&&fx<29){color=hair;shade=Math.max(.46,Math.min(1.6,(r+g+b+90)/235));}
+  else if(fy>=12&&r>g*1.19&&b>g*.95&&r>28&&r<190){color=coat;shade=Math.max(.47,Math.min(1.68,(r+g+b)/153));}
+  if(color){a[j]=Math.min(255,Math.round(color[0]*shade));a[j+1]=Math.min(255,Math.round(color[1]*shade));a[j+2]=Math.min(255,Math.round(color[2]*shade));}
+ }
+ x.putImageData(d,0,0);
+ // Crisp equipment accents follow the same 32x40 frame layout in all orientations.
+ x.imageSmoothingEnabled=false;
+ for(let id=0;id<116;id++){
+  const sx=(id%10)*32,sy=Math.floor(id/10)*40,fr=id<40?id%10:id<100?(id-40)%8:0;
+  if(id<100 && fr<10){
+   x.fillStyle=style.trim;
+   if(id<40){x.fillRect(sx+14,sy+22,2,2);}
+   else{x.fillRect(sx+14,sy+21,2,2);}
+  }
+ }
+ return c;
+}
+function v12CreateSkin(name,style){
+ if(!V09_SPRITE_IMAGE?.naturalWidth)return;
+ let canvas=v12PaletteImage(style);
+ const sprite=new Image();
+ sprite.onload=()=>{v11Register(name,sprite,style.scale||1,'original');if(state?.created)draw();};
+ sprite.onerror=()=>console.warn('Could not initialize '+name+' sprite; original fallback remains available.');
+ sprite.src=canvas.toDataURL('image/png');
+}
+function v12InitSkin(){
+ if(!V09_SPRITE_IMAGE?.naturalWidth)return;
+ v12CreateSkin('Sania',V12_STYLES.Sania);
+}
+if(V09_SPRITE_IMAGE.complete&&V09_SPRITE_IMAGE.naturalWidth)v12InitSkin();
+else V09_SPRITE_IMAGE.addEventListener('load',v12InitSkin,{once:true});
+const V12_PREV_ANIMATE=v11Animate;
+v11Animate=function(name,action,dir='down',ms=650){
+ // A focus action is mundane until Sania discovers a first manifestation.
+ if(name==='Sania'&&action==='cast'&&state?.flags?.v08?.stage!=='manifested')action='defend';
+ return V12_PREV_ANIMATE(name,action,dir,ms);
+};
+// Render 2D avatar action frames outside Hage as well; no passive game-time ticks.
+let v12LastFrame=0;
+function v12Everywhere(now){
+ requestAnimationFrame(v12Everywhere);
+ if(!state?.created||document.hidden||state.zone==='region:hage'||$('overlay').classList.contains('visible'))return;
+ if(now-v12LastFrame>=32){v12LastFrame=now;draw();}
+}
+requestAnimationFrame(v12Everywhere);
+const v12Badge=document.querySelector('.brand .sub');if(v12Badge)v12Badge.textContent='v0.12';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
