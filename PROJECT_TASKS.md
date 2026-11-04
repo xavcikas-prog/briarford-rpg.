@@ -1,6 +1,6 @@
 # BRIARFORD RPG — VIENINTELIS PAGRINDINIS DARBŲ SĄRAŠAS
 
-**Paskutinė peržiūra:** 2026-11-04  
+**Paskutinė peržiūra:** 2026-11-04 (patikrintas iPhone v0.21 video)  
 **Kodo atskaitos taškas:** `main`, **2D v0.21 + eksperimentinis 3D vaizdas v0.22** (GitHub)  
 **Apimtis:** visi žinomi šio projekto susitarimai, žaidėjo testų pastabos ir versijų aprašai iki v0.22.  
 **Tikslas:** *žaidžiamas*, nemokamas ir offline-capable, portretiniam iPhone skirtas originalaus Sania nuotykio 2D pixel-art RPG Black Clover pasaulyje. Ne AI Dungeon scenarijus. Ne vien paveikslėlių projektas.
@@ -152,7 +152,7 @@
 
 **Dabartinis sprendimas (2026-11-04):** 3D v0.22 palikti veikiančiu, bet **neplėtoti**, kol žaidėjas vėl paprašys. Pagrindinė kūrimo kryptis vėl 2D, pradedant nuo v0.21 žaidimo sistemos. 3D galima atidaryti atskirai su `?view=3d`, bet tai nėra naujo žaidimo bazė.
 
-1. **v0.23 — 2D Stability & Sania:** `P0-01,02,03,04,05,06,07` — tikras 64×64 Sania pasirodymas iPhone, ėjimo/bėgimo animacijos, combat action frames, offline / save/load saugumas, ankstesni vartotojo raportuoti bugai. Jokių papildomų izoliuotų grafikos paketų.
+1. **v0.23 — 2D Stability & Sania:** `P0-01,02,03,04,05,06,07`, `IPH-BUG-01/02`, `IPH-QA-05/06` — tikras 64×64 Sania pasirodymas iPhone, ėjimo/bėgimo animacijos, combat action frames, offline / save/load saugumas, ankstesni vartotojo raportuoti bugai. Jokių papildomų izoliuotų grafikos paketų.
 2. **v0.24 — Combat Integration:** `COMBAT-01–05` — animacija → pataikymas → žala / statusas, guard/dash/hurt, patikima priešų taktika, daugiau pasirinkimų.
 3. **v0.25 — Magic Integration:** `MAG-02–04, MAG-08, ART-05` — realūs mana / AP burtai ir gynyba, NPC elementų skirtumai, Sania riboto impulso vizualai *tik atrakinti*.
 4. **v0.26 — Living Briarford:** `NPC-01–05, QUEST-04/05, MAP-03` — įeinami namai, individualūs NPC, savarankiškas gyvenimas, dalykiški dialogai, quest pasekmės, įvairesnės veiklos.
@@ -173,6 +173,25 @@
 - [ ] `3D-TEST-06` Jei 3D netinka — tiesiog grįžti į `./` 2D URL; GitHub kodas ir atkūrimo šaka leidžia atšaukti eksperimentą be naujos žaidimo logikos.
 
 **Atidaroma:** `https://xavcikas-prog.github.io/briarford-rpg./?view=3d` (3D) arba `https://xavcikas-prog.github.io/briarford-rpg./` (2D).
+
+## 12. Realaus iPhone 2D v0.21 žaidimo vaizdo testas (2026-11-04)
+
+**Šaltinis:** žaidėjo 2 min. 27 sek. iPhone Safari ekrano įrašas `ScreenRecording_11-04-2026 21-23-43_1.mp4`. **Tai yra 2D v0.21, ne eksperimentinio 3D režimo testas.**
+
+### Patvirtinta vaizdo įrašu
+- [x] `IPH-01` Įkelto veikėjo progresas pasiekiamas: 8 diena, 5 lygis, ~46/46 HP, STR 14, Magic Theory 120, keli išmokti įgūdžiai.
+- [x] `IPH-02` Užduočių žurnale matomos šešios pažymėtos Completed užduotys, įskaitant tilto remontą ir Vessa siuntinį. **Tai dar neįrodo visų quest duplikavimo / turn-in regression testų.**
+- [x] `IPH-03` Atidaromi Skills / Training Yard / Activities / Sealed Grimoire / Uncertain Pulse Field Notes / Local Map. Sania grimoaro progresas yra aktyvus, bet dar lieka tyrinėjimų ir kontrolės etapų.
+- [x] `IPH-04` Local Map atidaro Northern Forest; susidūrimas su vilku prasideda, pasiekiami taktiniai veiksmai, kova baigiasi atlygiu (+20 XP, mėsa, kailis).
+
+### Aptiktos UX / vizualinės spragos — aktyvūs darbai
+- [!] `IPH-BUG-01` **Priešo matomumas kovoje:** vilkas beveik nematomas / gali būti paslėptas po didesniu Sania sprite ar žemėlapio ženklais. Žaidėjas gali atlikti heavy / quick strikes, bet neturi aiškaus taikinio, pasiekiamumo ir atstumo indikatoriaus. Patikrinti draw order, sprite anchor, enemy highlight, health bar ir tile occupancy.
+- [!] `IPH-BUG-02` **Perkrautas combat HUD iPhone:** vienu metu matoma apie 13 veiksmų, trijų stulpelių eilės suspaudžia tekstą ir palieka mažai vietos kovos arenai. Sukurti atskiras „Attack“, „Defense“, „Magic“, „Items“, „Other“ grupes / kontekstines korteles; palikti svarbius AP, stamina ir End Turn tiesiogiai matomus.
+- [?] `IPH-QA-05` **Atakų grįžtamasis ryšys:** iš įrašo heavy miss ir quick hit rodomi daugiausia tekstu; papildomai patikrinti realią smūgio animaciją, žalos skaičius, taikinio reakciją ir garsą. Nerodyti kaip patvirtinto buginio mechanikos sutrikimo be tikslesnio testo.
+- [?] `IPH-QA-06` **Grimoaro statuso aiškumas:** Character ekrane rodoma `Grimoire: sealed`, nors Field Notes jau kalba apie atrastą `Unsteady Pulse`. Tai gali būti logiška (antspaudas išlieka), bet žaidėjui paaiškinti „seal still mostly intact; first limited manifestation discovered“, neatskleidžiant paslapčių.
+- [?] `IPH-QA-07` Testas nepatvirtina 3D WebGL veikimo, Hage/Kikka naujų interjerų ar visų save slotų migracijos.
+
+**Prioritetas:** `IPH-BUG-01` ir `IPH-BUG-02` taisyti pirmaisiais v0.23 darbais; `IPH-QA-05/06` patikrinti kartu. Neskubėti plėsti 3D, kol žaidėjas neprašo.
 
 ## 10. Nuolatinio sekimo protokolas
 
