@@ -128,3 +128,14 @@ Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cac
 - Unsteady Pulse cast sheet is gated by saved v0.8 manifestation state; preview hides it beforehand.
 - Same save format and old artwork fallback retained.
 - Entire game JavaScript passes syntax validation. Physical iPhone Safari has not yet been tested.
+
+## v0.22 — opt-in 3D rendering experiment
+- Separate entry via `?view=3d`; 2D without query stays the default and uses unchanged gameplay logic.
+- Custom WebGL scene geometry builds from the real `makeMap` tile data: grass, roads, houses, water, interiors, forests and NPCs.
+- Camera drag, zoom, reset, 2D return and tap-through to original `cn.pointerdown` input.
+- Static JS parse test: PASS (3d-prototype.js and existing index main script).
+- Simulated WebGL API test in mobile Chromium harness: 16,626 3D terrain vertices; world scene generated; labels rendered; zero page JS errors.
+- Real WebGL visual test is **blocked by runner GPU/administrator policy**; not claimed as passed. Physical iPhone Safari is the acceptance test.
+- Existing slots are copied into `briarford_pre3d_slot_1..3` only when first entering the test. Always export JSON before major changes.
+- Fallback restores old 2D canvas if browser cannot create WebGL context.
+- Savepoints: `savepoints/v0.21-pre-3d` and `savepoints/v0.22-3d-test`.
