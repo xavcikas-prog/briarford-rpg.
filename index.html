@@ -1891,7 +1891,7 @@ function v10Anchor(id){
 }
 function v10Sprite(context,img,id,tileX,tileY,width=23,height=29){
  if(!img?.naturalWidth)return false;
- const anchor=v10Anchor(id); // All re-skinned frames share the same source silhouette and normalized foot position.
+ const anchor=img.__bespoke?{x:16,y:36}:v10Anchor(id); // Bespoke actors use their own consistent boots anchor.
  const footX=Math.round(tileX*16+8),footY=Math.round(tileY*16+15);
  const dx=Math.round(footX-anchor.x*width/32),dy=Math.round(footY-anchor.y*height/40);
  context.save();context.imageSmoothingEnabled=false;
@@ -2263,6 +2263,137 @@ activityPanel=function(){
 };
 activityButton.onclick=activityPanel;
 const v13Brand=document.querySelector('.brand .sub');if(v13Brand)v13Brand.textContent='v0.13';
+
+
+/* v0.14 — genuinely independent sprite designs, not colorized Yuno cells.
+   Bespoke geometry/silhouettes and gait/attack per character, same 32x40 export contract. */
+const V14_HEROES={
+ Sania:{kind:'wanderer',height:28,torso:8,head:8,hair:'#4b3129',hair2:'#795142',skin:'#d5b095',cloth:'#49645a',cloth2:'#2f413c',legs:'#574435',trim:'#bd9c67',weapon:'dagger',cape:false,gait:1.1,voice:'observant'},
+ Asta:{kind:'fighter',height:27,torso:12,head:9,hair:'#c8cacc',hair2:'#e2e4df',skin:'#e5b997',cloth:'#2b3a33',cloth2:'#463e34',legs:'#3d2f2a',trim:'#ccbf9a',weapon:'greatsword',cape:false,gait:1.5,voice:'explosive'},
+ Yuno:{kind:'wind',height:31,torso:8,head:8,hair:'#25242d',hair2:'#39343e',skin:'#d5ae98',cloth:'#433044',cloth2:'#2f2535',legs:'#332a36',trim:'#c6a86d',weapon:'wind',cape:true,gait:.8,voice:'measured'},
+ Noelle:{kind:'knight',height:30,torso:8,head:8,hair:'#d6d8df',hair2:'#f1ecf0',skin:'#e7bfab',cloth:'#dedde4',cloth2:'#9da3c2',legs:'#5d638a',trim:'#bd9c75',weapon:'lance',cape:true,gait:.7,voice:'proud'},
+ 'Yami Sukehiro':{kind:'captain',height:35,torso:13,head:10,hair:'#21232a',hair2:'#3d4148',skin:'#b58e73',cloth:'#30373c',cloth2:'#ebe1d0',legs:'#343336',trim:'#c6a68b',weapon:'katana',cape:false,gait:.7,voice:'heavy'}
+};
+const V14_FRAME_SIZE=[32,40],V14_FRAME_COUNT=116;
+function v14Direction(frame){
+ if(frame<40)return {dir:Math.floor(frame/10),action:frame%10<4?'idle':'run',f:frame%10<4?frame%10:frame%10-4};
+ if(frame<72){let k=frame-40;return {dir:Math.floor(k/8),action:k%8<4?'attack':'cast',f:k%8<4?k%8:k%8-4};}
+ if(frame<100){let k=frame-72,q=k%7;return {dir:Math.floor(k/7),action:q<2?'defend':q<4?'hurt':'dash',f:q<2?q:q<4?q-2:q-4};}
+ return {dir:0,action:frame<108?'knockdown':'summon',f:frame<108?frame-100:frame-108};
+}
+function v14Shape(c,x,y,w,h,color){c.fillStyle=color;c.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h));}
+function v14DrawDistinct(c,p,k){
+ const {dir,action,f}=v14Direction(k),right=dir===2,left=dir===1,back=dir===3,side=left||right;
+ const run=action==='run',dash=action==='dash',att=action==='attack',cast=action==='cast'||action==='summon',knock=action==='knockdown',hurt=action==='hurt',guard=action==='defend';
+ const speed=run?Math.round(Math.sin(f*Math.PI/3)*3*p.gait):dash?(f-1)*4:0;
+ c.save();c.translate(16,34);
+ if(knock){c.translate(0,Math.min(5,f));c.rotate(-Math.min(1.25,f*.18));}
+ else if(hurt){c.translate((f?2:-1)*(left?-1:1),1);}
+ else if(dash){c.translate(f*2*(right?1:left?-1:0),-1);}
+ // Each actor's silhouette is fully redrawn — no source sprite pixels reused.
+ if(p.cape){
+  const sweep=run?Math.sin(f*2)*3:att?4:0;
+  v14Shape(c,-p.torso/2-4-sweep,-17,p.torso+8,20,p.cloth2);
+  v14Shape(c,-p.torso/2-3-sweep,-18,3,18,p.cloth);
+  v14Shape(c,p.torso/2+sweep,-18,3,18,p.cloth);
+ }
+ const legs=run?speed:0;
+ v14Shape(c,-5+legs,-9,4,9,p.legs);v14Shape(c,2-legs,-9,4,9,p.legs);
+ v14Shape(c,-6+legs,-1,5,2,'#252424');v14Shape(c,2-legs,-1,5,2,'#252424');
+ if(p.kind==='knight'){v14Shape(c,-8,-19,16,12,p.cloth2);v14Shape(c,-7,-22,14,8,p.cloth);}
+ else if(p.kind==='captain'){v14Shape(c,-9,-20,18,14,p.cloth);v14Shape(c,-5,-20,11,6,p.cloth2);}
+ else if(p.kind==='fighter'){v14Shape(c,-8,-18,16,13,p.cloth);v14Shape(c,-6,-12,12,5,p.cloth2);}
+ else{v14Shape(c,-p.torso/2,-20,p.torso,14,p.cloth);}
+ v14Shape(c,-2,-17,4,10,p.trim);
+ if(p.kind==='wanderer'){v14Shape(c,-7,-18,14,3,p.trim);v14Shape(c,4,-11,5,5,'#554338');}
+ if(p.kind==='fighter'){v14Shape(c,-10,-18,4,8,'#a6a29b');v14Shape(c,6,-18,4,8,'#a6a29b');}
+ if(p.kind==='knight'){v14Shape(c,-11,-19,4,8,'#b9beca');v14Shape(c,7,-19,4,8,'#b9beca');}
+ if(p.kind==='captain'){v14Shape(c,-10,-21,4,11,'#322f38');v14Shape(c,6,-21,4,11,'#322f38');}
+ const arm=run?speed:att?f*2:cast?f:0;
+ v14Shape(c,-p.torso/2-4,-18-arm,4,10,p.skin);
+ v14Shape(c,p.torso/2,-18+arm,4,10,p.skin);
+ const headY=-p.height+4;
+ v14Shape(c,-p.head/2,headY,p.head,p.head+1,p.skin);
+ if(p.kind==='fighter'){
+  v14Shape(c,-6,headY-4,12,5,p.hair);v14Shape(c,-7,headY-5,4,5,p.hair2);
+  v14Shape(c,2,headY-7,4,7,p.hair2);v14Shape(c,-6,headY+2,12,2,'#2a272e');
+  v14Shape(c,-2,headY+2,4,2,'#d4b989');
+ }else if(p.kind==='knight'){
+  v14Shape(c,-6,headY-3,12,5,p.hair);
+  v14Shape(c,-7,headY,3,14,p.hair2);v14Shape(c,4,headY,3,14,p.hair2);
+  v14Shape(c,-4,headY-5,8,2,p.hair2);
+ }else if(p.kind==='captain'){
+  v14Shape(c,-7,headY-4,14,6,p.hair);v14Shape(c,-7,headY-6,5,3,p.hair2);
+  v14Shape(c,2,headY-7,5,4,p.hair2);v14Shape(c,-1,headY+7,4,2,'#2d2625');
+ }else if(p.kind==='wind'){
+  v14Shape(c,-6,headY-4,12,5,p.hair);v14Shape(c,-7,headY-6,4,4,p.hair2);
+  v14Shape(c,2,headY-7,5,5,p.hair);v14Shape(c,-5,headY+3,2,5,p.hair);
+ }else{
+  v14Shape(c,-5,headY-3,10,5,p.hair);v14Shape(c,-6,headY-5,4,4,p.hair2);
+  v14Shape(c,1,headY-6,4,5,p.hair2);v14Shape(c,-5,headY+3,2,4,p.hair);
+ }
+ if(!back){const eyeY=headY+4;v14Shape(c,side?(right?2:-4):-3,eyeY,2,1,'#242329');
+  if(!side)v14Shape(c,2,eyeY,2,1,'#242329');}
+ if(p.kind==='wanderer'){v14Shape(c,-5,headY+p.head+2,11,3,'#7b5d42');}
+ if(p.kind==='knight'){v14Shape(c,-5,-21,10,2,'#c7c8cf');}
+ if(p.kind==='captain'){v14Shape(c,-6,-13,12,3,'#99796b');}
+ const sign=right?1:left?-1:1;
+ if((att||guard)&&p.weapon==='greatsword'){
+  const bx=right?8:left?-15:8;
+  v14Shape(c,bx,-23-f*2,5,19,'#c1c5c4');
+  v14Shape(c,bx+1,-23-f*2,3,14,'#d6d8db');
+  v14Shape(c,bx-2,-8-f*2,10,3,'#5c5650');
+ }
+ if((att||guard)&&p.weapon==='katana'){
+  const bx=right?9:left?-13:9;
+  v14Shape(c,bx,-25-f,2,19,'#cad4d8');
+  v14Shape(c,bx-4,-7-f,10,2,'#a08e69');
+ }
+ if((att||guard)&&p.weapon==='dagger'){
+  const bx=right?9:left?-13:9;
+  v14Shape(c,bx,-19-f,2,9,'#cbd0cd');v14Shape(c,bx-2,-11-f,6,2,'#9a7b45');
+ }
+ if((att||cast)&&p.weapon==='wind'){
+  c.strokeStyle='#6cebb4';c.lineWidth=2;
+  const arc=8+f*2;c.beginPath();c.arc(0,-16,arc,Math.PI*.2+f*.1,Math.PI*1.1+f*.13);c.stroke();
+  if(cast){v14Shape(c,sign*(6+f*2),-25,3,3,'#b5f7cf');}
+ }
+ if((att||cast)&&p.weapon==='lance'){
+  const bx=right?8:left?-9:8;
+  v14Shape(c,bx,-26-f*2,3,19,'#8bd3e3');
+  v14Shape(c,bx-2,-27-f*2,7,5,'#d3f9ff');
+ }
+ if(cast&&!['wind','lance'].includes(p.weapon)){
+  c.strokeStyle=p.kind==='fighter'?'#c7c2a2':'#9b9ca4';
+  c.lineWidth=1;c.beginPath();c.arc(0,-16,8+f*2,0,Math.PI*1.7);c.stroke();
+ }
+ c.restore();
+}
+function v14CreateAtlas(name){
+ const p=V14_HEROES[name];if(!p)return null;
+ const canvas=document.createElement('canvas');canvas.width=320;canvas.height=480;
+ const c=canvas.getContext('2d');c.imageSmoothingEnabled=false;
+ for(let frameId=0;frameId<116;frameId++){
+  c.save();c.translate(frameId%10*32,Math.floor(frameId/10)*40);
+  v14DrawDistinct(c,p,frameId);c.restore();
+ }
+ return canvas;
+}
+function v14Install(name){
+ const canvas=v14CreateAtlas(name);if(!canvas)return;
+ const img=new Image();
+ img.__bespoke=true;
+ img.onload=()=>{v11Register(name,img,V14_HEROES[name].kind==='captain'?1.1:1,'bespoke');if(state?.created)draw();};
+ img.src=canvas.toDataURL('image/png');
+}
+const V14_OLD_CREATE_SKIN=v12CreateSkin;
+v12CreateSkin=function(name,style){
+ if(V14_HEROES[name]){v14Install(name);return}
+ return V14_OLD_CREATE_SKIN(name,style);
+};
+if(V09_SPRITE_IMAGE.complete&&V09_SPRITE_IMAGE.naturalWidth)
+ Object.keys(V14_HEROES).forEach((name,i)=>setTimeout(()=>v14Install(name),i*80));
+const v14Brand=document.querySelector('.brand .sub');if(v14Brand)v14Brand.textContent='v0.14';
 
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
