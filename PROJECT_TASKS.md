@@ -185,13 +185,20 @@
 - [x] `IPH-04` Local Map atidaro Northern Forest; susidūrimas su vilku prasideda, pasiekiami taktiniai veiksmai, kova baigiasi atlygiu (+20 XP, mėsa, kailis).
 
 ### Aptiktos UX / vizualinės spragos — aktyvūs darbai
-- [!] `IPH-BUG-01` **Priešo matomumas kovoje:** vilkas beveik nematomas / gali būti paslėptas po didesniu Sania sprite ar žemėlapio ženklais. Žaidėjas gali atlikti heavy / quick strikes, bet neturi aiškaus taikinio, pasiekiamumo ir atstumo indikatoriaus. Patikrinti draw order, sprite anchor, enemy highlight, health bar ir tile occupancy.
+- [~] `IPH-BUG-01` **Vilko matomumo pataisa ĮKELTA, LAUKIA iPhone patvirtinimo.** Naujas aiškesnis vilko sprite, kovos taikinio kontūras, pasiekiamumo spalvos, dinaminė HP juosta ir už ekrano esančio priešo indikatorius. Automatiniai `tests/wolf-visibility.test.cjs` regresiniai patikrinimai **12/12 PASS**, pilno JS sintaksė PASS. Nežymėti `[x]` iki tikro iPhone testo (prieš / per kovą / mirus vilkui). Savepoint `savepoints/iph-bug-01-wolf-visibility`.
 - [!] `IPH-BUG-02` **Perkrautas combat HUD iPhone:** vienu metu matoma apie 13 veiksmų, trijų stulpelių eilės suspaudžia tekstą ir palieka mažai vietos kovos arenai. Sukurti atskiras „Attack“, „Defense“, „Magic“, „Items“, „Other“ grupes / kontekstines korteles; palikti svarbius AP, stamina ir End Turn tiesiogiai matomus.
 - [?] `IPH-QA-05` **Atakų grįžtamasis ryšys:** iš įrašo heavy miss ir quick hit rodomi daugiausia tekstu; papildomai patikrinti realią smūgio animaciją, žalos skaičius, taikinio reakciją ir garsą. Nerodyti kaip patvirtinto buginio mechanikos sutrikimo be tikslesnio testo.
 - [?] `IPH-QA-06` **Grimoaro statuso aiškumas:** Character ekrane rodoma `Grimoire: sealed`, nors Field Notes jau kalba apie atrastą `Unsteady Pulse`. Tai gali būti logiška (antspaudas išlieka), bet žaidėjui paaiškinti „seal still mostly intact; first limited manifestation discovered“, neatskleidžiant paslapčių.
 - [?] `IPH-QA-07` Testas nepatvirtina 3D WebGL veikimo, Hage/Kikka naujų interjerų ar visų save slotų migracijos.
 
 **Prioritetas:** `IPH-BUG-01` ir `IPH-BUG-02` taisyti pirmaisiais v0.23 darbais; `IPH-QA-05/06` patikrinti kartu. Neskubėti plėsti 3D, kol žaidėjas neprašo.
+
+
+### 2026-11-05 — Pirmoji v0.23 užduotis (vienas darbas vienu metu)
+- Kode įdiegta **IPH-BUG-01**: vilko matomumas, HP, range ir offscreen cue; praėjo 12 automatiškai vykdomų testų.
+- Statusas **[~] dalinai / laukia realaus iPhone patvirtinimo**, ne galutinai užbaigta.
+- **Nepradėti IPH-BUG-02**, kol žaidėjas nepatvirtina pataisos realiame ekrane.
+- Testas: 2D nuoroda → Local Map → Northern Forest → vilkas, prieik/pasitrauk, kova, patikrink žalią/gelsvą kontūrą ir HP; po pergalės vilkas turi dingti.
 
 ## 10. Nuolatinio sekimo protokolas
 
