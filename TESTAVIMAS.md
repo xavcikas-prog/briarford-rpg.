@@ -102,3 +102,12 @@ These checks were performed with Chromium mobile emulation and a deterministic s
 - Old save keys were not modified; new animation state remains ephemeral and isn't added to save data.
 
 Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cached version should be checked on the device after reload.
+
+## v0.10–v0.13 incremental graphics releases
+- v0.10 Yuno interpolation: float world position, anchored foot placement and run frame index driven by accumulated distance.
+- v0.11 overworld and combat animation profile maps; player combat toolbar emits visual actions.
+- v0.12 Sania uses its own recolored original 4-direction atlas, visual game loop and no premature magical effect.
+- v0.13 20+ original/canon-inspired skin variants, all mapped onto the existing 116-frame rig; character gallery opens from Activities.
+- Index HTML syntax parsed with JavaScript Function constructor after each code addition.
+- GitHub savepoint branches hold previous versions for rollback. No save data migration needed.
+- Physical iPhone rendering, body anchor quality and heavy per-device performance still require direct test; color variants are early prototype art, not approved final portraits.
