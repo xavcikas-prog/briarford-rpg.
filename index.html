@@ -2665,6 +2665,197 @@ activityPanel=function(){
 };activityButton.onclick=activityPanel;
 const v18brand=document.querySelector('.brand .sub');if(v18brand)v18brand.textContent='v0.18';
 
+
+/* v0.19 — self-moving village developments, evidence-gated branching quests, NPC knowledge diffusion. */
+const V19_QUESTS={
+ river:{name:'The Bitter River',people:['Mira','Liora','Haldric'],evidence:['clinic','crops','sample'],hint:'Investigate at Mira, Liora and the riverbank. No one is forced to ask you for help.'},
+ convoy:{name:'The Missing Convoy',people:['Vessa','Orven','Renn'],evidence:['manifest','guard','tracks'],hint:'Ask Vessa and Orven, then examine the hunter trail north of Briarford.'}
+};
+function v19(){
+ if(!state?.created)return null;
+ state.flags.v19??={quests:{},events:[],known:{},agendas:{},riverQuality:55,routeSafety:58,day:0,cycle:0};
+ return state.flags.v19;
+}
+function v19Quest(id){
+ const v=v19();if(!v)return;
+ v.quests[id]??={status:'active',evidence:[],started:state.day,choice:null};
+ return v.quests[id];
+}
+function v19Event(id,label,witnesses){
+ const v=v19();if(v.events.some(x=>x.id===id))return;
+ v.events.unshift({id,label,day:state.day,witnesses});
+ v.events=v.events.slice(0,24);
+ for(const name of witnesses)v.known[name]??={};for(const name of witnesses)v.known[name][id]=state.day;
+}
+function v19Clue(id,key,description){
+ const q=v19Quest(id);if(q.status==='done'||q.evidence.includes(key))return notify('This clue is already recorded or the case is closed.');
+ q.evidence.push(key);updTime(12);gainXP(2);
+ notify(description+' Evidence added to '+V19_QUESTS[id].name+'. +2 XP.');
+}
+function v19Source(id,key){
+ if(state.zone==='village'&&key==='sample'&&Math.abs(state.x-10)+Math.abs(state.y-30)<=5)return true;
+ if(state.zone==='forest'&&key==='tracks'&&Math.abs(state.x-10)+Math.abs(state.y-27)<=5)return true;
+ return false;
+}
+function v19Discover(id,key){
+ if(!v19Source(id,key))return notify('The evidence must be inspected at its actual location. Visit the riverbank or northern hunter trail.');
+ const msg=key==='sample'?'The silt contains bitter yellow residue beneath clear water.':'A wagon rut veers off-road beside two unusually narrow bootprints.';
+ v19Clue(id,key,msg);v19Panel(id);
+}
+function v19Solve(id,decision){
+ const v=v19(),q=v19Quest(id);
+ if(q.status==='done')return notify('This case was already settled.');
+ if(!V19_QUESTS[id].evidence.every(k=>q.evidence.includes(k)))return notify('You still lack reliable evidence. Talk to the named witnesses and inspect the location.');
+ const quality=v.riverQuality,safety=v.routeSafety;
+ if(id==='river'){
+  if(decision==='filter'){
+   if((state.items.wood||0)<2||(state.items.herbs||0)<1)return notify('The filter needs 2 firewood and 1 medicinal herb.');
+   addItem('wood',-2);addItem('herbs',-1);v.riverQuality=Math.min(100,quality+38);remember('Mira','helped install a clean-water filter',9);
+   state.flags.villageStatus.food=Math.min(12,state.flags.villageStatus.food+1);
+  }else if(decision==='levy'){
+   v.riverQuality=Math.min(100,quality+25);state.flags.villageStatus.taxMood=Math.min(100,state.flags.villageStatus.taxMood+13);
+   remember('Haldric','supported paying for a river purifier',5);remember('Vessa','heard that new public expenditure raised levies',-2);
+  }else{
+   v.riverQuality=Math.min(100,quality+10);state.flags.villageStatus.food=Math.max(0,state.flags.villageStatus.food-1);
+   remember('Mira','warned the households to boil water',3);
+  }
+  v19Event('river-resolved','The river response is underway: '+decision+'.',['Mira','Liora','Haldric']);
+ }else{
+  if(decision==='escort'){
+   if((state.items.bread||0)<1)return notify('An escort needs at least one ration.');
+   addItem('bread',-1);v.routeSafety=Math.min(100,safety+31);remember('Orven','organized a convoy escort',7);
+   v19Event('convoy-resolved','Guards escorted the convoy through the northern bend.',['Orven','Vessa','Renn']);
+  }else if(decision==='bounty'){
+   v.routeSafety=Math.min(100,safety+20);state.gold+=4;remember('Vessa','paid scouts to secure the road',5);
+   v19Event('convoy-resolved','Paid scouts cleared the trail; questions remain about the missing cargo.',['Vessa','Orven']);
+  }else{
+   v.routeSafety=Math.min(100,safety+8);remember('Orven','reported danger but refused to risk a patrol',-2);
+   v19Event('convoy-resolved','Travellers warned to avoid the northern road.',['Renn','Orven']);
+  }
+ }
+ q.status='done';q.choice=decision;q.resolved=state.day;gainXP(id==='river'?13:14);updTime(45);
+ notify(V19_QUESTS[id].name+' resolved via '+decision+'. The village will respond over the coming days.');v19Panel(id);
+}
+function v19Panel(id){
+ const info=V19_QUESTS[id],v=v19(),q=v19Quest(id);
+ customModal(info.name,body=>{
+  html(body,'p',info.hint,'small');
+  html(body,'div','Case: '+q.status+' · Evidence '+q.evidence.length+'/'+info.evidence.length,'banner');
+  for(const clue of info.evidence)html(body,'div',(q.evidence.includes(clue)?'✅ ':'◇ ')+clue,'list-row');
+  if(q.status==='done'){html(body,'div','Outcome: '+q.choice+' · Day '+q.resolved,'banner');return}
+  if(id==='river'){
+   btn(body,'Talk to Mira (clinic records)',()=>v19FromWitness('Mira','river','clinic'));
+   btn(body,'Ask Liora (field observations)',()=>v19FromWitness('Liora','river','crops'));
+   btn(body,'Examine river silt (only at the river)',()=>v19Discover('river','sample'));
+  }else{
+   btn(body,'Ask Vessa (caravan manifest)',()=>v19FromWitness('Vessa','convoy','manifest'));
+   btn(body,'Ask Orven (patrol notes)',()=>v19FromWitness('Orven','convoy','guard'));
+   btn(body,'Examine forest tracks (only at the trail)',()=>v19Discover('convoy','tracks'));
+  }
+  if(info.evidence.every(k=>q.evidence.includes(k))){
+   html(body,'hr','','separator');html(body,'strong','Choose an outcome · only once');
+   if(id==='river'){
+    btn(body,'Build filters: 2 wood + 1 herbs',()=>v19Solve(id,'filter'));
+    btn(body,'Ask Haldric to fund purification (higher taxes)',()=>v19Solve(id,'levy'));
+    btn(body,'Warn households to boil water',()=>v19Solve(id,'warning'));
+   }else{
+    btn(body,'Escort wagons: 1 bread ration',()=>v19Solve(id,'escort'));
+    btn(body,'Hire local scouts',()=>v19Solve(id,'bounty'));
+    btn(body,'Publish a travel warning',()=>v19Solve(id,'warning'));
+   }
+  }else html(body,'p','Missing clues must be gathered in person or at the actual field site.','small');
+ });
+}
+function v19FromWitness(n,id,key){
+ const dist=Math.abs((state.npcs.find(x=>x.id===n)?.x||0)-state.x)+Math.abs((state.npcs.find(x=>x.id===n)?.y||0)-state.y);
+ if(state.zone!=='village'||dist>5)return notify('Find '+n+' in Briarford and speak within a few steps.');
+ const messages={clinic:'Mira has seen the same residue in patients’ drinking jars.',crops:'Liora noticed discolored roots after irrigation.',manifest:'Vessa counts fewer sealed crates than the outgoing manifest lists.',guard:'Orven says the road was not fully patrolled that night.'};
+ v19Clue(id,key,messages[key]);v19Panel(id);
+}
+function v19Day(){
+ const v=v19();if(!v||v.day===state.day)return;v.day=state.day;
+ const status=state.flags.villageStatus;
+ const pressure=status.taxMood>68?'public petitions':'ordinary paperwork';
+ for(const n of state.npcs){
+  const task=n.id==='Garrick'?(status.supply<5?'repairing tools from scrap':'preparing forged hardware'):
+   n.id==='Liora'?(status.food<6?'checking failed crops':'tending the fields'):
+   n.id==='Orven'?(v.routeSafety<50?'investigating roadside danger':'walking the boundary patrol'):
+   n.id==='Mira'?(v.riverQuality<70?'checking drinking water':'treating ordinary injuries'):
+   n.id==='Haldric'?pressure:
+   n.id==='Vessa'?(v.routeSafety<55?'delaying caravan deliveries':'trading grain and textiles'):
+   n.id==='Renn'?'tracking wildlife':n.id==='Teren'?'practicing the forge':'maintaining household affairs';
+  v.agendas[n.id]={day:state.day,task};
+ }
+ if(!v.quests.river&&state.day>=4&&v.riverQuality<60) v19Event('river-warning','Mira is investigating bitter water from the millstream.',['Mira','Liora']);
+ if(!v.quests.convoy&&state.day>=5&&v.routeSafety<65)v19Event('caravan-warning','A caravan failed to arrive at Briarford on schedule.',['Vessa','Orven']);
+ for(const e of v.events){
+  const informed=state.npcs.filter(n=>v.known[n.id]?.[e.id]!==undefined);
+  const uninformed=state.npcs.filter(n=>!v.known[n.id]||v.known[n.id][e.id]===undefined);
+  const count=Math.min(uninformed.length,Math.max(1,Math.floor(informed.length/2)));
+  for(let i=0;i<count;i++){if(!uninformed.length)break;
+   const idx=Math.floor(rand(0,uninformed.length)),n=uninformed.splice(idx,1)[0];
+   v.known[n.id]??={};v.known[n.id][e.id]=state.day;
+  }
+ }
+}
+const V19_PREV_DAY=villageDay;
+villageDay=function(){V19_PREV_DAY();if(state?.created)v19Day();};
+const V19_OLD_RUMOR=v05worldRumor;
+v05worldRumor=function(id){
+ const v=v19(),n=v?.known?.[id]||{},events=v?.events||[];
+ const local=events.filter(e=>n[e.id]!==undefined);
+ if(local.length && (v.cycle++%4===1)){
+  const e=local[v.cycle%local.length];
+  return e.label+' I heard about this on day '+n[e.id]+'.';
+ }
+ return V19_OLD_RUMOR(id);
+};
+const V19_PREV_TALK=v06talk;
+v06talk=function(id){
+ const result=V19_PREV_TALK(id);
+ if(state?.zone==='village'&&$('overlay').classList.contains('visible')){
+  const body=$('modal-body'),relevant=id==='Mira'||id==='Liora'?'river':id==='Vessa'||id==='Orven'||id==='Renn'?'convoy':null;
+  if(relevant){const b=html(body,'div','','banner');html(b,'strong','Village matters');
+   btn(b,'Ask about '+V19_QUESTS[relevant].name,()=>v19Panel(relevant),'secondary');}
+  if(v19()?.agendas?.[id])html(body,'p','Current concern: '+v19().agendas[id].task+'.','small');
+ }
+ return result;
+};talk=v06talk;
+const V19_PREV_LANDMARK=landmarkAction;
+landmarkAction=function(id){
+ const r=V19_PREV_LANDMARK(id);
+ if((id==='fishing'||id==='tracks')&&$('overlay').classList.contains('visible')){
+  const q=id==='fishing'?'river':'convoy',k=id==='fishing'?'sample':'tracks';
+  const b=html($('modal-body'),'div','','banner');html(b,'strong','Investigate local conditions');
+  btn(b,id==='fishing'?'Test the river sediment':'Examine wagon tracks',()=>{v19Quest(q);v19Discover(q,k)},'secondary');
+ }
+ return r;
+};
+function v19Board(){
+ const v=v19();customModal('Village Developments',body=>{
+  html(body,'p','Life continues without Sania: supplies, water safety, roads and individual daily work change over time. Accepting an investigation is optional.','small');
+  html(body,'div','Water quality '+v.riverQuality+'/100 · Road safety '+v.routeSafety+'/100','banner');
+  for(const [id,info] of Object.entries(V19_QUESTS)){
+   const q=v.quests[id],row=html(body,'div','','banner');
+   html(row,'strong',info.name+' · '+(q?.status||'Available'));
+   btn(row,q?.status==='done'?'Review outcome':'Investigate',()=>v19Panel(id),'secondary');
+  }
+  html(body,'strong','Recent local developments');
+  for(const e of v.events.slice(0,5))html(body,'div','Day '+e.day+': '+e.label,'list-row');
+  html(body,'hr','','separator');html(body,'strong','Today’s NPC agendas');
+  for(const [id,a] of Object.entries(v.agendas))html(body,'div',id+': '+a.task,'small');
+ });
+}
+const V19_PREV_ACTIVITIES=activityPanel;
+activityPanel=function(){const r=V19_PREV_ACTIVITIES();
+ if(state?.created&&!state.combat&&$('overlay').classList.contains('visible')){
+  const b=html($('modal-body'),'div','','banner');html(b,'strong','🌾 Village development');
+  btn(b,'Examine local events, NPC work and investigations',v19Board,'secondary');
+ }
+ return r;
+};activityButton.onclick=activityPanel;
+const v19Brand=document.querySelector('.brand .sub');if(v19Brand)v19Brand.textContent='v0.19';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
