@@ -1,9 +1,15 @@
-# Briarford RPG — v0.9
+# Briarford RPG — v0.10
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.10 — Overworld motion correction
+- Yuno moves smoothly between tile centers; animation frames advance by distance traveled, not an independent clock.
+- Foot-anchor normalization prevents vertical sprite jitter across animation frames.
+- The previous 760ms instant tile-teleport loop has been disabled and replaced with a lightweight requestAnimationFrame renderer.
+- Four-direction idle/walk/run rendering, pausing movement for dialogue and saving existing progress.
+- This is a savepoint: `savepoints/v0.10` branch.
 ## New in v0.9 — animated Yuno visual test
 - Integrated a **116-frame top-down pixel art sprite atlas** at `assets/yuno-animated-atlas.png`, rebuilt using an image supplied as a visual reference by the player.
 - Yuno in **Hage Village** now uses original 4-direction animated idle and run frames on the actual overworld canvas instead of the simple placeholder character.
