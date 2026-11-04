@@ -3008,6 +3008,42 @@ draw=function(){V20_PREV_DRAW();
  ctx.fillStyle=id==='chapel'?'#ebdeab':id==='exam'?'#c4b58b':'#d8ab69';
  ctx.fillRect(x*16+4,y*16+6,8,3);
 };
+
+/* v0.20 additional per-person town identity; do not reuse one merchant skin for everybody. */
+const V20_GENERIC_COLORS={
+ hair:['#3e302b','#644a34','#8a684b','#be9b78','#b2afa1','#302f42','#975c48'],
+ cloth:['#5d7047','#455e70','#806b58','#6d5068','#786547','#4b6b66','#655a83'],
+ accent:['#c8b17c','#b9bdb2','#d8aa76','#9bacb7','#d0c3a0']
+};
+const V20_OLD_TOWN_LOCALS=v03townLocals;
+v03townLocals=function(){
+ const locals=V20_OLD_TOWN_LOCALS();
+ for(const local of locals){
+  if(!local||V14_HEROES[local.name]||local.canon)continue;
+  const seed=local.name.split('').reduce((s,c)=>Math.imul(s,31)+c.charCodeAt(0)>>>0,17);
+  const kind=local.job==='Guard'?'guard':local.job==='Merchant'?'trader':local.job==='Craftsperson'?'smith':
+    local.name==='Witch Guard'?'guard':local.name==='Herbalist'?'healer':'trader';
+  const hair=V20_GENERIC_COLORS.hair[seed%V20_GENERIC_COLORS.hair.length];
+  const cloth=V20_GENERIC_COLORS.cloth[(seed>>4)%V20_GENERIC_COLORS.cloth.length];
+  const trim=V20_GENERIC_COLORS.accent[(seed>>8)%V20_GENERIC_COLORS.accent.length];
+  V14_HEROES[local.name]={
+   kind,height:29+seed%6,torso:7+(seed>>3)%6,head:8+(seed>>5)%3,
+   hair,hair2:trim,skin:'#cba88d',cloth,cloth2:'#35433f',legs:'#493f40',trim,
+   weapon:kind==='guard'?'spear':kind==='smith'?'hammer':kind==='healer'?'water':'coin',
+   cape:kind==='trader'||kind==='healer',gait:.65+(seed%7)*.12
+  };
+  COLOURS[local.name]=[hair,'#cba88d',cloth];
+  setTimeout(()=>v14Install(local.name),70);
+ }
+ return locals;
+};
+// Distinct building interiors may not be used as long-range teleportation shortcuts.
+const V20_OLD_TRAVEL=v03travel;
+v03travel=function(destination){
+ if(v20Venue())return notify('Leave the building before setting out on a long-distance journey.');
+ return V20_OLD_TRAVEL(destination);
+};
+
 const v20brand=document.querySelector('.brand .sub');if(v20brand)v20brand.textContent='v0.20';
 
 const V03_ORIGINAL_INIT=init;
