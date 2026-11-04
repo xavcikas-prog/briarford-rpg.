@@ -1,9 +1,16 @@
-# Briarford RPG — v0.11
+# Briarford RPG — v0.12
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.12 — Playable Sania sprite
+- Sania now renders through the same 4-direction pixel actor pipeline as Yuno, with a **distinct original charcoal-green coat, chestnut hair and warm-gold accents**, not Yuno's character palette.
+- The atlas is recolored in the browser from the existing edited 116-frame source: no extra network request is required.
+- Sania has idle, directional run, and visually distinct combat attack, hurt, defense and dash actions.
+- Research/casting visuals are restricted until the sealed grimoire has manifested; these are animations, not extra learned spells.
+- Town NPC and player animations update independently of game time, without affecting movement, quests, items or saves.
+- Restore checkpoint: `savepoints/v0.12` branch.
 ## New in v0.11 — Shared animation pipeline
 - Separate state maps for **overworld** (idle, walk, run, interact, light cast) and **combat** (attack, cast, defend, hurt, dash, knockdown, special).
 - Unified animated actor registry with distinct skins, speeds, directional actions and visual pose lifetimes.
