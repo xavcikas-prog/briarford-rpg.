@@ -2395,6 +2395,62 @@ if(V09_SPRITE_IMAGE.complete&&V09_SPRITE_IMAGE.naturalWidth)
  Object.keys(V14_HEROES).forEach((name,i)=>setTimeout(()=>v14Install(name),i*80));
 const v14Brand=document.querySelector('.brand .sub');if(v14Brand)v14Brand.textContent='v0.14';
 
+
+/* v0.15 — additional bespoke canon outfits, spell effects and gait signatures. */
+Object.assign(V14_HEROES,{
+ 'Magna Swing':{kind:'fire',height:29,torso:11,head:9,hair:'#bf602d',hair2:'#ef993d',skin:'#d2a282',cloth:'#863e2f',cloth2:'#5a3031',legs:'#383a39',trim:'#d8a665',weapon:'fire',cape:false,gait:1.35},
+ 'Vanessa Enoteca':{kind:'thread',height:32,torso:7,head:8,hair:'#a84f68',hair2:'#c97e93',skin:'#e7bb9d',cloth:'#a4597b',cloth2:'#53304d',legs:'#5c3a53',trim:'#e1c0a4',weapon:'thread',cape:true,gait:.85},
+ Luck:{kind:'lightning',height:28,torso:8,head:8,hair:'#d3bf8d',hair2:'#f6e6b9',skin:'#dfb79c',cloth:'#4f616e',cloth2:'#313e50',legs:'#343f4d',trim:'#edc774',weapon:'lightning',cape:false,gait:1.75},
+ 'Sister Lily':{kind:'nun',height:32,torso:7,head:8,hair:'#e2e4df',hair2:'#f5f5ee',skin:'#e3bca3',cloth:'#e5e7df',cloth2:'#5f6d82',legs:'#565e69',trim:'#bbcdd9',weapon:'water',cape:true,gait:.5},
+ 'Father Orsi':{kind:'priest',height:32,torso:10,head:9,hair:'#96867c',hair2:'#a59c90',skin:'#c7a081',cloth:'#81725f',cloth2:'#524c45',legs:'#514a43',trim:'#d6c6a2',weapon:'staff',cape:true,gait:.5},
+ 'Witch Queen':{kind:'queen',height:34,torso:10,head:9,hair:'#d8d0c9',hair2:'#ebe5d5',skin:'#d4b39c',cloth:'#66283e',cloth2:'#2b1a30',legs:'#38252e',trim:'#e6bd77',weapon:'blood',cape:true,gait:.4}
+});
+const V15_ORIGINAL_DRAW=v14DrawDistinct;
+v14DrawDistinct=function(c,p,k){
+ V15_ORIGINAL_DRAW(c,p,k);
+ const d=v14Direction(k),a=d.action,f=d.f;
+ if(!['fire','thread','lightning','nun','priest','queen'].includes(p.kind))return;
+ c.save();c.translate(16,34);
+ // Outfit shapes are character-specific, not translated from any preexisting sprite pixels.
+ if(p.kind==='fire'){
+  v14Shape(c,-8,-19,3,10,'#b88a55');v14Shape(c,5,-19,3,10,'#b88a55');
+  v14Shape(c,-5,-28,10,3,'#3b3434');v14Shape(c,-4,-28,4,1,'#e6b971');
+  if(a==='attack'||a==='cast'||a==='summon'){
+   for(let j=0;j<3;j++){const x=7+(j+f)*2,y=-25-j*4+f;
+    v14Shape(c,x,y,3,6,'#eb8e38');v14Shape(c,x+1,y-2,2,3,'#f5db84');}
+  }
+ }else if(p.kind==='thread'){
+  v14Shape(c,-7,-22,3,20,p.hair);v14Shape(c,5,-22,3,20,p.hair2);
+  v14Shape(c,-11,-32,22,3,'#3f263b');v14Shape(c,-6,-36,13,6,'#442a40');
+  if(a==='attack'||a==='cast'||a==='summon'){
+   c.strokeStyle='#e7a3be';c.lineWidth=1;
+   for(let j=0;j<3;j++){c.beginPath();c.moveTo(-8,-13+j*3);c.bezierCurveTo(15,-39-j,23+f*2,-15,11+f*2,-2);c.stroke();}
+  }
+ }else if(p.kind==='lightning'){
+  v14Shape(c,-7,-28,15,4,p.hair2);v14Shape(c,3,-35,3,7,p.hair2);
+  if(a==='attack'||a==='cast'||a==='dash'||a==='summon'){
+   c.strokeStyle='#f4dc69';c.lineWidth=2;c.beginPath();
+   c.moveTo(-12,-27);c.lineTo(-4-f,-16);c.lineTo(-9+f,-13);c.lineTo(8+f*2,-5);c.stroke();
+  }
+ }else if(p.kind==='nun'){
+  v14Shape(c,-8,-28,4,24,'#f5f2e9');v14Shape(c,5,-28,4,24,'#e1e7e8');
+  v14Shape(c,-7,-33,14,6,'#e6e8e7');v14Shape(c,-2,-23,4,6,'#bcc9d5');
+  if(a==='cast'){c.strokeStyle='#b7e4eb';c.lineWidth=2;c.beginPath();c.arc(0,-16,11+f,0,Math.PI*1.5);c.stroke();}
+ }else if(p.kind==='priest'){
+  v14Shape(c,-6,-20,12,16,'#85705d');v14Shape(c,-1,-23,3,10,'#d8c5a1');
+  v14Shape(c,10,-29,2,29,'#9b805d');
+  if(a==='cast')v14Shape(c,7,-33,7,5,'#dfd5ae');
+ }else if(p.kind==='queen'){
+  v14Shape(c,-12,-20,4,21,'#6b3043');v14Shape(c,8,-20,4,21,'#6b3043');
+  v14Shape(c,-7,-34,4,6,'#ebc780');v14Shape(c,-2,-37,4,9,'#e7c17b');v14Shape(c,4,-34,4,6,'#ebc780');
+  if(a==='cast'||a==='attack'){c.strokeStyle='#b65e68';c.lineWidth=2;c.beginPath();c.arc(0,-15,12+f*2,Math.PI*.2,Math.PI*1.5);c.stroke();}
+ }
+ c.restore();
+};
+for(const name of ['Magna Swing','Vanessa Enoteca', 'Luck','Sister Lily','Father Orsi','Witch Queen'])
+ setTimeout(()=>v14Install(name),200+Math.random()*200);
+const v15Brand=document.querySelector('.brand .sub');if(v15Brand)v15Brand.textContent='v0.15';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
