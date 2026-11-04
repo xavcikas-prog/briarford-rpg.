@@ -1,5 +1,5 @@
-const CACHE='briarford-v021-1';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./assets/yuno-animated-atlas.png','./assets/sania-64-atlas.b64'];
+const CACHE='briarford-v022-3d-test-1';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./assets/yuno-animated-atlas.png','./assets/sania-64-atlas.b64','./3d-prototype.js'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
