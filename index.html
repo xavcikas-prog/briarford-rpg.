@@ -2967,7 +2967,15 @@ function v20GoTo(id){
 }
 const V20_OLD_ACTIVITY=activityPanel;
 activityPanel=function(){
- if(v20Venue())return v20InteriorObject(26,20);
+ if(v20Venue()){
+  const id=v20Venue(),targets={chapel:[25,18],exam:[25,17],inn:[25,25],guild:[24,25]};
+  const [x,y]=targets[id]||[25,20];
+  return modal(V20_SITES[id].label,V20_SITES[id].lead,[
+   {text:'Walk to the main furnishings and interact',act:()=>{closeModal();startMove(pathTo(state.x,state.y,x,y,true),()=>v20InteriorObject(x,y));}},
+   {text:'Leave through the south door',act:v20Exit},
+   {text:'Continue exploring'}
+  ]);
+ }
  const r=V20_OLD_ACTIVITY();
  if(state?.created&&state.zone.startsWith('region:')&&$('overlay').classList.contains('visible')){
   const zone=state.zone.slice(7),sites=Object.entries(V20_SITES).filter(([id,p])=>p.region===zone);
