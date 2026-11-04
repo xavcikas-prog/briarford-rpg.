@@ -88,3 +88,17 @@ Note: Chromium mobile emulation, not a physical iPhone Safari run.
 - Refusing a fatal intervention leads to defeat rather than forced awakening: PASS
 
 These checks were performed with Chromium mobile emulation and a deterministic synthetic save; physical iPhone Safari and the player's actual save still need user-side verification.
+
+## v0.9 Yuno sprite integration tests (Chromium 390×844 mobile emulation)
+- Optimized PNG atlas: 116 animation frames, 32×40 cell dimensions, 10 columns, transparency: PASS
+- JavaScript syntax for the full game and animation patch: PASS
+- New game start and World Map → Hage Village travel: PASS
+- Actual Yuno sprite asset loading into canvas: PASS (test uses equivalent inline data URI)
+- Yuno is present and moves on valid walkable Hage tiles: PASS
+- NPC dialogue retains existing options and adds animation access: PASS
+- Animation studio opens, action + 4-direction controls respond: PASS
+- Running (left) and wind cast preview on a mobile screen: PASS
+- No page JavaScript exceptions in tested flows: PASS
+- Old save keys were not modified; new animation state remains ephemeral and isn't added to save data.
+
+Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cached version should be checked on the device after reload.
