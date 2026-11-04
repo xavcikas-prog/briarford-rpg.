@@ -1,8 +1,17 @@
-# Briarford RPG — v0.20
+# Briarford RPG — v0.21
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## New in v0.21 — integrated actual Sania pixel art
+- Replaces Sania's geometry-built placeholder **in the playable game** with an original approved high-detail 64×64 frame atlas.
+- 80 distinct cells: 4-direction idle (4 frames), run (8 frames), dagger attack (4 frames), and unstable casting (4 frames).
+- Existing world navigation and combat logic now directly select animation frames; built-in **Activities → Preview Sania 64px animations** gives a test surface.
+- Anomaly casting is deliberately unavailable in the preview until the first manifestation is obtained through real gameplay. No forced demon appearance or spoiler.
+- The optimized source artwork is stored as a WebP payload (`assets/sania-64-atlas.b64`) and loaded/cached as an image. Fallback to previous models if decoding fails.
+- Savepoint `savepoints/v0.21` retains this version; pre-change code is `savepoints/v0.20-before-art-integration`.
+- This is a real game-integrated animation update, **not** a claim that all generated demon/combat splash art has been wired. Additional long-form combat and demon visuals remain assets for later mechanical integration.
 
 ## New in v0.20 — Contextual buildings and local-world exploration
 - **Hage Village**: enter a custom chapel and village storehouse, walk within each distinct map, investigate furnishings and leave through the entrance.
