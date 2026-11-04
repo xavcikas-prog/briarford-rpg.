@@ -1,9 +1,15 @@
-# Briarford RPG — v0.15
+# Briarford RPG — v0.16
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.16
+- Every existing **named Briarford villager** now has an original sprite geometry rig: Liora, Renn, Teren, Garrick, Mira, Haldric, Orven, Vessa and Elna.
+- Distinct village roles and silhouettes: hunter's bow and equipment, smith's apron and hammer, water healer's robe, watch captain's spear and shoulder plates, trader's bags, elderly staff and practical apprentice clothing.
+- Generic town trader/guard/smith also use distinct custom base shapes; these are no longer recolored Yuno silhouettes.
+- Characters retain separate palettes, movement speed and animations. Further bespoke art cleanup and signature combat AI remain upcoming.
+- Rollback checkpoint: `savepoints/v0.16`.
 ## New in v0.15
 - Additional hand-structured pixel silhouettes for Magna, Vanessa, Luck, Sister Lily, Father Orsi and Witch Queen.
 - Fire, thread, lightning, water, staff and blood-colored spell preview VFX are distinct, rather than repainted Yuno wind effects. Future-arc techniques are NOT automatically granted at start.
