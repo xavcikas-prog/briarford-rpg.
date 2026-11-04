@@ -2128,6 +2128,141 @@ function v12Everywhere(now){
 requestAnimationFrame(v12Everywhere);
 const v12Badge=document.querySelector('.brand .sub');if(v12Badge)v12Badge.textContent='v0.12';
 
+
+/* v0.13 — canon-aware character palette atlas + individualized Briarford portraits.
+   All characters use the shared four-direction renderer, but do not inherit wind magic. */
+const V13_STYLES={
+ Asta:{hair:'#bfc5b7',coat:'#263b39',trim:'#b9af7b',glow:'#7e3b42',scale:.89,detail:'headband',canon:true},
+ 'Sister Lily':{hair:'#e8e3da',coat:'#bdcad8',trim:'#f0eae3',glow:'#9fc7d8',scale:.98,detail:'veil',canon:true},
+ 'Father Orsi':{hair:'#85827b',coat:'#857358',trim:'#dfc699',glow:'#8c9d81',scale:1.02,detail:'priest',canon:true},
+ 'Yami Sukehiro':{hair:'#25282e',coat:'#273a4c',trim:'#e2d6bd',glow:'#385e5f',scale:1.15,detail:'captain',canon:true},
+ 'Magna Swing':{hair:'#c56530',coat:'#674136',trim:'#c1a45c',glow:'#a43f39',scale:1.03,detail:'goggles',canon:true},
+ 'Vanessa Enoteca':{hair:'#c36780',coat:'#662d50',trim:'#cca99d',glow:'#b25a80',scale:1.04,detail:'witchhat',canon:true},
+ Noelle:{hair:'#e5dde5',coat:'#bcc3dc',trim:'#e3d8c8',glow:'#73a8da',scale:.98,detail:'silver',canon:true},
+ Luck:{hair:'#dec891',coat:'#3d5160',trim:'#d7d4b8',glow:'#cfbc62',scale:.91,detail:'smile',canon:true},
+ 'Witch Queen':{hair:'#f0e3d9',coat:'#5c263c',trim:'#c38d77',glow:'#a34453',scale:1.08,detail:'queen',canon:true},
+ Liora:{hair:'#b97b42',coat:'#67678a',trim:'#cfac7b',glow:'#668ebb',scale:.95,detail:'bow'},
+ Renn:{hair:'#987047',coat:'#53694a',trim:'#a08c5c',glow:'#81886b',scale:.98,detail:'hunter'},
+ Teren:{hair:'#9e5e42',coat:'#874b36',trim:'#c79b50',glow:'#a77752',scale:.99,detail:'apron'},
+ Garrick:{hair:'#59423a',coat:'#605046',trim:'#bfa17b',glow:'#8c7765',scale:1.09,detail:'apron'},
+ Mira:{hair:'#72555d',coat:'#688eaa',trim:'#c6d6d3',glow:'#6fa7c4',scale:1.00,detail:'healer'},
+ Haldric:{hair:'#abb0a2',coat:'#775e55',trim:'#d5bf8b',glow:'#9e8876',scale:1.01,detail:'elder'},
+ Orven:{hair:'#3a4b54',coat:'#4e6571',trim:'#a3acb1',glow:'#6d93a3',scale:1.09,detail:'guard'},
+ Vessa:{hair:'#a76b3e',coat:'#8c6547',trim:'#dbba6d',glow:'#9f865e',scale:.98,detail:'merchant'},
+ Elna:{hair:'#9e9286',coat:'#806980',trim:'#e1ba9b',glow:'#a891b7',scale:.96,detail:'elder'},
+ MarketTrader:{hair:'#9a7954',coat:'#8a7453',trim:'#d2b97a',glow:'#8b9d78',scale:.98,detail:'merchant'},
+ TownGuard:{hair:'#424d55',coat:'#40566c',trim:'#b1b9c6',glow:'#879da5',scale:1.04,detail:'guard'},
+ TownSmith:{hair:'#6d5348',coat:'#725947',trim:'#baa189',glow:'#b09270',scale:1.06,detail:'apron'},
+ 'Witch Guard':{hair:'#a9b4bd',coat:'#35344e',trim:'#a993a7',glow:'#946ca8',scale:1.02,detail:'guard'},
+ Herbalist:{hair:'#a17b4b',coat:'#557451',trim:'#b4d2a0',glow:'#82b987',scale:.96,detail:'healer'}
+};
+const V13_BASE_PALETTE=v12PaletteImage;
+v12PaletteImage=function(style){
+ const canvas=V13_BASE_PALETTE(style),c=canvas.getContext('2d');
+ c.imageSmoothingEnabled=false;
+ for(let id=0;id<116;id++){
+  const sx=(id%10)*32,sy=Math.floor(id/10)*40;
+  // Add restrained, readable pixel accents; keep the idle/run face and foot anchors clear.
+  const direction=id<40?Math.floor(id/10):id<72?Math.floor((id-40)/8):id<100?Math.floor((id-72)/7):0;
+  const facing=direction!==3;
+  switch(style.detail){
+   case 'headband':
+    c.fillStyle='#202124';c.fillRect(sx+9,sy+11,15,3);
+    c.fillStyle='#bcad76';c.fillRect(sx+16,sy+11,2,2);
+    c.fillStyle=style.hair;c.fillRect(sx+8,sy+7,3,3);c.fillRect(sx+21,sy+6,3,3);break;
+   case 'veil':
+    c.fillStyle='#dddcd4';c.fillRect(sx+7,sy+6,3,20);c.fillRect(sx+23,sy+6,3,20);
+    c.fillStyle='#e6e0d7';c.fillRect(sx+11,sy+5,12,2);break;
+   case 'priest':
+    c.fillStyle='#d5c6a2';c.fillRect(sx+15,sy+20,2,7);
+    c.fillStyle='#88663c';c.fillRect(sx+12,sy+24,8,2);break;
+   case 'captain':
+    c.fillStyle='#e2d8c5';c.fillRect(sx+12,sy+21,9,3);
+    c.fillStyle='#303537';c.fillRect(sx+7,sy+16,3,13);c.fillRect(sx+23,sy+16,3,13);break;
+   case 'goggles':
+    if(facing){c.fillStyle='#a6b8b8';c.fillRect(sx+11,sy+12,4,2);c.fillRect(sx+18,sy+12,4,2);
+    c.fillStyle='#34363c';c.fillRect(sx+15,sy+12,3,2);}break;
+   case 'witchhat':
+    c.fillStyle=style.hair;c.fillRect(sx+7,sy+11,4,16);c.fillRect(sx+23,sy+11,4,16);
+    c.fillStyle='#3f314c';c.fillRect(sx+6,sy+5,21,3);c.fillRect(sx+13,sy+1,9,5);break;
+   case 'silver':
+    c.fillStyle='#e6e0e2';c.fillRect(sx+7,sy+11,3,12);c.fillRect(sx+23,sy+11,3,12);
+    c.fillStyle='#95a8c4';c.fillRect(sx+15,sy+21,3,3);break;
+   case 'smile':
+    if(facing){c.fillStyle='#d1bd9a';c.fillRect(sx+14,sy+18,6,2);}break;
+   case 'queen':
+    c.fillStyle='#e6c58b';c.fillRect(sx+11,sy+4,3,4);c.fillRect(sx+16,sy+2,3,5);c.fillRect(sx+22,sy+4,3,4);
+    c.fillStyle='#79374d';c.fillRect(sx+8,sy+21,3,13);c.fillRect(sx+25,sy+21,3,13);break;
+   case 'bow':c.fillStyle='#e1c48a';c.fillRect(sx+21,sy+9,5,2);break;
+   case 'hunter':c.fillStyle='#b9a17b';c.fillRect(sx+24,sy+23,2,8);break;
+   case 'apron':c.fillStyle='#b28c66';c.fillRect(sx+12,sy+25,11,7);break;
+   case 'healer':c.fillStyle='#bcded7';c.fillRect(sx+15,sy+21,3,5);break;
+   case 'guard':c.fillStyle='#c9cccb';c.fillRect(sx+9,sy+20,3,3);c.fillRect(sx+23,sy+20,3,3);break;
+   case 'merchant':c.fillStyle='#dcb878';c.fillRect(sx+21,sy+21,4,5);break;
+   case 'elder':c.fillStyle='#d5c5a4';c.fillRect(sx+22,sy+24,2,9);break;
+   case 'scarf':c.fillStyle='#b7a171';c.fillRect(sx+13,sy+19,9,2);break;
+  }
+ }
+ return canvas;
+};
+// Building one atlas per character is intentionally spread across frames on mobile.
+const V13_QUEUE=Object.entries(V13_STYLES),V13_COMPLETED=new Set();
+function v13BuildOne(){
+ if(!V09_SPRITE_IMAGE?.naturalWidth)return;
+ let entry=V13_QUEUE.find(([name])=>!V13_COMPLETED.has(name));if(!entry)return;
+ const [name,style]=entry;V13_COMPLETED.add(name);
+ try{v12CreateSkin(name,style);}catch(e){console.warn('Sprite fallback for '+name,e);}
+ if(V13_COMPLETED.size<V13_QUEUE.length)setTimeout(v13BuildOne,42);
+}
+function v13LoadAll(){
+ if(!V09_SPRITE_IMAGE?.naturalWidth)return;
+ setTimeout(v13BuildOne,35);
+}
+if(V09_SPRITE_IMAGE.complete&&V09_SPRITE_IMAGE.naturalWidth)v13LoadAll();
+else V09_SPRITE_IMAGE.addEventListener('load',v13LoadAll,{once:true});
+// A canvas showcase of actor variants; character presence on world maps follows era logic.
+function v13Gallery(){
+ if(!state?.created)return;
+ const names=['Sania','Yuno','Asta','Sister Lily','Father Orsi','Yami Sukehiro','Magna Swing','Vanessa Enoteca','Noelle','Luck','Witch Queen','Liora','Renn','Teren','Garrick','Mira','Haldric','Orven','Vessa','Elna'];
+ let selected='Sania',dir='down',motion='idle',begin=performance.now();
+ customModal('Character Art · Preview',body=>{
+  html(body,'p','Original pixel-art palette variants share the Yuno animation rig. Some designs are provisional; characters appear in the world only when their era and location allow it.','small');
+  const cv=document.createElement('canvas');cv.width=260;cv.height=150;cv.style.cssText='width:100%;max-width:390px;image-rendering:pixelated;background:#1c2a26;border:1px solid #70816a;border-radius:9px';body.appendChild(cv);
+  const charGrid=html(body,'div','','chips');charGrid.style.maxHeight='150px';charGrid.style.overflow='auto';
+  names.forEach(name=>{const b=btn(charGrid,name,()=>{selected=name;begin=performance.now()},'chip');b.style.fontSize='11px';});
+  const directions=html(body,'div','','chips');
+  ['down','left','right','up'].forEach(d=>btn(directions,d,()=>{dir=d;begin=performance.now()},'chip'));
+  const actions=html(body,'div','','chips');
+  ['idle','run','attack','defend','hurt','dash'].forEach(a=>btn(actions,a,()=>{motion=a;begin=performance.now()},'chip'));
+  html(body,'div','Combat effects and special moves remain visual tests, not new character powers.','small');
+  function paint(now){
+   if(!cv.isConnected||!$('overlay').classList.contains('visible'))return;
+   const c=cv.getContext('2d');c.clearRect(0,0,cv.width,cv.height);
+   c.fillStyle='#283f31';c.fillRect(0,110,cv.width,40);c.fillStyle='#4c684e';c.fillRect(0,110,cv.width,2);
+   c.fillStyle='#e5ce9e';c.font='13px system-ui';c.fillText(selected+' · '+motion+' · '+dir,10,18);
+   const skin=V11_SKINS.get(selected);
+   if(skin?.image?.naturalWidth){
+    const frameId=v09FrameId(motion,dir,now-begin);
+    c.imageSmoothingEnabled=false;c.drawImage(skin.image,frameId%10*32,Math.floor(frameId/10)*40,32,40,89,16,78,98);
+   }else{c.fillText('Preparing sprite…',70,80);}
+   requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+ });
+}
+const V13_PREVIOUS_ACTIVITIES=activityPanel;
+activityPanel=function(){
+ const r=V13_PREVIOUS_ACTIVITIES();
+ if(state?.created&&$('overlay').classList.contains('visible')){
+  const box=html($('modal-body'),'div','','banner');
+  html(box,'strong','🎨 Character art preview');
+  btn(box,'Open animated character gallery',v13Gallery,'secondary');
+ }
+ return r;
+};
+activityButton.onclick=activityPanel;
+const v13Brand=document.querySelector('.brand .sub');if(v13Brand)v13Brand.textContent='v0.13';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
