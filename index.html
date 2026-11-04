@@ -3150,6 +3150,70 @@ const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
 init();
+/* v0.22 EXPERIMENT: A separate opt-in WebGL view layered over the SAME
+   2D game rules. Original 2D page loads exactly as before without ?view=3d. */
+(function install3DExperiment(){
+ const sceneTitle=document.querySelector('.scenehead');
+ if(sceneTitle){
+  const shortcut=document.createElement('a');
+  shortcut.href='./?view=3d';
+  shortcut.textContent='◈ Try 3D';
+  shortcut.setAttribute('aria-label','Open optional 3D game view');
+  shortcut.style.cssText='white-space:nowrap;color:#f0d79b;background:#2b4337;border:1px solid #6b8b73;border-radius:7px;padding:4px 7px;text-decoration:none;font:600 11px system-ui;';
+  sceneTitle.appendChild(shortcut);
+ }
+ if(new URLSearchParams(location.search).get('view')!=='3d')return;
+ // Preserve a pretest copy once. No old slot is overwritten by merely opening 3D.
+ for(let i=1;i<=3;i++){
+  try{
+   const key=storageKey(i),backup='briarford_pre3d_slot_'+i;
+   if(!storage.getItem(backup)&&storage.getItem(key))
+    storage.setItem(backup,storage.getItem(key));
+  }catch(e){console.warn('Could not copy save '+i+' to 3D safety backup:',e);}
+ }
+ window.__briarford3d={
+  canvas:cn,
+  zone:()=>state?.zone||'village',
+  player:()=>state&&{created:!!state.created,x:state.x,y:state.y,day:state.day,minute:state.minute,zone:state.zone},
+  map:()=>state?makeMap(state.zone):[],
+  npcs:()=>{
+   if(!state?.created)return[];
+   if(state.zone==='village')return state.npcs.map(n=>({name:n.id,x:n.x,y:n.y}));
+   if(state.zone.startsWith('region:'))return v03townLocals().map(n=>({name:n.name,x:n.x,y:n.y}));
+   if(indoors()){
+    const house=HOUSE_DEFS.find(h=>h.id===interiorId());
+    const owner=house&&state.npcs.find(n=>n.id===house.owner);
+    return owner?[{name:owner.id,x:26,y:20}]:[];
+   }
+   return [];
+  },
+  actor:name=>V14_HEROES[name]||{color:COLOURS[name]||['#574b39','#cda98d','#596f56']},
+  enemy:()=>{
+   if(!state?.created)return null;
+   if(state.combat&&state.combat.enemyX!==undefined)return{x:state.combat.enemyX,y:state.combat.enemyY};
+   if(state.zone==='forest'&&state.enemy?.wolfAlive)return{x:20,y:17};
+   return null;
+  },
+  isModal:()=>$('overlay').classList.contains('visible'),
+  tap:(x,y)=>{
+   if(!state?.created||$('overlay').classList.contains('visible'))return;
+   const r=cn.getBoundingClientRect(),cam=state.camera||[0,0];
+   // Reuse all old interaction handlers, including buildings, enemies, NPCs and quests.
+   if(x>=cam[0]&&x<cam[0]+20&&y>=cam[1]&&y<cam[1]+20){
+    const pointer=new PointerEvent('pointerdown',{
+     bubbles:true,cancelable:true,pointerType:'touch',
+     clientX:r.left+(x-cam[0]+.5)*r.width/20,
+     clientY:r.top+(y-cam[1]+.5)*r.height/20
+    });
+    cn.dispatchEvent(pointer);
+   }else startMove(pathTo(state.x,state.y,x,y));
+  }
+ };
+ const script=document.createElement('script');
+ script.src='./3d-prototype.js?v=022-1';
+ script.onerror=()=>console.error('3D script failed to load. Remove ?view=3d to play the original 2D game.');
+ document.body.appendChild(script);
+})();
 if('serviceWorker' in navigator && location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
 </script>
