@@ -1891,7 +1891,7 @@ function v10Anchor(id){
 }
 function v10Sprite(context,img,id,tileX,tileY,width=23,height=29){
  if(!img?.naturalWidth)return false;
- const anchor=img===V09_SPRITE_IMAGE?v10Anchor(id):{x:16,y:38};
+ const anchor=v10Anchor(id); // All re-skinned frames share the same source silhouette and normalized foot position.
  const footX=Math.round(tileX*16+8),footY=Math.round(tileY*16+15);
  const dx=Math.round(footX-anchor.x*width/32),dy=Math.round(footY-anchor.y*height/40);
  context.save();context.imageSmoothingEnabled=false;
