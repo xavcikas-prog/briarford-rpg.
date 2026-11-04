@@ -1,9 +1,16 @@
-# Briarford RPG — v0.17
+# Briarford RPG — v0.18
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.18 — Attribute-bound magic
+- 15 listed magic attributes and a starter set of documented character spells (Wind, Water, Fire, Lightning, Dark, Thread, Anti-Magic, Unknown), each with range/AP/mana and grounded owner.
+- Future-era canon spells stay locked; no instant arbitrary Fire/Water/Dark spells for Sania.
+- Tactical **Mana Read** (requires Mana Perception) and **Controlled Breathing** (requires discipline) now change combat guard/stamina/strain.
+- Sania's first known pulse remains an anomaly, not a licensed copy of Asta's devil power.
+- Activities → Magical Traditions gives a compact, categorized canon-aware spell codex.
+- Restore branch: `savepoints/v0.18`.
 ## New in v0.17 — Real equipment & tactical options
 - Tactical stamina pool: 8 points, recovering each turn; attacks must pay AP and stamina.
 - Light, standard and heavy strikes with different hit chances, damage and potential stagger.
