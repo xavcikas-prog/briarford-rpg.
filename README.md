@@ -1,9 +1,14 @@
-# Briarford RPG — v0.14
+# Briarford RPG — v0.15
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.15
+- Additional hand-structured pixel silhouettes for Magna, Vanessa, Luck, Sister Lily, Father Orsi and Witch Queen.
+- Fire, thread, lightning, water, staff and blood-colored spell preview VFX are distinct, rather than repainted Yuno wind effects. Future-arc techniques are NOT automatically granted at start.
+- Characters still need deeper hand-authored combat AI and regional appearances; these models are original test assets, not exact anime screenshots.
+- GitHub rollback: `savepoints/v0.15`.
 ## New in v0.14 — individually drawn pixel silhouettes
 - Bespoke geometry-based pixel character rigs, **not recolors** of Yuno frames, for Sania, Asta, Yuno, Noelle and Yami.
 - Distinct proportions, boots anchors, hairstyles, wardrobe and physical combat gestures per role.
