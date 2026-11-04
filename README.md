@@ -1,9 +1,17 @@
-# Briarford RPG — v0.12
+# Briarford RPG — v0.13
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
 
+## New in v0.13 — Shared NPC art standard
+- Reused a single **116-frame 4-direction pixel rig** to generate distinct, original in-browser skins for existing village residents, regional merchants/guards/craftspeople and the visible early-story canon cast.
+- Canon-inspired looks: Asta (pale spiky hair/headband), Yami (tall dark silhouette), Magna (orange hair/goggles), Vanessa (rose hair/hat), Sister Lily (pale veil), Father Orsi (clerical robe), Witch Queen (crown/cloak). Noelle and Luck are available for art preview but **not spawned into the wrong story era**.
+- Briarford's nine named NPCs have individual hair/clothing palettes and selected profession accessories.
+- **Activities → Character art preview** opens an animated character gallery with four directions and idle, run, attack, defend, hurt, dash test actions.
+- Asset generation happens locally, gradually and offline-friendly; sprite artwork remains a **prototype interpretation**, not exact official studio artwork or final licensed character art.
+- Four GitHub checkpoints: `savepoints/v0.10`, `savepoints/v0.11`, `savepoints/v0.12`, `savepoints/v0.13`. Original v0.9 checkpoint also preserved.
+- Existing saves and combat stats unchanged.
 ## New in v0.12 — Playable Sania sprite
 - Sania now renders through the same 4-direction pixel actor pipeline as Yuno, with a **distinct original charcoal-green coat, chestnut hair and warm-gold accents**, not Yuno's character palette.
 - The atlas is recolored in the browser from the existing edited 116-frame source: no extra network request is required.
