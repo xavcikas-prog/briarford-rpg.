@@ -2591,6 +2591,80 @@ activityPanel=function(){
 };activityButton.onclick=activityPanel;
 const v17brand=document.querySelector('.brand .sub');if(v17brand)v17brand.textContent='v0.17';
 
+
+/* v0.18 — attribute-bound magic library; no arbitrary Fire/Water unlock for Sania. */
+const V18_SPELLS=[
+ {id:'wind-shot',owner:'Yuno',attr:'Wind',name:'Wind Shot',tier:1,ap:2,mana:3,range:6,desc:'Directed pressure strike. Its force depends on control and aim.',phase:'present'},
+ {id:'wind-ward',owner:'Yuno',attr:'Wind',name:'Wind Guard',tier:1,ap:1,mana:4,range:0,desc:'Short-lived wind turbulence deflects small projectiles.',phase:'present'},
+ {id:'wind-hawk',owner:'Yuno',attr:'Wind',name:'Wind Bird Formation',tier:3,ap:3,mana:9,range:5,desc:'A complex formation still beyond the trainee’s initial grasp.',phase:'future'},
+ {id:'anti-sword',owner:'Asta',attr:'Anti-Magic',name:'Demon-Slayer Sword',tier:2,ap:3,mana:0,range:1,desc:'A heavy sword whose unusual nature is not shared by ordinary mages.',phase:'present'},
+ {id:'water-shield',owner:'Noelle',attr:'Water',name:'Sea Dragon’s Nest',tier:2,ap:3,mana:7,range:0,desc:'Large water barrier; requires substantial control and power.',phase:'future'},
+ {id:'water-roar',owner:'Noelle',attr:'Water',name:'Sea Dragon’s Roar',tier:4,ap:4,mana:14,range:7,desc:'A later offensive development. Not an initial-grimoire spell.',phase:'future'},
+ {id:'dark-slash',owner:'Yami Sukehiro',attr:'Dark',name:'Dark Cloaked Slash',tier:3,ap:3,mana:8,range:5,desc:'Dark magic carried along a sword slash, requiring practiced timing.',phase:'present'},
+ {id:'fire-ball',owner:'Magna Swing',attr:'Fire',name:'Fireball',tier:1,ap:2,mana:4,range:5,desc:'Concentrated flame with blast potential, vulnerable to cover and water.',phase:'present'},
+ {id:'thread-catch',owner:'Vanessa Enoteca',attr:'Thread',name:'Binding Thread',tier:2,ap:2,mana:5,range:4,desc:'Restrains movement when the caster has line of sight.',phase:'present'},
+ {id:'lightning-rush',owner:'Luck',attr:'Lightning',name:'Lightning Rush',tier:2,ap:3,mana:6,range:3,desc:'Lightning reinforcement increases movement and strike tempo.',phase:'present'},
+ {id:'healing-water',owner:'Mira',attr:'Water',name:'Cleansing Water',tier:1,ap:2,mana:3,range:1,desc:'Careful cleaning and stabilization; does not regenerate a missing limb.',phase:'present'},
+ {id:'grimoire-pulse',owner:'Sania',attr:'Unknown',name:'Unsteady Pulse',tier:0,ap:2,mana:0,range:2,desc:'Unreliable interference with maintained spells. Consumes health and generates strain.',phase:'hidden'}
+];
+const V18_ATTRS=['Wind','Water','Fire','Lightning','Dark','Anti-Magic','Thread','Earth','Ice','Plant','Light','Spatial','Healing','Sealing','Unknown'];
+function v18Known(sp){
+ if(sp.owner==='Sania')return v08().stage!=='sealed';
+ if(sp.phase==='future')return false;
+ return true;
+}
+function v18SpellUI(attribute='All'){
+ const spells=V18_SPELLS.filter(x=>attribute==='All'||x.attr===attribute);
+ customModal('Magic Codex · '+attribute,body=>{
+  html(body,'p','Magic is bound to the caster and grimoire. This codex documents known disciplines; it does NOT grant every element to Sania. Future-era spells remain sealed until their proper time.','small');
+  const pick=html(body,'div','','chips');
+  ['All',...V18_ATTRS].forEach(x=>btn(pick,x,()=>v18SpellUI(x),'chip'));
+  if(!spells.length)html(body,'div','This magic tradition has not yet been documented in this prototype.','banner');
+  for(const sp of spells){
+   const available=v18Known(sp),b=html(body,'div','','banner');
+   html(b,'strong',(available?'✦ ':'🔒 ')+(available?sp.name:'Undiscovered technique'));
+   html(b,'p',sp.owner+' · '+sp.attr+' · Tier '+sp.tier,'small');
+   if(available){
+    html(b,'div',sp.desc,'small');html(b,'div','AP '+sp.ap+' · Mana '+sp.mana+' · Range '+sp.range+' tiles','tag');
+    if(sp.owner==='Sania')btn(b,'Open pulse field notes',v08Status,'secondary');
+   }else html(b,'div','Unavailable in the current story era or not yet personally discovered.','small');
+  }
+  btn(body,'Your training disciplines',v03talents,'secondary');
+ });
+}
+function v18BattleSense(){
+ const c=v17C();if(!c)return;
+ if(!(v06().learned.sense||state.flags.v03.magic.sense))
+  return notify('You must first learn Mana Perception. Theory alone does not grant elemental spells.');
+ if(c.ap<1)return notify('Insufficient AP.');
+ c.ap--;c.guard=true;
+ v11Animate('Sania','defend','down',550);
+ notify(c.kind==='ward'?'Mana Read: the patrol glyph can charge a rune bolt. Guard +3 this turn.':'Mana Read: no spell-casting signature is present. You brace for a physical attack.');
+ draw();updateHUD();
+}
+function v18BattleBreath(){
+ const c=v17C();if(!c)return;
+ if(!(v06().learned.breath||state.flags.v03.magic.breath))return notify('Controlled Breathing must be learned first.');
+ if(c.bonus<1)return notify('Your bonus action is spent.');
+ c.bonus--;c.stamina=Math.min(c.maxStamina,c.stamina+4);
+ const f=v08();f.strain=Math.max(0,f.strain-1);
+ notify('Controlled Breathing: +4 stamina, -1 strain. No extra magical element gained.');
+ updateHUD();
+}
+function v18Button(id,label,fn){if($(id))return;const b=document.createElement('button');b.id=id;b.textContent=label;b.onclick=fn;$('battlebar').appendChild(b);}
+v18Button('v18sense','👁 Read Mana · 1 AP',v18BattleSense);
+v18Button('v18breath','🫁 Controlled Breath · bonus',v18BattleBreath);
+const V18_OLD_ACTIVITIES=activityPanel;
+activityPanel=function(){
+ const r=V18_OLD_ACTIVITIES();
+ if(state?.created&&!state.combat&&$('overlay').classList.contains('visible')){
+  const b=html($('modal-body'),'div','','banner');html(b,'strong','📘 Magical Traditions');
+  btn(b,'Browse spell attributes and canon casters',()=>v18SpellUI('All'),'secondary');
+ }
+ return r;
+};activityButton.onclick=activityPanel;
+const v18brand=document.querySelector('.brand .sub');if(v18brand)v18brand.textContent='v0.18';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
