@@ -2497,6 +2497,99 @@ for(const name of ['Liora','Renn','Teren','Garrick','Mira','Haldric','Orven','Ve
  setTimeout(()=>v14Install(name),320+(Object.keys(V14_HEROES).indexOf(name)%9)*65);
 const v16Brand=document.querySelector('.brand .sub');if(v16Brand)v16Brand.textContent='v0.16';
 
+
+/* v0.17 — distinct tactical weapon ranges, stamina, crit/stagger and equipment choices. */
+Object.assign(V03_EQUIPMENT,{
+ longbow:{name:"Recurve Bow",slot:"weapon",damage:3,price:58,desc:"Longer-ranged hunting bow.",reach:7},
+ spear:{name:"Militia Spear",slot:"weapon",damage:2,price:32,desc:"Can strike from two tiles away.",reach:2},
+ axe:{name:"Iron Hatchet",slot:"weapon",damage:3,price:34,desc:"Heavy one-handed chopping weapon.",reach:1},
+ gambeson:{name:"Padded Gambeson",slot:"body",armor:2,price:28,desc:"Warm padded armor used by caravan guards."},
+ mail:{name:"Chain Hauberk",slot:"body",armor:4,price:92,desc:"Heavy protection; hard to conceal."},
+ ring:{name:"Simple Brass Ring",slot:"trinket",focus:1,price:21,desc:"Keeps a reminder close to your hand; not enchanted."}
+});
+Object.assign(itemNames,{longbow:'Recurve Bow',spear:'Militia Spear',axe:'Iron Hatchet',gambeson:'Padded Gambeson',mail:'Chain Hauberk',ring:'Simple Brass Ring'});
+function v17C(){const c=state?.combat;if(!c)return null;c.stamina??=8;c.maxStamina??=8;c.offBalance??=0;c.aim??=0;return c;}
+function v17Reach(){
+ const key=state.flags?.v03?.equipped?.weapon;
+ return V03_EQUIPMENT[key]?.reach||(key==='bow'?6:1);
+}
+function v17Attack(kind='standard'){
+ const c=v17C();if(!c)return;
+ const weapon=state.flags.v03.equipped.weapon,reach=v17Reach(),isRanged=['bow','longbow'].includes(weapon);
+ const dist=Math.abs(state.x-c.enemyX)+Math.abs(state.y-c.enemyY);
+ const ap=kind==='quick'?1:kind==='heavy'?3:2,st=kind==='quick'?2:kind==='heavy'?5:3;
+ if(c.ap<ap)return notify('Not enough action points for that strike.');
+ if(c.stamina<st)return notify('Exhausted. Guard or end your turn to recover stamina.');
+ if(dist>reach || dist<1)return notify('Target outside weapon reach ('+reach+' tiles). Move closer or change weapons.');
+ const stat=isRanged?'DEX':'STR',skill=isRanged?'archery':'blade',power=v03equippedPower();
+ c.ap-=ap;c.stamina-=st;
+ const roll=check(stat,kind==='quick'?12:kind==='heavy'?14:11,Math.floor(state.skills[skill]/6)+(c.focus||0)+(c.aim||0));
+ c.focus=0;c.aim=0;skillUp(skill,1);
+ v11Animate('Sania',isRanged?'cast':'attack',V11_POSITIONS.get('Sania')?.direction||'down',480);
+ if(!roll.pass){notify('Your '+kind+' attack misses. Roll '+roll.total+'. Stamina '+c.stamina+'/'+c.maxStamina);return;}
+ const crit=roll.roll>=19,base=kind==='heavy'?7:kind==='quick'?2:4;
+ const damage=Math.max(1,base+Math.floor(rand(0,5))+Math.floor((state.stats[stat]-10)/3)+power.damage+(crit?4:0)-(c.kind==='ward'&&c.shield>0?4:0));
+ c.hp=Math.max(0,c.hp-damage);
+ if(kind==='heavy'&&roll.total>=19&&rand()<.48)c.offBalance=1;
+ notify((crit?'Critical! ':'')+damage+' damage · '+(isRanged?'ranged':'melee')+' '+kind+' attack. Stamina '+c.stamina+'/'+c.maxStamina+(c.offBalance?' · enemy staggered':''));
+ if(c.hp<=0){winCombat();return;}draw();updateHUD();
+}
+attack=function(){v17Attack('standard')};$('attackBtn').onclick=attack;
+const V17_OLD_ENDTURN=endTurn;
+endTurn=function(){
+ const c=v17C();if(!c)return;
+ if(c.offBalance>0){c.offBalance--;c.ap=4;c.bonus=1;c.guard=false;c.round++;c.stamina=Math.min(c.maxStamina,c.stamina+3);
+  updTime(2);notify('Staggered enemy loses its action. Your stamina recovers to '+c.stamina+'/'+c.maxStamina+'.');draw();updateHUD();return;}
+ const before=state.hp;
+ V17_OLD_ENDTURN();
+ const next=v17C();
+ if(next){next.stamina=Math.min(next.maxStamina,next.stamina+3);
+  if(state.hp<before && before-state.hp>=8)next.bruised=(next.bruised||0)+1;
+  updateHUD();}
+};$('turnBtn').onclick=endTurn;
+const V17_OLD_COMBAT_HUD=updateHUD;
+updateHUD=function(){V17_OLD_COMBAT_HUD();if(state?.combat){
+ const c=v17C();$('combattitle').textContent+= ' · Stamina '+c.stamina+'/'+c.maxStamina;
+ if($('v17quick'))$('v17quick').disabled=c.ap<1||c.stamina<2;
+ if($('v17heavy'))$('v17heavy').disabled=c.ap<3||c.stamina<5;
+ if($('v17aim'))$('v17aim').disabled=c.bonus<1;
+ }};
+const combatActions=$('battlebar');
+function v17BattleButton(id,label,fn){
+ if($(id))return;
+ const b=document.createElement('button');b.id=id;b.textContent=label;b.onclick=fn;combatActions.appendChild(b);return b;
+}
+v17BattleButton('v17quick','🗡 Quick Strike · 1 AP',()=>v17Attack('quick'));
+v17BattleButton('v17heavy','⚔ Heavy Strike · 3 AP',()=>v17Attack('heavy'));
+v17BattleButton('v17aim','🎯 Aim · bonus',()=>{
+ const c=v17C();if(!c||c.bonus<1)return;
+ c.bonus--;c.aim=3;notify('You take aim. +3 to your next attack roll.');updateHUD();
+});
+function v17Shop(){
+ const catalog=['spear','axe','longbow','gambeson','mail','ring'];
+ customModal('Armory · Stock & Equipment',body=>{
+  html(body,'p','A practical collection of locally available gear. Equipment can be changed from the top HUD. Weapon reach and stamina use differ.','small');
+  html(body,'div','Your coins: '+state.gold,'banner');
+  for(const id of catalog){const gear=V03_EQUIPMENT[id],row=html(body,'div','','list-row');
+   html(row,'span',gear.name+' · '+gear.price+' coins · '+gear.desc,'small');
+   const button=btn(row,'Buy',()=>{if(state.gold<gear.price)return notify('You cannot afford '+gear.name+'.');
+    state.gold-=gear.price;addItem(id);updTime(5);notify('Purchased '+gear.name+'.');v17Shop();
+   });button.disabled=state.gold<gear.price;}
+  btn(body,'Equip carried gear',v03equips,'secondary');
+ });
+}
+const V17_BEFORE_ACTIVITIES=activityPanel;
+activityPanel=function(){
+ const r=V17_BEFORE_ACTIVITIES();
+ if(state?.created&&!state.combat&&$('overlay').classList.contains('visible')){
+  let node=html($('modal-body'),'div','','banner');
+  html(node,'strong','⚔ Training & Equipment');
+  btn(node,'Inspect armor, reach and available gear',v17Shop,'secondary');
+ }
+ return r;
+};activityButton.onclick=activityPanel;
+const v17brand=document.querySelector('.brand .sub');if(v17brand)v17brand.textContent='v0.17';
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
