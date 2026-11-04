@@ -3235,6 +3235,97 @@ function v23DrawWolf(){
 const V23_DRAW_BEFORE_WOLF=draw;
 draw=function(){V23_DRAW_BEFORE_WOLF();v23DrawWolf();};
 
+
+/* v0.23 ANIMATION-01 — real atlas gallery; the old 32x40 palette-preview is
+   replaced, NOT presented as Sania's approved 64x64 art. */
+function v23SaniaPowerVisible(){
+ return !!(state?.flags?.v08 && state.flags.v08.stage!=='sealed');
+}
+function v23GalleryFrames(name){
+ const detailed=name==='Sania' && v21Ready && V21_SANIA.naturalWidth===512;
+ const skin=V11_SKINS.get(name);
+ const other=!!(skin?.image?.naturalWidth);
+ return {detailed,available:detailed||other,
+  kind:detailed?'approved-64':other?'legacy-32':'pending',
+  actions:detailed?['idle','run','attack',...(v23SaniaPowerVisible()?['cast']:[])]:
+  other?['idle','run','attack','defend','hurt','dash']:[]
+ };
+}
+function v23FrameInfo(name,action,dir,elapsed){
+ const frames=v23GalleryFrames(name);
+ if(frames.detailed){
+  const id=v21Frame(action,dir,elapsed);
+  return {img:V21_SANIA,sx:(id%8)*64,sy:Math.floor(id/8)*64,sw:64,sh:64,id};
+ }
+ const skin=V11_SKINS.get(name);
+ if(!skin?.image?.naturalWidth)return null;
+ const id=v09FrameId(action,dir,elapsed);
+ return {img:skin.image,sx:(id%10)*32,sy:Math.floor(id/10)*40,sw:32,sh:40,id};
+}
+function v23Gallery(){
+ if(!state?.created)return;
+ const names=['Sania','Yuno','Asta','Sister Lily','Father Orsi','Yami Sukehiro','Magna Swing',
+  'Vanessa Enoteca','Noelle','Luck','Witch Queen','Liora','Renn','Teren','Garrick','Mira','Haldric','Orven','Vessa','Elna'];
+ let name='Sania',dir='down',action='idle',started=performance.now(),alive=true;
+ customModal('Character Art · Real Animations',body=>{
+  const intro=html(body,'p','Sania uses the approved 64×64 art. Other characters still use experimental art; they are not yet the same quality. Previewing an animation never grants a new ability.','small');
+  const stage=document.createElement('canvas');stage.width=296;stage.height=210;
+  stage.style.cssText='display:block;width:100%;max-width:390px;margin:8px auto;background:#14201e;border:1px solid #779b82;border-radius:10px;image-rendering:pixelated';
+  stage.setAttribute('aria-label','Animated character preview');body.appendChild(stage);
+  const status=html(body,'p','','small');
+  const people=html(body,'div','','chips');
+  people.style.cssText='display:flex;flex-wrap:wrap;gap:5px;max-height:108px;overflow:auto;padding:4px 0';
+  const modes=html(body,'div','','chips');modes.style.cssText='display:flex;flex-wrap:wrap;gap:5px;margin:9px 0';
+  const dirs=html(body,'div','','chips');dirs.style.cssText='display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px';
+  function restart(){started=performance.now();}
+  function refresh(){
+   modes.replaceChildren();
+   const meta=v23GalleryFrames(name);
+   status.textContent=name+' · '+(meta.kind==='approved-64'?'Approved 64×64 image atlas':meta.kind==='legacy-32'?'Temporary 32×40 prototype art':'Loading asset…');
+   if(!meta.actions.includes(action))action='idle';
+   for(const value of meta.actions){
+    const b=btn(modes,value==='run'?'Run':value==='idle'?'Idle':value==='attack'?'Dagger / Attack':value==='cast'?'Unsteady Pulse':value[0].toUpperCase()+value.slice(1),()=>{action=value;restart();refresh()},'secondary');
+    b.style.borderColor=action===value?'#d3bb7a':'#43594c';b.setAttribute('aria-pressed',String(action===value));
+   }
+   for(const b of people.querySelectorAll('button')){b.setAttribute('aria-pressed',String(b.textContent===name));b.style.borderColor=b.textContent===name?'#d3bb7a':'#43594c';}
+  }
+  for(const value of names){
+   const b=btn(people,value,()=>{name=value;action='idle';restart();refresh()},'secondary');
+   b.style.cssText='font-size:11px;padding:6px 9px;min-height:34px';
+  }
+  for(const value of V21_DIR){
+   const b=btn(dirs,value[0].toUpperCase()+value.slice(1),()=>{dir=value;restart();for(const node of dirs.children)node.setAttribute('aria-pressed',String(node===b))},'secondary');
+   b.style.cssText='font-size:12px;padding:7px;min-height:35px';
+   b.setAttribute('aria-pressed',String(value===dir));
+  }
+  html(body,'p',v23SaniaPowerVisible()?'Only powers Sania has actually manifested can appear in this viewer.':'The grimoire is still sealed. Hidden and demonic animations are concealed until they are discovered in the story.','small');
+  refresh();
+  function paint(now){
+   if(!alive||!stage.isConnected||!$('overlay').classList.contains('visible')){alive=false;return;}
+   const c=stage.getContext('2d');c.clearRect(0,0,stage.width,stage.height);
+   c.fillStyle='#182a25';c.fillRect(0,0,296,210);
+   c.fillStyle='#324a3a';c.fillRect(0,167,296,43);
+   c.fillStyle='#50654b';c.fillRect(0,166,296,2);
+   c.fillStyle='#eeddb6';c.font='13px system-ui';c.textAlign='left';
+   c.fillText(name+' • '+action+' • '+dir,12,23);
+   const f=v23FrameInfo(name,action,dir,now-started);
+   if(f){
+    c.imageSmoothingEnabled=false;
+    // Use exact cell metadata for each atlas. Base pixels are never shifted by palette interpolation.
+    const w=f.sw===64?120:86,h=f.sh===64?120:108;
+    c.fillStyle='#08131085';c.fillRect(148-25,174,50,5);
+    c.drawImage(f.img,f.sx,f.sy,f.sw,f.sh,Math.round(148-w/2),175-h,w,h);
+    c.font='11px monospace';c.fillStyle='#b1d5b5';c.fillText('Frame '+f.id,12,196);
+   }else{c.fillStyle='#e0c691';c.fillText('Preparing character art…',45,108);}
+   requestAnimationFrame(paint);
+  }
+  requestAnimationFrame(paint);
+ });
+}
+v13Gallery=v23Gallery;
+// The Sania-only entry and the full gallery now use the same exact 64px atlas path.
+v21Preview=v23Gallery;
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
