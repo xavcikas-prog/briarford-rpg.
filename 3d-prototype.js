@@ -22,14 +22,14 @@ const labelLayer=document.createElement('div');labelLayer.style.cssText='positio
 const message=document.createElement('div');message.style.cssText='position:absolute;left:6px;right:6px;bottom:8px;text-align:center;font:11px system-ui;color:#f2e9d8;text-shadow:0 1px 4px #000;background:#0b1c1bc9;border:1px solid #46624e;border-radius:7px;padding:4px 8px;pointer-events:none;z-index:3';message.textContent='Tap ground / characters · Drag camera · All RPG menus work below';host.appendChild(message);
 const names=new Map();let lastZone='';
 function setStatus(t){message.textContent=t;}
-if(!gl){info.textContent='3D unavailable (WebGL unsupported)';setStatus('Your browser cannot start WebGL. Tap 2D to return safely.');return;}
+if(!gl){bridge.canvas.style.visibility='visible';canvas.style.display='none';info.textContent='3D unavailable (WebGL unsupported)';setStatus('Your browser cannot start WebGL. The usual 2D map is still available.');return;}
 function compile(type,src){const sh=gl.createShader(type);gl.shaderSource(sh,src);gl.compileShader(sh);if(!gl.getShaderParameter(sh,gl.COMPILE_STATUS)){throw Error(gl.getShaderInfoLog(sh));}return sh;}
 let shader;
 try{
 shader=gl.createProgram();gl.attachShader(shader,compile(gl.VERTEX_SHADER,`attribute vec3 aPosition;attribute vec3 aNormal;attribute vec3 aColor;uniform mat4 uMatrix;uniform vec3 uSun;varying vec3 vColor;varying float vFog;void main(){vec4 p=uMatrix*vec4(aPosition,1.0);gl_Position=p;float lit=0.53+max(0.0,dot(normalize(aNormal),normalize(uSun)))*0.53;vColor=aColor*lit;vFog=clamp((p.w-8.0)/34.0,0.0,0.73);}`));
 gl.attachShader(shader,compile(gl.FRAGMENT_SHADER,`precision mediump float;varying vec3 vColor;varying float vFog;uniform vec3 uFog;void main(){gl_FragColor=vec4(mix(vColor,uFog,vFog),1.0);}`));
 gl.linkProgram(shader);if(!gl.getProgramParameter(shader,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(shader));
-}catch(e){info.textContent='3D renderer failed';setStatus('WebGL shader failed: '+e.message);return;}
+}catch(e){bridge.canvas.style.visibility='visible';canvas.style.display='none';info.textContent='3D renderer failed';setStatus('WebGL shader failed: '+e.message);return;}
 gl.useProgram(shader);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.disable(gl.CULL_FACE);
 const loc={p:gl.getAttribLocation(shader,'aPosition'),n:gl.getAttribLocation(shader,'aNormal'),c:gl.getAttribLocation(shader,'aColor'),m:gl.getUniformLocation(shader,'uMatrix'),sun:gl.getUniformLocation(shader,'uSun'),fog:gl.getUniformLocation(shader,'uFog')};
 for(const slot of [loc.p,loc.n,loc.c])gl.enableVertexAttribArray(slot);
@@ -78,7 +78,7 @@ function houseGroups(map){const result=[],seen=new Set(),height=map.length,width
 function material(tile){switch(tile){case 'road':return '#988368';case 'square':return '#a69a7e';case 'path':return '#83755b';case 'bridge':return '#c2a77a';case 'water':return '#3c8b9e';case 'farm':return '#756d40';case 'floor':return '#8e7861';case 'wall':return '#514c47';case 'furniture':return '#847158';case 'exit':return '#b89b68';case 'void':return '#1d2724';case 'brush':return '#446848';default:return '#52714a';}}
 function rebuild(map,player,zone,now){const mesh=new Mesh(),range=17;const x0=Math.max(0,Math.floor(player.x)-range),z0=Math.max(0,Math.floor(player.y)-range),x1=Math.min(map[0].length-1,Math.floor(player.x)+range),z1=Math.min(map.length-1,Math.floor(player.y)+range);
  for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++){
-  const tile=map[z]?.[x]||'void',h=hash(x,z),base=color(material(tile));const ground=tile==='water'?-.18:tile==='wall'?.0:-.06;
+  const tile=map[z]?.[x]||'void',h=hash(x,z),base=color(material(tile));const ground=tile==='water'?-.18:tile==='wall'?0:-.06;
   if(tile==='void')continue;
   mesh.box(x,ground-.12,z,1.01,.13,1.01,tint(base,(h-.5)*.08+.95));
   if(tile==='trees'){if(h>.09)tree(mesh,x+(h-.5)*.3,z+(hash(z,x)-.5)*.3,h);}
