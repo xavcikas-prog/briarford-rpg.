@@ -1,8 +1,8 @@
 # BRIARFORD RPG — VIENINTELIS PAGRINDINIS DARBŲ SĄRAŠAS
 
 **Paskutinė peržiūra:** 2026-11-04  
-**Kodo atskaitos taškas:** `main`, **v0.21** (GitHub)  
-**Apimtis:** visi žinomi šio projekto susitarimai, žaidėjo testų pastabos ir versijų aprašai iki v0.21.  
+**Kodo atskaitos taškas:** `main`, **2D v0.21 + eksperimentinis 3D vaizdas v0.22** (GitHub)  
+**Apimtis:** visi žinomi šio projekto susitarimai, žaidėjo testų pastabos ir versijų aprašai iki v0.22.  
 **Tikslas:** *žaidžiamas*, nemokamas ir offline-capable, portretiniam iPhone skirtas originalaus Sania nuotykio 2D pixel-art RPG Black Clover pasaulyje. Ne AI Dungeon scenarijus. Ne vien paveikslėlių projektas.
 
 > **SVARBIAUSIA:** „Yra kode“ ≠ „pilnai veikia“ ≠ „patikrinta telefone“. Nevadinti funkcijos užbaigta, kol žaidėjas negali jos patikimai naudoti žaidime.
@@ -158,6 +158,18 @@
 6. **v0.27+ Canon World Expansion**: `MAP-04/05, FACTION-01, MAG-05–07` — tikri miestai, atskiros karjeros, Knights atranka ir ilgametė grimoaro istorija.
 
 **Pastaba:** etapų numeriai yra planas, ne pažadas, kad visa išvardyta jau sukurta. P0 regresijos turi pirmenybę prieš naujus feature.
+
+
+## 11. Atskirai patvirtintas 3D bandymas — nesupainioti su pagrindiniu 2D žaidimu
+
+- [x] `3D-TEST-01` Sukurta atskira `?view=3d` peržiūra iš to paties žaidimo, numatytasis 2D režimas nepakeistas.
+- [x] `3D-TEST-02` Tikras WebGL erdvinis rendereris: perspektyva, pasukama kamera, pastatai, medžiai, upė, keliai, low-poly veikėjai, 3D touch picking, perjungimas 2D, tie patys NPC/quests/world state.
+- [x] `3D-TEST-03` Kodo atkūrimo taškai prieš eksperimentą ir po jo; asmeninių save slotų išankstinės kopijos į atskirus localStorage raktus; originalūs slotai atidarius 3D nėra perrašomi.
+- [?] `3D-TEST-04` **Fizinio iPhone Safari** testas: kamera ir FPS, tap-to-move NPC, Briarford miškas/bokštas, Hage, namų interjerai, inventory, save/load, ar nepažeistas UI. Testavimo aplinka blokuoja realų WebGL, todėl neskubėti laikyti kokybės patvirtinta.
+- [ ] `3D-TEST-05` Jei 3D tinka — tikri individualūs canon/Sania 3D modeliai su rigging/animacijomis, architektūra, biomai ir sąveikų vizualizacija; dabar tik stilizuoti 3D maketai. Nekeisti 2D bazės kol žaidėjas aiškiai nepatvirtina.
+- [ ] `3D-TEST-06` Jei 3D netinka — tiesiog grįžti į `./` 2D URL; GitHub kodas ir atkūrimo šaka leidžia atšaukti eksperimentą be naujos žaidimo logikos.
+
+**Atidaroma:** `https://xavcikas-prog.github.io/briarford-rpg./?view=3d` (3D) arba `https://xavcikas-prog.github.io/briarford-rpg./` (2D).
 
 ## 10. Nuolatinio sekimo protokolas
 
