@@ -3343,6 +3343,40 @@ v08Pulse=function(){
 const v23PulseButton=$('v08-pulse');
 if(v23PulseButton)v23PulseButton.onclick=v08Pulse;
 
+
+/* v0.24: tiny adapter keeps 2.5D battle presentation separate from the RPG's rules. */
+if(new URLSearchParams(location.search).get('view')!=='3d'){
+ const v24Bridge={
+  callbacks:{},
+  setCallbacks(o){this.callbacks=o||{};},
+  state:()=>state,
+  saniaAtlas:()=>V21_SANIA,
+  saniaFrame:(action,dir,elapsed)=>v21Frame(action,dir,elapsed),
+  wolfFrames:()=>V23_WOLF_FRAMES,
+  action:(name)=>V11_ACTIONS.get(name),
+  pulseUnlocked:()=>['fractured','steady'].includes(state?.flags?.v08?.stage)
+ };
+ window.__BriarfordCombatBridge=v24Bridge;
+ const v24PreviousHud=updateHUD;
+ updateHUD=function(){v24PreviousHud();v24Bridge.callbacks.onRefresh?.();};
+ const v24PreviousEncounter=beginCombat;
+ beginCombat=function(){
+  const previously=!!state?.combat,result=v24PreviousEncounter();
+  if(!previously&&state?.combat)v24Bridge.callbacks.onEncounter?.();
+  return result;
+ };
+ const v24PreviousWard=v08WardEncounter;
+ v08WardEncounter=function(){
+  const previously=!!state?.combat,result=v24PreviousWard();
+  if(!previously&&state?.combat)v24Bridge.callbacks.onEncounter?.();
+  return result;
+ };
+ const css=document.createElement('link');css.rel='stylesheet';css.href='./combat-presentation.css?v=024-1';document.head.appendChild(css);
+ const loader=document.createElement('script');loader.src='./combat-presentation.js?v=024-1';
+ loader.onerror=()=>console.warn('Combat presentation unavailable; original tactical UI remains playable.');
+ document.body.appendChild(loader);
+}
+
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
