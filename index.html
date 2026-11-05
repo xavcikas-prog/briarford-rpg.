@@ -3377,6 +3377,7 @@ if(new URLSearchParams(location.search).get('view')!=='3d'){
  document.body.appendChild(loader);
 }
 
+const v24Label=document.querySelector('.brand .sub');if(v24Label&&new URLSearchParams(location.search).get('view')!=='3d')v24Label.textContent='v0.24';
 const V03_ORIGINAL_INIT=init;
 init=function(){V03_ORIGINAL_INIT();v03init();updateHUD()};
 
