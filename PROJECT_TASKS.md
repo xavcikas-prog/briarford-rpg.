@@ -1,7 +1,7 @@
 # BRIARFORD RPG — VIENINTELIS PAGRINDINIS DARBŲ SĄRAŠAS
 
-**Paskutinė peržiūra:** 2026-11-04 (patikrintas iPhone v0.21 video)  
-**Kodo atskaitos taškas:** `main`, **2D v0.21 + eksperimentinis 3D vaizdas v0.22** (GitHub)  
+**Paskutinė peržiūra:** 2026-11-05 (v0.24 žaidimo kodas, iPhone peržiūra laukia)  
+**Kodo atskaitos taškas:** `main`, **2D v0.24 kovų peržiūra + atidėtas 3D v0.22** (GitHub)  
 **Apimtis:** visi žinomi šio projekto susitarimai, žaidėjo testų pastabos ir versijų aprašai iki v0.22.  
 **Tikslas:** *žaidžiamas*, nemokamas ir offline-capable, portretiniam iPhone skirtas originalaus Sania nuotykio 2D pixel-art RPG Black Clover pasaulyje. Ne AI Dungeon scenarijus. Ne vien paveikslėlių projektas.
 
@@ -185,8 +185,8 @@
 - [x] `IPH-04` Local Map atidaro Northern Forest; susidūrimas su vilku prasideda, pasiekiami taktiniai veiksmai, kova baigiasi atlygiu (+20 XP, mėsa, kailis).
 
 ### Aptiktos UX / vizualinės spragos — aktyvūs darbai
-- [~] `IPH-BUG-01` **Vilko matomumo pataisa ĮKELTA, LAUKIA iPhone patvirtinimo.** Naujas aiškesnis vilko sprite, kovos taikinio kontūras, pasiekiamumo spalvos, dinaminė HP juosta ir už ekrano esančio priešo indikatorius. Automatiniai `tests/wolf-visibility.test.cjs` regresiniai patikrinimai **12/12 PASS**, pilno JS sintaksė PASS. Nežymėti `[x]` iki tikro iPhone testo (prieš / per kovą / mirus vilkui). Savepoint `savepoints/iph-bug-01-wolf-visibility`.
-- [!] `IPH-BUG-02` **Perkrautas combat HUD iPhone:** vienu metu matoma apie 13 veiksmų, trijų stulpelių eilės suspaudžia tekstą ir palieka mažai vietos kovos arenai. Sukurti atskiras „Attack“, „Defense“, „Magic“, „Items“, „Other“ grupes / kontekstines korteles; palikti svarbius AP, stamina ir End Turn tiesiogiai matomus.
+- [x] `IPH-BUG-01` **Vilkas gerai matomas – PATVIRTINTA ŽAIDĖJO 2026-11-05.** Naujas kontrastingas sprite, range žymėjimas, HP juosta ir žymeklis už ekrano; 12/12 automatiniai testai; savepoint `savepoints/iph-bug-01-wolf-visibility`.
+- [~] `IPH-BUG-02` **KATEGORINIS HUD ĮKELTAS v0.24, LAUKIA ŽAIDĖJO iPhone TESTO.** Penkios kategorijos Attack, Defense, Magic, Items, Tactics; originalūs veiksmai išsaugoti, AP/stamina/End Turn matomi, Tactical Map atveria esamą žemėlapį. Testas `tests/combat-presentation.test.cjs` PASS; nevadinti pilnai išspręsta iki ekrano testo.
 - [?] `IPH-QA-05` **Atakų grįžtamasis ryšys:** iš įrašo heavy miss ir quick hit rodomi daugiausia tekstu; papildomai patikrinti realią smūgio animaciją, žalos skaičius, taikinio reakciją ir garsą. Nerodyti kaip patvirtinto buginio mechanikos sutrikimo be tikslesnio testo.
 - [?] `IPH-QA-06` **Grimoaro statuso aiškumas:** Character ekrane rodoma `Grimoire: sealed`, nors Field Notes jau kalba apie atrastą `Unsteady Pulse`. Tai gali būti logiška (antspaudas išlieka), bet žaidėjui paaiškinti „seal still mostly intact; first limited manifestation discovered“, neatskleidžiant paslapčių.
 - [?] `IPH-QA-07` Testas nepatvirtina 3D WebGL veikimo, Hage/Kikka naujų interjerų ar visų save slotų migracijos.
@@ -199,6 +199,21 @@
 - Statusas **[~] dalinai / laukia realaus iPhone patvirtinimo**, ne galutinai užbaigta.
 - **Nepradėti IPH-BUG-02**, kol žaidėjas nepatvirtina pataisos realiame ekrane.
 - Testas: 2D nuoroda → Local Map → Northern Forest → vilkas, prieik/pasitrauk, kova, patikrink žalią/gelsvą kontūrą ir HP; po pergalės vilkas turi dingti.
+
+## 13. v0.23–v0.24: Sania galerija ir naujas 2.5D kovos ekranas
+
+**Statusas:** funkcijos įdėtos į kodą ir patikrintos automatiniais testais, tačiau **dar nėra žaidėjo patvirtintos iPhone**. Gameplay 2D (ne 3D eksperimento) tęsiasi.
+
+- [~] `ANIM-01` Galerija dabar naudoja patvirtintą 64×64 Sania atlasą, o ne seną 32×40 fallback vaizdą; Yuno ir kiti prototipai aiškiai atskirti. Ta pati galerija aptarnauja veikėjų ir Sania animacijų peržiūras. `tests/sania-frames.test.cjs`: PASS. **Laukia realaus iPhone įvertinimo.** Savepoint `savepoints/v0.23-sania-gallery-fix`.
+- [~] `ANIM-02` Specialios galios animacijos įjungimas susietas su realia `fractured/steady` grimoaro būsena. Sealed būsena nedemonstruoja cast; successful Unsteady Pulse kovoje paleidžia cast animaciją. Reikia tikrų kadrų, kurie įvertinami žaidime.
+- [~] `COMBAT-ENCOUNTER-01A` **Prieš kovą:** Sania/priešo vardai, vietovė, HP, žinomi STR/DEX/CON, magijos statusas; neinventuojama priešų statistikų. Kova prasideda tik paspaudus Enter Battle.
+- [~] `COMBAT-ENCOUNTER-01B` **Kovos HUD:** Attack, Defense, Magic, Items, Tactics kategorijos, veikiantys originalių veiksmų mygtukai, AP/stamina ir End Turn, grįžimas į langelių Tactical Map. `IPH-BUG-02` laukia iPhone testo.
+- [~] `COMBAT-ENCOUNTER-01C` **Kontekstinis fonas:** originaliai generuojamas 2.5D side-view miškui, kaimui, miestui, bokštui, keliui ir interjerui (pagal `state.zone`), su daugiasluoksniu fonu ir perspektyvine žeme.
+- [ ] `COMBAT-ENCOUNTER-01D` **Pilnas detalumas:** kol kas scena piešta procedūriniu Canvas stiliumi ir naudoja Sania 64px atlasą, bet pilni specifiniai priešo modeliai, magia VFX, hit reactions ir unikalios aukšto detalumo animacijos visoms kovoms **dar nebaigtos**. Nevadinti AAA kokybe.
+- [~] `COMBAT-ENCOUNTER-01E` **Realios kovos sąsaja:** naujas vaizdas per `window.__BriarfordCombatBridge` skaito **tą pačią** būseną, o nauji mygtukai kviečia originalių AP / HP / XP / inventoriaus / ginklo pasiekiamumo veiksmų mygtukus. Įjungti scenos bandymai (6 vietovių tipai), užrakinta / atrakinta magija, išėjimas iš kovos; `tests/combat-presentation.test.cjs` PASS.
+- [ ] `COMBAT-ENCOUNTER-QA` **Svarbiausia dabar:** patikrinti Safari fiziniame iPhone (Briarford → Northern Forest → wolf, ir Old Tower → Living Ward), ar intro pasirodo, mygtukai išlieka pasiekiami, Tactical Map veikia, žala rodoma teisingai, išsaugojimas išlieka ir nereikia daug scrollinti. Tik tada uždaryti šias užduotis.
+
+**Šios dvi naujos kodo dalys turi atskirus savepointus**: `savepoints/v0.23-sania-gallery-fix` ir `savepoints/v0.24-encounter-ui`. Ankstesnis 2D atkūrimo taškas `savepoints/v0.23-pre-animation-rework` taip pat paliktas.
 
 ## 10. Nuolatinio sekimo protokolas
 
