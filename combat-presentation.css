@@ -1,0 +1,29 @@
+/* Briarford optional illustrated combat view (existing tactical simulation is authoritative). */
+#v24arena,#v24hud{display:none}
+#v24arena{width:100%;aspect-ratio:480/275;background:#24372f;touch-action:none;image-rendering:auto}
+.v24battle #v24arena{display:block}.v24battle #v24hud{display:grid}
+.v24battle #battlebar{display:none!important}.v24battle #game{display:none}
+.v24battle.v24map #game{display:block}.v24battle.v24map #v24arena{display:none}
+#v24hud{grid-template-columns:minmax(0,1fr);gap:8px;background:#202c27;border-top:1px solid #8d774f;padding:9px 10px 12px}
+.v24health{font-size:11px;display:flex;gap:7px;justify-content:space-between;flex-wrap:wrap;color:#e4d5b7}
+.v24tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;padding-bottom:3px}
+.v24tabs button{font-size:11px;padding:7px 9px;flex:0 0 auto;min-height:40px;background:#2d4036}
+.v24tabs button[aria-selected=true]{background:#615a3f;border-color:#dcc28e}
+.v24options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.v24options button{min-width:0;min-height:46px;padding:8px;font-size:12px;text-align:left}
+.v24options p{grid-column:1/-1;font-size:12px;color:#bfcdbc}
+.v24help{font-size:11px;line-height:1.4;color:#bbcab8}
+.v24bottom{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.v24bottom button{min-height:49px}
+.v24bottom button:first-child{background:#7a6743;border-color:#ddc488;color:#fff5d7}
+#v24intro{position:fixed;z-index:30;inset:0;background:#07100eea;display:none;overflow:auto;padding:15px;align-items:center;justify-content:center}
+#v24intro.open{display:flex}
+.v24introcard{width:min(100%,450px);background:linear-gradient(145deg,#2f4035,#192823);border:1px solid #bba069;border-radius:14px;overflow:hidden;color:#eee2ca}
+.v24introcard h2{margin:0;background:#35493b;padding:17px;font:700 23px Georgia,serif;color:#f4d69d}
+.v24introcard .vs{display:flex;gap:8px;align-items:center;justify-content:space-around;padding:14px;font-size:17px;font-weight:bold}
+.v24introcard .vs b{font:700 25px Georgia,serif;color:#dfb96f}
+.v24introcard .stat{display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center;padding:6px 18px;gap:5px;font-size:12px;border-top:1px solid #60716455}
+.v24introcard .stat span:first-child{color:#a9dbc0}.v24introcard .stat span:last-child{color:#e7b5a6}
+.v24introcard p{padding:10px 16px;color:#bfd0c0;line-height:1.45;font-size:12px}
+.v24introcard button{display:block;width:calc(100% - 30px);margin:8px 15px 16px;background:#77623d;border-color:#dfc48c;color:#fff3d4}
+@media(max-width:350px){.v24tabs button{padding:5px 7px;font-size:10px}.v24options button{font-size:11px}}
