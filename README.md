@@ -1,10 +1,20 @@
-# Briarford RPG — 2D v0.23 (wolf visibility patch; iPhone QA pending) + optional 3D experiment v0.22
+# Briarford RPG — 2D v0.24 (encounter presentation test) + optional 3D experiment v0.22
 
 **Project planning source of truth:** [PROJECT_TASKS.md](./PROJECT_TASKS.md) — maintained backlog of implemented code, partial prototypes, missing mechanics, known regressions and next priorities. Never equate generated graphics with working gameplay.
 
 An **unofficial, independently written Black Clover fan RPG prototype** for personal offline-friendly iPhone play. Gameplay is in English. The original Briarford village and Sania are not canon.
 
 **Play:** https://xavcikas-prog.github.io/briarford-rpg./
+
+## v0.24 — real game-linked 2.5D encounter prototype
+- **Before battle:** encounter comparison with Sania HP, STR/DEX/CON, known magic status and the enemy HP; unknown enemy stats are shown as unknown.
+- **During battle:** dynamically illustrated 2.5D side-view backgrounds from encounter location (forest / village / city / ruins / interior), Sania approved 64px art and enemies.
+- **Mobile controls:** five grouped menus — Attack, Defense, Magic, Items and Tactics — with visible AP/stamina/End Turn. Every option proxies the existing RPG action; no second combat logic is introduced.
+- **Positioning stays tactical:** tap Tactical Map to see the original tile-based battlefield and move, then return to the illustrated arena.
+- **Before this:** v0.23 fixed the Character Art gallery to use Sania's approved image atlas, correcting the fractured/steady grimoire reveal check.
+- **Tests:** `node tests/sania-frames.test.cjs` and `node tests/combat-presentation.test.cjs`. Code-level PASS; physical iPhone Safari acceptance pending.
+- **Rollback branches:** `savepoints/v0.23-sania-gallery-fix`, `savepoints/v0.24-encounter-ui`. Original 2D data and saved slot formats unchanged.
+- This is an illustrated **prototype**, not the completed fully hand-animated anime combat system. Individual enemy animation sets and full spell art remain backlog items.
 
 ## v0.23 step 1 — IPH-BUG-01 wolf visibility (code complete; user acceptance pending)
 - The forest wolf is now a readable, high-contrast pixel model overlaid at its real combat tile (no changes to combat rules or saves).
