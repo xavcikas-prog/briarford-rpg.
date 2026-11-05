@@ -155,3 +155,11 @@ Caveat: Chrome mobile emulation is not physical iPhone Safari. Github-hosted cac
 - Does NOT test physical iPhone pixels, actual user save or 60 FPS graphics. Therefore `IPH-BUG-01` is **implementation complete but awaiting iPhone user acceptance**.
 - Existing combat action system, HP values, AP/stamina, NPC routines, save/load keys and both 2D / 3D entry points remain unmodified.
 - Savepoints: `savepoints/v0.22-pre-combat-ux`, `savepoints/iph-bug-01-wolf-visibility`.
+
+## 2026-11-05 — v0.23 / v0.24 character animation and battle arena
+- `tests/sania-frames.test.cjs`: PASS; approved 64×64 Sania atlas, 4-direction row mapping, Yuno independent asset, sealed-vs-fractured-vs-steady power states.
+- `tests/combat-presentation.test.cjs`: PASS; five action tabs, original combat handler invocation, intro stats with unknown enemy values, tactical-map view switch, safe sealed magic behavior, six landscape variants, post-battle HUD reset.
+- Whole `index.html` JS and separate `combat-presentation.js` parse: PASS.
+- Attempted a mobile Chromium rendering harness, but the container's browser is blocked by administrator policy from opening file/localhost URLs. **Do not claim real browser rendering QA passed.**
+- Final artwork still needs unique character/enemy animations and more detailed backgrounds. The 2.5D scene uses procedural Canvas geometry, not externally scraped screenshots or borrowed game assets.
+- Existing 2D game and old combat buttons remain authoritative, and 3D experiment stays paused.
