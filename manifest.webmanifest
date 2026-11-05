@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Briarford — Black Clover fan RPG (v0.21)",
+  "name": "Briarford — Black Clover fan RPG (v0.24)",
   "short_name": "Briarford",
-  "description": "Offline-friendly pixel RPG with 64px animated Sania, tactical combat, NPCs, exploration, and sealed grimoire progression.",
+  "description": "Mobile pixel RPG with the approved Sania sprite, 2.5D battle encounters, contextual arenas and categorized combat controls.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
